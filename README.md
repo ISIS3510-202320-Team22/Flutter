@@ -1,6 +1,6 @@
 # guarap
 
-A new Flutter project.
+A new Flutter project for our Mobile Development class. 
 
 ## Getting Started
 
