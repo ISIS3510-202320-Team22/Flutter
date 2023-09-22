@@ -9,7 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import 'package:guarap/main.dart';
-import 'package:guarap/ui/publish_photo.dart';
+import 'package:guarap/ui/publish_photos/publish_photo.dart';
 
 void main() {
   testWidgets('Counter increments smoke test', (WidgetTester tester) async {
