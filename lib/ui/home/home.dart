@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:guarap/ui/header.dart';
 
 class Home extends StatefulWidget{
   const Home({super.key});
@@ -15,8 +16,8 @@ class _Home extends State<Home>{
 
   @override
   Widget build(context){
-    return Scaffold(
-      
+    return Header(
+       Scaffold(
       bottomNavigationBar: NavigationBar(destinations: const [
         NavigationDestination(icon:  Icon(Icons.camera,color: Colors.black), label: ""),
         NavigationDestination(icon:  Icon(Icons.post_add,color: Colors.black), label: "",),
@@ -24,6 +25,8 @@ class _Home extends State<Home>{
         NavigationDestination(icon:  Icon(Icons.people,color: Colors.black), label: ""),
       ],
       height: 50),
+    ),
     );
+   
   }
 }
