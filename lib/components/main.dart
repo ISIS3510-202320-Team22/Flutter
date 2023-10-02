@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:guarap/ui/home/home.dart';
-import 'package:guarap/ui/publish_photos/publish_photo.dart';
+import 'package:guarap/components/publish_photos/ui/publish_photo.dart';
 
 var kColorScheme = ColorScheme.fromSeed(
     seedColor: const Color.fromARGB(

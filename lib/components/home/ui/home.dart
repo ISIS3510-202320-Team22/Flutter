@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:guarap/ui/header.dart';
+import 'package:guarap/components/header.dart';
 
 class Home extends StatefulWidget{
   const Home({super.key});

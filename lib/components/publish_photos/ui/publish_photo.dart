@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:guarap/ui/header.dart';
+import 'package:guarap/components/header.dart';
 
 class PublishPhoto extends StatelessWidget {
   const PublishPhoto({super.key});
