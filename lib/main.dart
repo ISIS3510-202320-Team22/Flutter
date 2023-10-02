@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:guarap/ui/home/home.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:guarap/ui/publish_photos/publish_photo.dart';
 
 var kColorScheme = ColorScheme.fromSeed(
