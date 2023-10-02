@@ -12,7 +12,7 @@ void main() {
     MaterialApp(
       theme:
           ThemeData().copyWith(useMaterial3: true, colorScheme: kColorScheme),
-      home: const Home() // Aca cambiar la clase que quieres testear
+      home: const PublishPhoto() // Aca cambiar la clase que quieres testear
     ),
   );
 }
