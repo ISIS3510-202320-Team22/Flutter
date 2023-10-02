@@ -24,7 +24,7 @@ class HomeErrorState extends HomeState{
 }
 
 // Action State to navigate the camera view
-class HomeNavigateToCameraPageActionState extends HomeActionState{
+class HomeNavigateToProfilePageActionState extends HomeActionState{
 
 }
 

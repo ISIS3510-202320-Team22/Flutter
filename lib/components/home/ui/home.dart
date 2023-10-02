@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:guarap/components/header.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:guarap/components/profile/ui/profile.dart';
+import 'package:guarap/components/publish_photos/ui/publish_photo.dart';
 
+import '../../feed/ui/feed.dart';
 import '../bloc/home_bloc.dart';
 
 class Home extends StatefulWidget {
@@ -25,7 +28,13 @@ class _Home extends State<Home> {
       // Callback that determines whether the builder should rebuild when the state changes
       buildWhen: (previous, current) => current is !HomeActionState,
       listener: (context, state) {
-        // TODO: implement listener
+        if(state is HomeNavigateToPublishPageActionState){
+          Navigator.push(context, MaterialPageRoute(builder: (context)=> const PublishPhoto()));
+        }
+        else if (state is HomeNavigateToProfilePageActionState){
+          Navigator.push(context, MaterialPageRoute(builder: (context)=> const Profile()));
+        }
+
       },
       builder: (context, state) {
         return Header(
@@ -35,7 +44,7 @@ class _Home extends State<Home> {
                   icon: IconButton(
                     onPressed: () {
                     },
-                    icon: const Icon(Icons.settings),
+                    icon: const Icon(Icons.home),
                   ),
                   label: ""),
               NavigationDestination(
@@ -49,18 +58,20 @@ class _Home extends State<Home> {
               NavigationDestination(
                   icon: IconButton(
                     onPressed: () {
-                      homeBloc.add(HomeCameraButtonNavigateEvent());
                     },
-                    icon: const Icon(Icons.camera_enhance),
+                    icon: const Icon(Icons.category),
                   ),
                   label: ""),
               NavigationDestination(
                   icon: IconButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      homeBloc.add(HomeProfileButtonNavigateEvent());
+                    },
                     icon: const Icon(Icons.person),
                   ),
                   label: ""),
             ]),
+          body: const Feed(),
           ),
         );
       },

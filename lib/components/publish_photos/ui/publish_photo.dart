@@ -13,7 +13,7 @@ class PublishPhoto extends StatelessWidget {
         children: [
           Text(
             "New Post",
-            style: GoogleFonts.roboto(
+            style: GoogleFonts.arima(
                 color: Colors.black, fontSize: 30, fontWeight: FontWeight.bold),
           )
         ],

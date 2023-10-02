@@ -4,7 +4,7 @@ part of 'home_bloc.dart';
 abstract class HomeEvent {}
 
 // Event when the camera button is clicked
-class HomeCameraButtonClickedEvent extends HomeEvent{
+class HomeProfileButtonClickedEvent extends HomeEvent{
 
 }
 
@@ -14,7 +14,7 @@ class HomePublishButtonClickedEvent extends HomeEvent{
 }
 
 // Event when the camera button is clicked to navigate to this page
-class HomeCameraButtonNavigateEvent extends HomeEvent{
+class HomeProfileButtonNavigateEvent extends HomeEvent{
 
 
 }
