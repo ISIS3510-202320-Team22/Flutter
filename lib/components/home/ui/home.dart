@@ -46,7 +46,7 @@ class _Home extends State<Home> {
                     },
                     icon: const Icon(Icons.home),
                   ),
-                  label: ""),
+                  label: "Feed"),
               NavigationDestination(
                   icon: IconButton(
                     onPressed: () {
@@ -54,14 +54,14 @@ class _Home extends State<Home> {
                     },
                     icon: const Icon(Icons.add_box),
                   ),
-                  label: ""),
+                  label: "Publish"),
               NavigationDestination(
                   icon: IconButton(
                     onPressed: () {
                     },
                     icon: const Icon(Icons.category),
                   ),
-                  label: ""),
+                  label: "Categories"),
               NavigationDestination(
                   icon: IconButton(
                     onPressed: () {
@@ -69,7 +69,7 @@ class _Home extends State<Home> {
                     },
                     icon: const Icon(Icons.person),
                   ),
-                  label: ""),
+                  label: "Profile"),
             ]),
           body: const Feed(),
           ),

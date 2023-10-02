@@ -23,7 +23,7 @@ class HomeErrorState extends HomeState{
 
 }
 
-// Action State to navigate the camera view
+// Action State to navigate the profile view
 class HomeNavigateToProfilePageActionState extends HomeActionState{
 
 }
