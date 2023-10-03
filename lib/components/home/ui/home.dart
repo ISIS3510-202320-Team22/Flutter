@@ -12,11 +12,16 @@ class Home extends StatefulWidget {
 
   @override
   State<Home> createState() {
-    return _Home();
+    return _HomeState();
   }
 }
 
-class _Home extends State<Home> {
+class _HomeState extends State<Home> {
+  @override
+  void initState(){
+    homeBloc.add(HomeInitialEvent());
+    super.initState();
+  }
   final HomeBloc homeBloc = HomeBloc();
   @override
   Widget build(context) {
@@ -26,18 +31,23 @@ class _Home extends State<Home> {
       // Callback that determines whether the listener should be called when the state changes.
       listenWhen: (previous, current) => current is HomeActionState,
       // Callback that determines whether the builder should rebuild when the state changes
-      buildWhen: (previous, current) => current is !HomeActionState,
+      buildWhen: (previous, current) => current is! HomeActionState,
       listener: (context, state) {
-        if(state is HomeNavigateToPublishPageActionState){
-          Navigator.push(context, MaterialPageRoute(builder: (context)=> const PublishPhoto()));
+        if (state is HomeNavigateToPublishPageActionState) {
+          Navigator.push(context,
+              MaterialPageRoute(builder: (context) => const PublishPhoto()));
+        } else if (state is HomeNavigateToProfilePageActionState) {
+          Navigator.push(context,
+              MaterialPageRoute(builder: (context) => const Profile()));
         }
-        else if (state is HomeNavigateToProfilePageActionState){
-          Navigator.push(context, MaterialPageRoute(builder: (context)=> const Profile()));
-        }
-
       },
       builder: (context, state) {
-        return Header(
+        switch (state.runtimeType) {
+          case HomeLoadingState:
+            return const Scaffold(
+                body: Center(child: CircularProgressIndicator()));
+          case HomeLoadedSuccessState:
+            return  Header(
           Scaffold(
             bottomNavigationBar: NavigationBar(destinations: [
               NavigationDestination(
@@ -74,6 +84,11 @@ class _Home extends State<Home> {
           body: const Feed(),
           ),
         );
+          case HomeErrorState:
+          return const Scaffold(body: Center(child: Text("Error"),));
+          default:
+          return const SizedBox();
+        }
       },
     );
   }

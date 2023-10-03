@@ -3,6 +3,8 @@ part of 'home_bloc.dart';
 @immutable
 abstract class HomeEvent {}
 
+class HomeInitialEvent extends HomeEvent{}
+
 // Event when the profile button is clicked
 class HomeProfileButtonClickedEvent extends HomeEvent{
 

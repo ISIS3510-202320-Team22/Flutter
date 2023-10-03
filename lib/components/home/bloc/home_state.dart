@@ -15,7 +15,8 @@ class HomeLoadingState extends HomeState{
 
 // When the loading is done the actual app is going to appear
 class HomeLoadedSuccessState extends HomeState{
-
+    final List<PhotoDataModel> photos;
+    HomeLoadedSuccessState({required this.photos});
 }
 
 // If an error ocurred

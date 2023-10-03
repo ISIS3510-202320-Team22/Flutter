@@ -36,7 +36,7 @@ class _TakePhotoState extends State<TakePhoto> {
     return Column(
       children: [
         CircleAvatar(
-          radius: 60,
+          radius: 80,
           backgroundColor: Colors.grey,
           foregroundImage: _pickedImageFile != null?  FileImage(_pickedImageFile!) : null,
         ),

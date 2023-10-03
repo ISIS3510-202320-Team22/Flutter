@@ -1,7 +1,10 @@
 import 'dart:async';
 
 import 'package:bloc/bloc.dart';
+import 'package:guarap/models/PhotosDataModel.dart';
 import 'package:meta/meta.dart';
+
+import '../../../data/photos_data.dart';
 
 part 'home_event.dart';
 part 'home_state.dart';
@@ -9,10 +12,17 @@ part 'home_state.dart';
 class HomeBloc extends Bloc<HomeEvent, HomeState> {
   HomeBloc() : super(HomeInitial()) {
     // On this event run a fuction to pass the state
+    on<HomeInitialEvent>(homeInitialEvent);
     on<HomeProfileButtonClickedEvent>(homeProfileButtonClickedEvent);
     on<HomePublishButtonClickedEvent>(homePublishButtonClickedEvent);
     on<HomeProfileButtonNavigateEvent>(homeProfileButtonNavigateEvent);
     on<HomePublishButtonNavigateEvent>(homePublishButtonNavigateEvent);
+  }
+
+    FutureOr<void> homeInitialEvent(HomeInitialEvent event, Emitter<HomeState> emit) async{
+      emit(HomeLoadingState());
+      await Future.delayed(const Duration(seconds: 4));
+      emit(HomeLoadedSuccessState(photos: PhotosData.dataList.map((e) => PhotoDataModel(e["id"],e["@username"],e["imageurl"])).toList()));
   }
 
   FutureOr<void> homeProfileButtonClickedEvent(
@@ -35,4 +45,6 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
       print("Vamosss Navigate Publish");
       emit(HomeNavigateToPublishPageActionState());
   }
+
+
 }
