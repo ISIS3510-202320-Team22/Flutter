@@ -8,7 +8,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
-import 'package:guarap/components/main.dart';
+import 'package:guarap/main.dart';
 import 'package:guarap/components/publish_photos/ui/publish_photo.dart';
 
 void main() {
