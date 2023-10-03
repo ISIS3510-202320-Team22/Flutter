@@ -5,7 +5,7 @@ import 'package:location/location.dart';
 
 class AddLocation extends StatefulWidget{
 
-  AddLocation({super.key});
+  const AddLocation({super.key});
 
   @override
   State<AddLocation> createState(){
@@ -14,10 +14,14 @@ class AddLocation extends StatefulWidget{
 }
 
   class _AddLocationState extends State<AddLocation>{
+  
+    Location? _pickedLocation;
+
+    var _isGettingLocation = false;
 
     void _getCurrentLocation() async{
-
-      Location location = new Location();
+      
+      Location location = Location();
 
       bool serviceEnabled;
       PermissionStatus permissionGranted;
@@ -39,11 +43,33 @@ class AddLocation extends StatefulWidget{
         }
       }
 
+      setState(() {
+        _isGettingLocation = true;
+      });
+
       locationData = await location.getLocation();
+
+      setState(() {
+        _isGettingLocation = false;
+      });
+
+
+      print(locationData.latitude);
+      print(locationData.altitude);
     }
 
     @override
     Widget build(context){
+
+      Widget previewContent = Text(
+              "No location chosen",
+              style: GoogleFonts.roboto(color: Colors.black, fontSize: 15),
+            );
+
+      if (_isGettingLocation){
+        previewContent = const CircularProgressIndicator();
+      }
+
       return Column(children: [
         
         Container( // Where the map location is goign to be displayed
@@ -54,10 +80,7 @@ class AddLocation extends StatefulWidget{
               border: Border.all(color: const Color.fromARGB(100, 192, 192, 192)),
               color: Colors.grey.withOpacity(0.2)
             ),
-            child: Text(
-              "No location chosen",
-              style: GoogleFonts.roboto(color: Colors.black, fontSize: 15),
-            ), 
+            child: previewContent,
         ),
 
         //Buttons
@@ -66,8 +89,10 @@ class AddLocation extends StatefulWidget{
           children: [
           TextButton.icon(
             icon: const Icon(Icons.location_on),
-            label: const Text("Add Location"),
-            onPressed: () {},
+            label: const Text("Get current Location"),
+            onPressed: () {
+              _getCurrentLocation;
+            },
           ),
 
            TextButton.icon(
