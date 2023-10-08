@@ -6,12 +6,15 @@ class TextFieldInput extends StatelessWidget {
   final bool isPassword;
   final String hintText;
   final TextInputType textInputType;
+  final String validatorMessage;
   const TextFieldInput(
       {Key? key,
       required this.controller,
       this.isPassword = false,
       required this.hintText,
-      required this.textInputType})
+      required this.textInputType,
+      required this.validatorMessage
+      })
       : super(key: key);
 
   @override
@@ -19,7 +22,7 @@ class TextFieldInput extends StatelessWidget {
     final OutlineInputBorder inputBorder = OutlineInputBorder(
       borderSide: Divider.createBorderSide(context),
     );
-    return TextField(
+    return TextFormField(
       controller: controller,
       obscureText: isPassword,
       keyboardType: textInputType,
@@ -33,6 +36,12 @@ class TextFieldInput extends StatelessWidget {
           fontSize: 14,
         ),
       ),
+      validator: (value) {
+        if (value == null || value.isEmpty) {
+          return validatorMessage;
+        }
+        return null;
+      },
     );
   }
 }

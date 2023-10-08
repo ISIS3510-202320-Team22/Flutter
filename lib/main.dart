@@ -1,9 +1,11 @@
 import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:guarap/components/auth/bloc/auth_bloc.dart';
 import 'firebase_options.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:guarap/components/home/ui/home.dart';
-import 'package:guarap/components/auth/ui/login.dart';
+import 'package:guarap/components/auth/ui/login_screen.dart';
 
 var kColorScheme = ColorScheme.fromSeed(
     seedColor: const Color.fromARGB(
@@ -11,23 +13,38 @@ var kColorScheme = ColorScheme.fromSeed(
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform,);
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
 
   runApp(
-    MaterialApp(
-      debugShowCheckedModeBanner: false,
-      theme:ThemeData().copyWith(useMaterial3: true, colorScheme: kColorScheme),
-      home: StreamBuilder(
-        stream: FirebaseAuth.instance.authStateChanges(),
-        builder: (context, snapshot) {
-          if (snapshot.hasData) {
-            return const Home();
-          } else {
-            return const Login();
-          }
-          
-        }
-      ) 
+    BlocProvider(
+      create: (context) => AuthBloc(),
+      child: const GuarapApp(),
     ),
   );
+}
+
+class GuarapApp extends StatelessWidget {
+  const GuarapApp({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    final AuthBloc authBloc = BlocProvider.of<AuthBloc>(context);
+
+    return MaterialApp(
+        debugShowCheckedModeBanner: false,
+        theme:
+            ThemeData().copyWith(useMaterial3: true, colorScheme: kColorScheme),
+        home: StreamBuilder(
+            stream: FirebaseAuth.instance.authStateChanges(),
+            builder: (context, snapshot) {
+              // Snapshot contains user object if user is logged in
+              if (!snapshot.hasData || snapshot.hasError) {
+                return const Login();
+              } else {
+                return const Home();
+              }
+            }));
+  }
 }

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:guarap/components/auth/ui/login.dart';
+import 'package:guarap/components/auth/ui/login_screen.dart';
 
 class SignUp extends StatefulWidget {
   const SignUp({super.key});
