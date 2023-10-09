@@ -40,6 +40,10 @@ dependencies:
   firebase_core: 
   firebase_auth: 
   cloud_firestore: 
+  location: ^5.0.3
+  http: ^1.1.0
+  uuid: ^4.1.0
+  google_maps_flutter: ^2.5.0
 
 dev_dependencies:
   flutter_test:
