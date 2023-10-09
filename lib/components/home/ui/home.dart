@@ -3,6 +3,7 @@ import 'package:guarap/components/header.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:guarap/components/profile/ui/profile.dart';
 import 'package:guarap/components/publish_photos/ui/publish_photo.dart';
+import 'package:guarap/components/categories/ui/categories.dart';
 
 import '../../feed/ui/feed.dart';
 import '../bloc/home_bloc.dart';
@@ -39,6 +40,9 @@ class _HomeState extends State<Home> {
         } else if (state is HomeNavigateToProfilePageActionState) {
           Navigator.push(context,
               MaterialPageRoute(builder: (context) => const Profile()));
+        } else if (state is HomeNavigateToCategoriesPageActionState) {
+          Navigator.push(context,
+              MaterialPageRoute(builder: (context) => const Categories()));
         }
       },
       builder: (context, state) {
@@ -68,6 +72,7 @@ class _HomeState extends State<Home> {
               NavigationDestination(
                   icon: IconButton(
                     onPressed: () {
+                      homeBloc.add(HomeCategoriesButtonNavigateEvent());
                     },
                     icon: const Icon(Icons.category),
                   ),
