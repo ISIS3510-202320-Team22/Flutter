@@ -15,10 +15,8 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     on<HomeInitialEvent>(homeInitialEvent);
     on<HomeProfileButtonClickedEvent>(homeProfileButtonClickedEvent);
     on<HomePublishButtonClickedEvent>(homePublishButtonClickedEvent);
-    on<HomeCategoriesButtonClickedEvent>(homeCategoriesButtonClickedEvent);
     on<HomeProfileButtonNavigateEvent>(homeProfileButtonNavigateEvent);
     on<HomePublishButtonNavigateEvent>(homePublishButtonNavigateEvent);
-    on<HomeCategoriesButtonNavigateEvent>(homeCategoriesButtonNavigateEvent);
   }
 
     FutureOr<void> homeInitialEvent(HomeInitialEvent event, Emitter<HomeState> emit) async{
@@ -37,11 +35,6 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
           print("Vamosss Publish");
       }
 
-  FutureOr<void> homeCategoriesButtonClickedEvent(
-      HomeCategoriesButtonClickedEvent event, Emitter<HomeState> emit) {
-          print("Vamosss Categories");
-      }
-
   FutureOr<void> homeProfileButtonNavigateEvent(HomeProfileButtonNavigateEvent event, Emitter<HomeState> emit) {
       print("Vamosss Navigate Profile");
       // When I get this state, for performing an action
@@ -51,11 +44,6 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
   FutureOr<void> homePublishButtonNavigateEvent(HomePublishButtonNavigateEvent event, Emitter<HomeState> emit) {
       print("Vamosss Navigate Publish");
       emit(HomeNavigateToPublishPageActionState());
-  }
-
-  FutureOr<void> homeCategoriesButtonNavigateEvent(HomeCategoriesButtonNavigateEvent event, Emitter<HomeState> emit) {
-      print("Vamosss Navigate Categories");
-      emit(HomeNavigateToCategoriesPageActionState());
   }
 
 
