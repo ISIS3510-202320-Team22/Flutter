@@ -55,9 +55,9 @@ class _LoginState extends State<Login> {
               MaterialPageRoute(builder: (context) => const Home()));
         } else if (state is LoginFailureState) {
           ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
+            const SnackBar(
               // content: Text(state.errorMessage),
-              content: const Text("Login failed"),
+              content: Text("Login failed. Check credentials."),
               backgroundColor: Colors.red,
             ),
           );
@@ -172,7 +172,6 @@ class _LoginState extends State<Login> {
                       )
                     ],
                   ),
-                  const SizedBox(height: 16),
                   Flexible(child: Container(), flex: 2),
                   const Divider(
                     color: Colors.grey,

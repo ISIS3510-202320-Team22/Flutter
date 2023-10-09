@@ -29,6 +29,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       emit(LoginSuccessfulState());
     } else {
       emit(LoginFailureState());
+      emit(LoginInitialState());
     }
   }
 }

@@ -37,12 +37,23 @@ class GuarapApp extends StatelessWidget {
         theme:
             ThemeData().copyWith(useMaterial3: true, colorScheme: kColorScheme),
         home: StreamBuilder(
-            stream: FirebaseAuth.instance.authStateChanges(),
+            stream: FirebaseAuth.instance.idTokenChanges(),
             builder: (context, snapshot) {
               // Snapshot contains user object if user is logged in
               if (!snapshot.hasData || snapshot.hasError) {
+                // Do login to check user data is valid
+
                 return const Login();
               } else {
+                // User was logged in, check if user data is still valid
+                try {
+                  FirebaseAuth.instance.currentUser!.reload();
+                } catch (e) {
+                  // User data is invalid, do login
+                  return const Login();
+                }
+                
+                print(snapshot.data);
                 return const Home();
               }
             }));
