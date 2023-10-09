@@ -21,7 +21,7 @@ class _Profile extends State<Profile> {
           ),
           centerTitle: true,
       ),
-      body: Center(
+      body: const Center(
         child: Text("Profile"),
       )
     );
