@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-//Comenatrio prueba
-
 class Categories extends StatefulWidget {
   const Categories({super.key});
 
