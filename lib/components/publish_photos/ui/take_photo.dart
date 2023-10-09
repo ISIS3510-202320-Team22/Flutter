@@ -15,35 +15,58 @@ class TakePhoto extends StatefulWidget {
 }
 
 class _TakePhotoState extends State<TakePhoto> {
-  final PublishBloc publishBloc = PublishBloc();
-
   File? _pickedImageFile;
 
   void _pickImage() async {
-
-  final pickedImage = await ImagePicker().pickImage(source:ImageSource.camera,imageQuality: 50,maxHeight: 400,maxWidth: 400);
-
-  if(pickedImage == null){
-    return;
-  } 
-  setState(() {
-    _pickedImageFile = File(pickedImage.path);
-  });
+    final pickedImage = await ImagePicker().pickImage(
+        source: ImageSource.camera,
+        imageQuality: 50,
+        maxHeight: double.infinity,
+        maxWidth: double.infinity);
+    if (pickedImage == null) {
+      return;
+    }
+    setState(() {
+      _pickedImageFile = File(pickedImage.path);
+    });
   }
+
+  final PublishBloc publishBloc = PublishBloc();
+
   @override
   Widget build(BuildContext context) {
-
+    /*
+    return BlocConsumer<PublishBloc, PublishState>(
+      bloc: publishBloc,
+      // Callback that determines whether the listener should be called when the state changes.
+      listenWhen: (previous, current) => current is PublishActionState,
+      // Callback that determines whether the builder should rebuild when the state changes
+      buildWhen: (previous, current) => current is! PublishActionState,
+      listener: (context, state) {
+        if (state is AddToCirclePhotoActionState) {
+          _pickedImageFile = File(pickedImage.path);
+        }
+      },
+      builder: (context, state) {
+      */
     return Column(
       children: [
-        CircleAvatar(
-          radius: 80,
-          backgroundColor: Colors.grey,
-          foregroundImage: _pickedImageFile != null?  FileImage(_pickedImageFile!) : null,
+        Container(
+          width: 130, // Set your desired width
+          height: 175, // Set your desired height
+          decoration: BoxDecoration(
+            color: Colors.grey, // Set the background color
+            borderRadius: BorderRadius.circular(8.0),
+          ),
+          child: Center(
+            child:
+                _pickedImageFile != null ? Image.file(_pickedImageFile!) : null,
+          ),
         ),
         TextButton.icon(
           onPressed: () {
             _pickImage();
-            // publishBloc.add(AddPhotoButtonClickedEvent());
+            //publishBloc.add(AddPhotoButtonClickedEvent());
           },
           icon: const Icon(Icons.image),
           label: const Text(
@@ -54,7 +77,6 @@ class _TakePhotoState extends State<TakePhoto> {
       ],
     );
   }
+  //);
 }
-
-  
-
+//}
