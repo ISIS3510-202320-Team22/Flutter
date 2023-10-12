@@ -52,7 +52,7 @@ class GuarapApp extends StatelessWidget {
                   // User data is invalid, do login
                   return const Login();
                 }
-                
+
                 print(snapshot.data);
                 return const Home();
               }

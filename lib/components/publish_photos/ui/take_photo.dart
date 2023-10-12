@@ -16,21 +16,7 @@ class TakePhoto extends StatefulWidget {
 
 class _TakePhotoState extends State<TakePhoto> {
   File? _pickedImageFile;
-/*
-  void _pickImage() async {
-    final pickedImage = await ImagePicker().pickImage(
-        source: ImageSource.camera,
-        imageQuality: 50,
-        maxHeight: double.infinity,
-        maxWidth: double.infinity);
-    if (pickedImage == null) {
-      return;
-    }
-    setState(() {
-      _pickedImageFile = File(pickedImage.path);
-    });
-  }
-*/
+
   final PublishBloc publishBloc = PublishBloc();
 
   @override
@@ -68,7 +54,6 @@ class _TakePhotoState extends State<TakePhoto> {
               ),
               TextButton.icon(
                 onPressed: () {
-                  //_pickImage();
                   publishBloc.add(AddPhotoButtonClickedEvent());
                 },
                 icon: const Icon(Icons.image),

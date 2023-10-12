@@ -19,32 +19,30 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     on<HomePublishButtonNavigateEvent>(homePublishButtonNavigateEvent);
   }
 
-    FutureOr<void> homeInitialEvent(HomeInitialEvent event, Emitter<HomeState> emit) async{
-      emit(HomeLoadingState());
-      await Future.delayed(const Duration(seconds: 4));
-      emit(HomeLoadedSuccessState(photos: PhotosData.dataList.map((e) => PhotoDataModel(e["id"],e["@username"],e["imageurl"])).toList()));
+  FutureOr<void> homeInitialEvent(
+      HomeInitialEvent event, Emitter<HomeState> emit) async {
+    emit(HomeLoadingState());
+    await Future.delayed(const Duration(seconds: 4));
+    emit(HomeLoadedSuccessState(
+        photos: PhotosData.dataList
+            .map((e) => PhotoDataModel(e["id"], e["@username"], e["imageurl"]))
+            .toList()));
   }
 
   FutureOr<void> homeProfileButtonClickedEvent(
-      HomeProfileButtonClickedEvent event, Emitter<HomeState> emit) {
-        print("Vamosss Profile");
-      }
+      HomeProfileButtonClickedEvent event, Emitter<HomeState> emit) {}
 
   FutureOr<void> homePublishButtonClickedEvent(
-      HomePublishButtonClickedEvent event, Emitter<HomeState> emit) {
-          print("Vamosss Publish");
-      }
+      HomePublishButtonClickedEvent event, Emitter<HomeState> emit) {}
 
-  FutureOr<void> homeProfileButtonNavigateEvent(HomeProfileButtonNavigateEvent event, Emitter<HomeState> emit) {
-      print("Vamosss Navigate Profile");
-      // When I get this state, for performing an action
-      emit(HomeNavigateToProfilePageActionState());
+  FutureOr<void> homeProfileButtonNavigateEvent(
+      HomeProfileButtonNavigateEvent event, Emitter<HomeState> emit) {
+    // When I get this state, for performing an action
+    emit(HomeNavigateToProfilePageActionState());
   }
 
-  FutureOr<void> homePublishButtonNavigateEvent(HomePublishButtonNavigateEvent event, Emitter<HomeState> emit) {
-      print("Vamosss Navigate Publish");
-      emit(HomeNavigateToPublishPageActionState());
+  FutureOr<void> homePublishButtonNavigateEvent(
+      HomePublishButtonNavigateEvent event, Emitter<HomeState> emit) {
+    emit(HomeNavigateToPublishPageActionState());
   }
-
-
 }
