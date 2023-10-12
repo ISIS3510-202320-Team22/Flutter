@@ -19,3 +19,16 @@ class RecoverAccountTextPressedEvent extends AuthEvent {
 }
 
 class SignUpTextPressedEvent extends AuthEvent {}
+
+// Recover Account Screen Events
+class RecoverAccountInitialEvent extends AuthEvent {
+  RecoverAccountInitialEvent();
+}
+
+class RecoverAccountEvent extends AuthEvent {
+  final String email;
+  RecoverAccountEvent({required this.email});
+}
+
+// Logout Events
+class LogoutEvent extends AuthEvent {}

@@ -26,4 +26,13 @@ class AuthMethods {
       return "Unknown error";
     }
   }
+
+  Future<String> logoutUser() async{
+    try {
+      await _auth.signOut();
+      return "success";
+    } on FirebaseAuthException catch (e) {
+      return "Unknown error";
+    }
+  }
 }

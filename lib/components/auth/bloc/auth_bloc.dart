@@ -1,8 +1,7 @@
 import 'dart:async';
-
 import 'package:bloc/bloc.dart';
 import 'package:guarap/components/auth/repository/auth_methods.dart';
-import 'package:meta/meta.dart';
+import 'package:meta/meta.dart'; 
 
 part 'auth_event.dart';
 part 'auth_state.dart';
@@ -11,15 +10,17 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   AuthBloc() : super(AuthInitial()) {
     on<LoginInitialEvent>(_loginInitialEvent);
     on<LoginEvent>(loginEvent);
+    on<RecoverAccountTextPressedEvent>(recoverAccountTextPressedEvent);
+    on<SignUpTextPressedEvent>(signUpTextPressedEvent);
+    on<RecoverAccountInitialEvent>(recoverAccountInitialEvent);
+    on<RecoverAccountEvent>(recoverAccountEvent);
+    on<LogoutEvent>(logoutEvent);
   }
 
   FutureOr<void> _loginInitialEvent(
-      LoginInitialEvent event, Emitter<AuthState> emit) {
-    print("LoginInitialEvent");
-  }
+      LoginInitialEvent event, Emitter<AuthState> emit) {}
 
   FutureOr<void> loginEvent(LoginEvent event, Emitter<AuthState> emit) async {
-    print("LoginEvent");
     emit(LoginAttemptState());
     // Implement Login logic calling FirebaseAuth.dart
     // If successful, emit(LoginSuccessfulState());
@@ -30,6 +31,33 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     } else {
       emit(LoginFailureState());
       emit(LoginInitialState());
+    }
+  }
+
+  FutureOr<void> recoverAccountTextPressedEvent(RecoverAccountTextPressedEvent event, Emitter<AuthState> emit) {
+    emit(LoginNavigateToRecoverPageActionState());
+  }
+
+  FutureOr<void> signUpTextPressedEvent(SignUpTextPressedEvent event, Emitter<AuthState> emit) {
+    emit(LoginNavigateToSignUpPageActionState());
+  }
+
+  FutureOr<void> recoverAccountInitialEvent(RecoverAccountInitialEvent event, Emitter<AuthState> emit) {
+    // TODO: implement passing the email from the login screen
+  }
+
+  FutureOr<void> recoverAccountEvent(RecoverAccountEvent event, Emitter<AuthState> emit) {
+    emit(RecoverAccountAttemptState());
+  }
+
+  FutureOr<void> logoutEvent(LogoutEvent event, Emitter<AuthState> emit) async {
+    emit(LogoutAttemptState());
+    String res = await AuthMethods().logoutUser();
+    if (res == "success") {
+      print("Logout succesful");
+      emit(LogoutSuccessfulState());
+    } else {
+      emit(LogoutFailureState());
     }
   }
 }
