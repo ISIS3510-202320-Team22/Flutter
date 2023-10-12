@@ -46,15 +46,21 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     // TODO: implement passing the email from the login screen
   }
 
-  FutureOr<void> recoverAccountEvent(RecoverAccountEvent event, Emitter<AuthState> emit) {
+  FutureOr<void> recoverAccountEvent(RecoverAccountEvent event, Emitter<AuthState> emit) async {
     emit(RecoverAccountAttemptState());
+    // Implement Recover Account logic calling FirebaseAuth.dart
+    String res = await AuthMethods().recoverAccount(email: event.email);
+    if (res == "success") {
+      emit(RecoverAccountSuccessfulState());
+    } else {
+      emit(RecoverAccountFailureState(errorMessage: res));
+    }
   }
 
   FutureOr<void> logoutEvent(LogoutEvent event, Emitter<AuthState> emit) async {
     emit(LogoutAttemptState());
     String res = await AuthMethods().logoutUser();
     if (res == "success") {
-      print("Logout succesful");
       emit(LogoutSuccessfulState());
     } else {
       emit(LogoutFailureState());

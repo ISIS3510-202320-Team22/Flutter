@@ -33,7 +33,10 @@ final class RecoverAccountAttemptState extends AuthState {}
 
 final class RecoverAccountSuccessfulState extends AuthActionState {}
 
-final class RecoverAccountFailureState extends AuthActionState {}
+final class RecoverAccountFailureState extends AuthState {
+  final String errorMessage;
+  RecoverAccountFailureState({required this.errorMessage});
+}
 
 // Logout States
 final class LogoutAttemptState extends AuthState {}

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:guarap/components/auth/bloc/auth_bloc.dart';
+import 'package:guarap/components/auth/ui/login_screen.dart';
 import 'package:guarap/components/auth/ui/text_field_input.dart';
 
 class RecoverAccount extends StatefulWidget {
@@ -16,6 +17,7 @@ class _RecoverAccountState extends State<RecoverAccount> {
   final TextEditingController _emailController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
   bool _isLoading = false;
+  String errorMessage = "";
 
   @override
   void initState() {
@@ -30,15 +32,26 @@ class _RecoverAccountState extends State<RecoverAccount> {
       listenWhen: (previous, current) => current is AuthActionState,
       buildWhen: (previous, current) => current is! AuthActionState,
       listener: (context, state) {
-        // TODO: implement listener
-
+        if (state is RecoverAccountSuccessfulState) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text("Recover account email sent."),
+            ),
+          );
+          Navigator.push(context, MaterialPageRoute(builder: (context) => const Login()));
+        }
       },
       builder: (context, state) {
         switch (state.runtimeType){
           case RecoverAccountAttemptState:
             _isLoading = true;
             break;
+          case RecoverAccountFailureState:
+            _isLoading = false;
+            errorMessage = (state as RecoverAccountFailureState).errorMessage;
+            break;
           default:
+            errorMessage = "";
             _isLoading = false;
             break;
         }
@@ -100,6 +113,13 @@ class _RecoverAccountState extends State<RecoverAccount> {
                             ),
                     ),
                   ),
+                  const SizedBox(height: 16),
+                  if (errorMessage != "") 
+                    Text(
+                      errorMessage,
+                      style: GoogleFonts.roboto(
+                          color: Colors.red, fontSize: 18),
+                    ),
                   ],
                 )
                 
