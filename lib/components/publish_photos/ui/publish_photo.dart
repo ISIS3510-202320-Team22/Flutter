@@ -24,7 +24,9 @@ class _PublishPhotoState extends State<PublishPhoto> {
           title: Text(
             "New Post",
             style: GoogleFonts.roboto(
-                color: Colors.black, fontSize: 40, fontWeight: FontWeight.bold),
+                color: Theme.of(context).colorScheme.onPrimaryContainer,
+                fontSize: 40,
+                fontWeight: FontWeight.bold),
           ),
           centerTitle: true,
         ),
@@ -84,7 +86,9 @@ class _PublishPhotoState extends State<PublishPhoto> {
                             border: InputBorder.none,
                             // text styling
                             hintStyle: GoogleFonts.roboto(
-                                color: Colors.black,
+                                color: Theme.of(context)
+                                    .colorScheme
+                                    .onPrimaryContainer,
                                 fontSize: 20,
                                 fontWeight: FontWeight.bold),
                           ),
