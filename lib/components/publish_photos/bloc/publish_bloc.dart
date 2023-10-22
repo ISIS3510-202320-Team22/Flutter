@@ -1,7 +1,9 @@
 import 'dart:async';
+import 'dart:ffi';
 import 'dart:io';
 import 'package:bloc/bloc.dart';
 import 'package:flutter/foundation.dart';
+import 'package:guarap/components/publish_photos/model/location_model.dart';
 import 'package:image_picker/image_picker.dart';
 part 'publish_event.dart';
 part 'publish_state.dart';

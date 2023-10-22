@@ -3,6 +3,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:guarap/components/publish_photos/model/location_model.dart';
 import 'package:guarap/components/publish_photos/ui/map.dart';
+import 'package:guarap/components/publish_photos/ui/publish_photo.dart';
 import 'package:location/location.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
@@ -80,7 +81,7 @@ class _AddLocationState extends State<AddLocation> {
     }
 
     //print(_pickedLocation!.address); Addres from your current location
-
+    PublishPhoto(location: _pickedLocation!.address);
     _savePlace(lat, lng);
   }
 

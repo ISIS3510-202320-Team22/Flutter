@@ -3,7 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:guarap/components/publish_photos/bloc/publish_bloc.dart';
-import 'package:image_picker/image_picker.dart';
+import 'package:guarap/components/publish_photos/ui/publish_photo.dart';
 
 class TakePhoto extends StatefulWidget {
   const TakePhoto({super.key});
@@ -19,6 +19,10 @@ class _TakePhotoState extends State<TakePhoto> {
 
   final PublishBloc publishBloc = PublishBloc();
 
+  File getImage(image) {
+    return image;
+  }
+
   @override
   Widget build(context) {
     return BlocConsumer<PublishBloc, PublishState>(
@@ -33,6 +37,7 @@ class _TakePhotoState extends State<TakePhoto> {
             case AddToCirclePhotoState:
               final addToCirclePhotoState = state as AddToCirclePhotoState;
               _pickedImageFile = addToCirclePhotoState.pickedImage;
+              PublishPhoto(image: _pickedImageFile);
               break;
             default:
               _pickedImageFile = null;
