@@ -71,7 +71,9 @@ class _HomeState extends State<Home> {
                       label: "Publish"),
                   NavigationDestination(
                       icon: IconButton(
-                        onPressed: () {},
+                        onPressed: () {
+                          homeBloc.add(HomeCategoriesButtonNavigateEvent());
+                        },
                         icon: const Icon(Icons.category),
                       ),
                       label: "Categories"),

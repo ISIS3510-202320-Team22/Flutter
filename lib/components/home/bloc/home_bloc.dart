@@ -38,13 +38,10 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
       HomePublishButtonClickedEvent event, Emitter<HomeState> emit) {}
 
   FutureOr<void> homeCategoriesButtonClickedEvent(
-      HomeCategoriesButtonClickedEvent event, Emitter<HomeState> emit) {
-    print("Vamosss Categories");
-  }
+      HomeCategoriesButtonClickedEvent event, Emitter<HomeState> emit) {}
 
   FutureOr<void> homeProfileButtonNavigateEvent(
       HomeProfileButtonNavigateEvent event, Emitter<HomeState> emit) {
-    print("Vamosss Navigate Profile");
     // When I get this state, for performing an action
     emit(HomeNavigateToProfilePageActionState());
   }
@@ -56,7 +53,6 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
 
   FutureOr<void> homeCategoriesButtonNavigateEvent(
       HomeCategoriesButtonNavigateEvent event, Emitter<HomeState> emit) {
-    print("Vamosss Navigate Categories");
     emit(HomeNavigateToCategoriesPageActionState());
   }
 }
