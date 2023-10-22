@@ -33,3 +33,8 @@ class HomeNavigateToProfilePageActionState extends HomeActionState{
 class HomeNavigateToPublishPageActionState extends HomeActionState{
   
 }
+
+// Action State to navigate the categories view
+class HomeNavigateToCategoriesPageActionState extends HomeActionState{
+  
+}
