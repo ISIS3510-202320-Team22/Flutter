@@ -26,4 +26,28 @@ class AuthMethods {
       return "Unknown error";
     }
   }
+
+  Future<String> logoutUser() async{
+    try {
+      await _auth.signOut();
+      return "success";
+    } on FirebaseAuthException catch (e) {
+      return "Unknown error $e";
+    }
+  }
+
+  Future<String> recoverAccount({required String email}) async {
+    try {
+      await _auth.sendPasswordResetEmail(email: email);
+      return "success";
+    } on FirebaseAuthException catch (e) {
+      if (e.code == 'user-not-found') {
+        return "User not found for this email address";
+      } else if (e.code == 'invalid-email') {
+        return "Invalid email";
+      } else {
+        return "Unknown error";
+      }
+    }
+  }
 }
