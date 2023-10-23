@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:guarap/components/header.dart';
+import 'package:guarap/components/widgets/header.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:guarap/components/profile/ui/profile.dart';
 import 'package:guarap/components/categories/ui/categories.dart';
@@ -19,10 +19,11 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
   @override
-  void initState(){
+  void initState() {
     homeBloc.add(HomeInitialEvent());
     super.initState();
   }
+
   final HomeBloc homeBloc = HomeBloc();
   @override
   Widget build(context) {
@@ -51,48 +52,50 @@ class _HomeState extends State<Home> {
             return const Scaffold(
                 body: Center(child: CircularProgressIndicator()));
           case HomeLoadedSuccessState:
-            return  Header(
-          Scaffold(
-            bottomNavigationBar: NavigationBar(destinations: [
-              NavigationDestination(
-                  icon: IconButton(
-                    onPressed: () {
-                    },
-                    icon: const Icon(Icons.home),
-                  ),
-                  label: "Feed"),
-              NavigationDestination(
-                  icon: IconButton(
-                    onPressed: () {
-                      homeBloc.add(HomePublishButtonNavigateEvent());
-                    },
-                    icon: const Icon(Icons.add_box),
-                  ),
-                  label: "Publish"),
-              NavigationDestination(
-                  icon: IconButton(
-                    onPressed: () {
-                      homeBloc.add(HomeCategoriesButtonNavigateEvent());
-                    },
-                    icon: const Icon(Icons.category),
-                  ),
-                  label: "Categories"),
-              NavigationDestination(
-                  icon: IconButton(
-                    onPressed: () {
-                      homeBloc.add(HomeProfileButtonNavigateEvent());
-                    },
-                    icon: const Icon(Icons.person),
-                  ),
-                  label: "Profile"),
-            ]),
-          body: const Feed(),
-          ),
-        );
+            return Header(
+              Scaffold(
+                bottomNavigationBar: NavigationBar(destinations: [
+                  NavigationDestination(
+                      icon: IconButton(
+                        onPressed: () {},
+                        icon: const Icon(Icons.home),
+                      ),
+                      label: "Feed"),
+                  NavigationDestination(
+                      icon: IconButton(
+                        onPressed: () {
+                          homeBloc.add(HomePublishButtonNavigateEvent());
+                        },
+                        icon: const Icon(Icons.add_box),
+                      ),
+                      label: "Publish"),
+                  NavigationDestination(
+                      icon: IconButton(
+                        onPressed: () {
+                          homeBloc.add(HomeCategoriesButtonNavigateEvent());
+                        },
+                        icon: const Icon(Icons.category),
+                      ),
+                      label: "Categories"),
+                  NavigationDestination(
+                      icon: IconButton(
+                        onPressed: () {
+                          homeBloc.add(HomeProfileButtonNavigateEvent());
+                        },
+                        icon: const Icon(Icons.person),
+                      ),
+                      label: "Profile"),
+                ]),
+                body: const Feed(),
+              ),
+            );
           case HomeErrorState:
-          return const Scaffold(body: Center(child: Text("Error"),));
+            return const Scaffold(
+                body: Center(
+              child: Text("Error"),
+            ));
           default:
-          return const SizedBox();
+            return const SizedBox();
         }
       },
     );

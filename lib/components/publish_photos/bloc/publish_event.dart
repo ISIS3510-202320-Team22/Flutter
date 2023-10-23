@@ -1,15 +1,11 @@
 part of 'publish_bloc.dart';
 
 @immutable
-abstract class PublishBlocEvent {}
+abstract class PublishEvent {}
+
+class PublishInitialEvent extends PublishEvent {}
 
 // Event when the add photo button is pressed
-class AddPhotoButtonClickedEvent extends PublishBlocEvent{
-
-}
-
-// Event to add the image to the circle
-
-class AddPhotoButtonShowImageEvent extends PublishBlocEvent{
-
+class AddPhotoButtonClickedEvent extends PublishEvent {
+  AddPhotoButtonClickedEvent();
 }

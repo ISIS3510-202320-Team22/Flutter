@@ -9,7 +9,10 @@ import 'package:guarap/components/auth/ui/login_screen.dart';
 
 var kColorScheme = ColorScheme.fromSeed(
     seedColor: const Color.fromARGB(
-        0, 0, 0, 0)); // Define the color palette for the app
+        255, 171, 0, 72)); // Define the color palette for the app
+var kDarkColorScheme = ColorScheme.fromSeed(
+    brightness: Brightness.dark,
+    seedColor: const Color.fromARGB(255, 171, 0, 72));
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -34,8 +37,20 @@ class GuarapApp extends StatelessWidget {
 
     return MaterialApp(
         debugShowCheckedModeBanner: false,
-        theme:
-            ThemeData().copyWith(useMaterial3: true, colorScheme: kColorScheme),
+        darkTheme: ThemeData.dark()
+            .copyWith(useMaterial3: true, colorScheme: kDarkColorScheme),
+        theme: ThemeData().copyWith(
+            useMaterial3: true,
+            colorScheme: kColorScheme,
+            elevatedButtonTheme: ElevatedButtonThemeData(
+              style: ElevatedButton.styleFrom(
+                  backgroundColor: const Color.fromARGB(255, 171, 0, 72)),
+            ),
+            textTheme: ThemeData().textTheme.copyWith(
+                titleLarge: TextStyle(
+                    fontWeight: FontWeight.normal,
+                    color: kColorScheme.onSecondaryContainer))),
+        themeMode: ThemeMode.system, // use the theme of the app
         home: StreamBuilder(
             stream: FirebaseAuth.instance.idTokenChanges(),
             builder: (context, snapshot) {
@@ -52,7 +67,7 @@ class GuarapApp extends StatelessWidget {
                   // User data is invalid, do login
                   return const Login();
                 }
-                
+
                 print(snapshot.data);
                 return const Home();
               }
