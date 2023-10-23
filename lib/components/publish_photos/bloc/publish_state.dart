@@ -12,3 +12,10 @@ class AddToCirclePhotoState extends PublishState {
   AddToCirclePhotoState({required this.pickedImage});
   final File? pickedImage;
 }
+
+// Action State to publish the data
+class PublishingDataState extends PublishActionState {}
+
+class PublishSuccessState extends PublishActionState {}
+
+class PublishErrorState extends PublishActionState {}

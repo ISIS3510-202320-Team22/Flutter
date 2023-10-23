@@ -12,7 +12,7 @@ class AddPhotoButtonClickedEvent extends PublishEvent {
 
 class PublishDataEvent extends PublishEvent {
   PublishDataEvent(this.date, this.description, this.downvotes, this.upvotes,
-      this.image, this.location, this.reported, this.user);
+      this.image, this.location, this.reported, this.uuid, this.category);
   final DateTime date;
   final String description;
   final int downvotes;
@@ -20,5 +20,19 @@ class PublishDataEvent extends PublishEvent {
   final File image;
   final String location;
   final bool reported;
-  final String? user;
+  final String? uuid;
+  final String? category;
+  final String postId = const Uuid().v4();
+  /*
+  Map<String, dynamic> toJson() => {
+        'date': date,
+        'description': description,
+        'downvotes': downvotes,
+        'upvotes': upvotes,
+        'image': image,
+        'location': location,
+        'reported': reported,
+        'user': uuid,
+      };
+  */
 }

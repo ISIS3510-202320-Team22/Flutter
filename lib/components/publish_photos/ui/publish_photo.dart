@@ -1,9 +1,8 @@
 import 'dart:io';
-
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:guarap/components/publish_photos/bloc/publish_bloc.dart';
-import 'package:guarap/components/publish_photos/model/location_model.dart';
 import 'package:guarap/components/publish_photos/ui/add_location.dart';
 import 'package:guarap/components/publish_photos/ui/take_photo.dart';
 
@@ -39,7 +38,21 @@ class _PublishPhotoState extends State<PublishPhoto> {
       listenWhen: (previous, current) => current is PublishActionState,
       buildWhen: (previous, current) => current is! PublishActionState,
       listener: (context, state) {
-        // TODO: implement listener
+        if (state is PublishSuccessState) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text("Posted!"),
+              backgroundColor: Colors.blue,
+            ),
+          );
+        } else if (state is PublishErrorState) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text("Error, post not published!"),
+              backgroundColor: Colors.red,
+            ),
+          );
+        }
       },
       builder: (context, state) {
         return Scaffold(
@@ -73,6 +86,8 @@ class _PublishPhotoState extends State<PublishPhoto> {
                         Expanded(
                           child: TextField(
                             controller: _inputTextController,
+                            // Max lenght for the user input
+                            maxLength: 100,
                             decoration: InputDecoration(
                               hintText: "Write a caption...",
                               border: InputBorder.none,
@@ -161,7 +176,8 @@ class _PublishPhotoState extends State<PublishPhoto> {
                                 widget.image!,
                                 widget.location!,
                                 false,
-                                null));
+                                null,
+                                _selectedCategory.name.toUpperCase()));
                           },
                           // red color button and text white
                           style: ElevatedButton.styleFrom(
