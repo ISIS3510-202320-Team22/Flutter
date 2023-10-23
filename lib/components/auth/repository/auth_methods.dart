@@ -41,7 +41,6 @@ class AuthMethods {
       await _auth.sendPasswordResetEmail(email: email);
       return "success";
     } on FirebaseAuthException catch (e) {
-      print(e.code);
       if (e.code == 'user-not-found') {
         return "User not found for this email address";
       } else if (e.code == 'invalid-email') {

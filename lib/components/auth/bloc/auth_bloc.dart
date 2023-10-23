@@ -17,6 +17,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     on<LogoutEvent>(logoutEvent);
   }
 
+  // Login Screen Events
   FutureOr<void> _loginInitialEvent(
       LoginInitialEvent event, Emitter<AuthState> emit) {}
 
@@ -42,6 +43,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     emit(LoginNavigateToSignUpPageActionState());
   }
 
+  // Recover Account Screen Events
   FutureOr<void> recoverAccountInitialEvent(RecoverAccountInitialEvent event, Emitter<AuthState> emit) {
     // TODO: implement passing the email from the login screen
   }
@@ -57,6 +59,10 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     }
   }
 
+  // Sign Up Screen Events
+  FutureOr<void> signUpInitialEvent(SignUpInitialEvent event, Emitter<AuthState> emit) {}
+
+  // Logout Events
   FutureOr<void> logoutEvent(LogoutEvent event, Emitter<AuthState> emit) async {
     emit(LogoutAttemptState());
     String res = await AuthMethods().logoutUser();
