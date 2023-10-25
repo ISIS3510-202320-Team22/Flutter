@@ -5,14 +5,13 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:guarap/components/publish_photos/bloc/publish_bloc.dart';
 import 'package:guarap/components/publish_photos/ui/add_location.dart';
 import 'package:guarap/components/publish_photos/ui/take_photo.dart';
+import 'add_location.dart';
 
 enum Category { sports, events, chill, food, study, other }
 
 class PublishPhoto extends StatefulWidget {
-  const PublishPhoto({super.key, this.image, this.location});
+  const PublishPhoto({super.key});
 
-  final File? image;
-  final String? location;
   @override
   State<PublishPhoto> createState() {
     return _PublishPhotoState();
@@ -24,6 +23,7 @@ class _PublishPhotoState extends State<PublishPhoto> {
   final _inputTextController = TextEditingController();
   final PublishBloc publishBloc = PublishBloc();
   final actualDate = DateTime.now();
+  File? _pickedImageFile;
 
   @override
   void dispose() {
@@ -52,9 +52,25 @@ class _PublishPhotoState extends State<PublishPhoto> {
               backgroundColor: Colors.red,
             ),
           );
+        } else if (state is PublishingPostState) {
+          //cargando
+        } else if (state is PublishPhotoErrorState) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text("Error: Could not send photo. Try again later!"),
+              backgroundColor: Colors.red,
+            ),
+          );
         }
       },
       builder: (context, state) {
+        switch (state.runtimeType) {
+          case AddToCirclePhotoState:
+            final addToCirclePhotoState = state as AddToCirclePhotoState;
+            _pickedImageFile = addToCirclePhotoState.pickedImage;
+            print(_pickedImageFile);
+            break;
+        }
         return Scaffold(
             appBar: AppBar(
               title: Text(
@@ -79,7 +95,7 @@ class _PublishPhotoState extends State<PublishPhoto> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
-                        const TakePhoto(),
+                        TakePhoto(publishBloc: publishBloc),
                         const SizedBox(
                           width: 20,
                         ),
@@ -158,7 +174,7 @@ class _PublishPhotoState extends State<PublishPhoto> {
                     ),
 
                     //Third row for the location of the user
-                    AddLocation(),
+                    AddLocation(publishBloc: publishBloc),
 
                     const SizedBox(height: 30),
 
@@ -168,17 +184,24 @@ class _PublishPhotoState extends State<PublishPhoto> {
                       children: [
                         ElevatedButton(
                           onPressed: () {
-                            publishBloc.add(PublishDataEvent(
-                                actualDate,
-                                _inputTextController.text,
-                                0,
-                                0,
-                                widget.image!,
-                                widget.location!,
-                                false,
-                                null,
-                                _selectedCategory.name.toUpperCase()));
+                            print(_pickedImageFile);
+                            if (_pickedImageFile == null) {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(
+                                  content: Text("Please add a photo!"),
+                                  backgroundColor: Colors.red,
+                                ),
+                              );
+                              return;
+                            } else {
+                              publishBloc.add(PublishPostEvent(
+                                  actualDate,
+                                  _inputTextController.text,
+                                  _selectedCategory.name.toUpperCase(),
+                                  _pickedImageFile));
+                            }
                           },
+
                           // red color button and text white
                           style: ElevatedButton.styleFrom(
                             backgroundColor:
