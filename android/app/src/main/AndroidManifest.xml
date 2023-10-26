@@ -3,6 +3,8 @@
         android:label="guarap"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
+        <meta-data android:name="com.google.android.geo.API_KEY"
+               android:value="AIzaSyAoh4_qFIhQj5RhFOZ3Hxn9Fc0zNR_8-tQ"/>
         <activity
             android:name=".MainActivity"
             android:exported="true"
