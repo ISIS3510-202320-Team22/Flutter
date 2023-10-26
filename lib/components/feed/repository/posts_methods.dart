@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:guarap/components/feed/ui/post_card.dart';
 
 class PostMethods {
-  Widget uploadData() {
+  Widget uploadData(category) {
     return StreamBuilder(
         stream: FirebaseFirestore.instance
             .collection('categories')
