@@ -36,8 +36,8 @@ class _HomeState extends State<Home> {
       buildWhen: (previous, current) => current is! HomeActionState,
       listener: (context, state) {
         if (state is HomeNavigateToPublishPageActionState) {
-          Navigator.push(context,
-              MaterialPageRoute(builder: (context) => const PublishPhoto()));
+          Navigator.push(
+              context, MaterialPageRoute(builder: (context) => PublishPhoto()));
         } else if (state is HomeNavigateToProfilePageActionState) {
           Navigator.push(context,
               MaterialPageRoute(builder: (context) => const Profile()));

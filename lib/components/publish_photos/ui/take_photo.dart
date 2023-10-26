@@ -3,11 +3,10 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:guarap/components/publish_photos/bloc/publish_bloc.dart';
-import 'package:image_picker/image_picker.dart';
 
 class TakePhoto extends StatefulWidget {
-  const TakePhoto({super.key});
-
+  const TakePhoto({super.key, required this.publishBloc});
+  final PublishBloc publishBloc;
   @override
   State<TakePhoto> createState() {
     return _TakePhotoState();
@@ -16,13 +15,10 @@ class TakePhoto extends StatefulWidget {
 
 class _TakePhotoState extends State<TakePhoto> {
   File? _pickedImageFile;
-
-  final PublishBloc publishBloc = PublishBloc();
-
   @override
   Widget build(context) {
     return BlocConsumer<PublishBloc, PublishState>(
-        bloc: publishBloc,
+        bloc: widget.publishBloc,
         // Listen to events but doesnt render
         listenWhen: (previous, current) => current is PublishActionState,
         // Determines whether the builder should rebuild when the state changes
@@ -34,8 +30,6 @@ class _TakePhotoState extends State<TakePhoto> {
               final addToCirclePhotoState = state as AddToCirclePhotoState;
               _pickedImageFile = addToCirclePhotoState.pickedImage;
               break;
-            default:
-              _pickedImageFile = null;
           }
           return Column(
             children: [
@@ -54,7 +48,7 @@ class _TakePhotoState extends State<TakePhoto> {
               ),
               TextButton.icon(
                 onPressed: () {
-                  publishBloc.add(AddPhotoButtonClickedEvent());
+                  widget.publishBloc.add(AddPhotoButtonClickedEvent());
                 },
                 icon: const Icon(Icons.image),
                 label: const Text(
