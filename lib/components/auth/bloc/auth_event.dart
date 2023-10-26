@@ -31,20 +31,25 @@ class RecoverAccountEvent extends AuthEvent {
 }
 
 // SignUp Screen Events
-class SignUpInitialEvent extends AuthEvent {
-  SignUpInitialEvent();
+class SignUpInitialEvent extends AuthEvent {}
+
+class SignUpValidateEmailEvent extends AuthEvent {
+  final String email;
+  SignUpValidateEmailEvent({required this.email});
 }
 
-
-
-class SignUpEvent extends AuthEvent {
+class SignUpValidateUsernameEvent extends AuthEvent {
   final String email;
+  final String username;
+  SignUpValidateUsernameEvent({required this.email, required this.username});
+}
+
+class SignUpValidatePasswordEvent extends AuthEvent {
+  final String email;
+  final String username;
   final String password;
-  final String confirmPassword;
-  SignUpEvent(
-      {required this.email,
-      required this.password,
-      required this.confirmPassword});
+  SignUpValidatePasswordEvent(
+      {required this.email, required this.username, required this.password});
 }
 
 // Logout Events
