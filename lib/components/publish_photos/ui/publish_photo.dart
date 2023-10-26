@@ -5,12 +5,14 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:guarap/components/publish_photos/bloc/publish_bloc.dart';
 import 'package:guarap/components/publish_photos/ui/add_location.dart';
 import 'package:guarap/components/publish_photos/ui/take_photo.dart';
-import 'add_location.dart';
 
 enum Category { sports, events, chill, food, study, other }
 
 class PublishPhoto extends StatefulWidget {
-  const PublishPhoto({super.key});
+  PublishPhoto({super.key});
+
+  File? _pickedImageFile;
+  String? address;
 
   @override
   State<PublishPhoto> createState() {
@@ -23,7 +25,7 @@ class _PublishPhotoState extends State<PublishPhoto> {
   final _inputTextController = TextEditingController();
   final PublishBloc publishBloc = PublishBloc();
   final actualDate = DateTime.now();
-  File? _pickedImageFile;
+  var _isLoading = false;
 
   @override
   void dispose() {
@@ -52,8 +54,6 @@ class _PublishPhotoState extends State<PublishPhoto> {
               backgroundColor: Colors.red,
             ),
           );
-        } else if (state is PublishingPostState) {
-          //cargando
         } else if (state is PublishPhotoErrorState) {
           ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(
@@ -67,8 +67,14 @@ class _PublishPhotoState extends State<PublishPhoto> {
         switch (state.runtimeType) {
           case AddToCirclePhotoState:
             final addToCirclePhotoState = state as AddToCirclePhotoState;
-            _pickedImageFile = addToCirclePhotoState.pickedImage;
-            print(_pickedImageFile);
+            widget._pickedImageFile = addToCirclePhotoState.pickedImage;
+            break;
+          case LocationSettedState:
+            final locationSettedState = state as LocationSettedState;
+            widget.address = locationSettedState.location.address;
+            break;
+          case PublishSuccessState:
+            _isLoading = true;
             break;
         }
         return Scaffold(
@@ -88,8 +94,11 @@ class _PublishPhotoState extends State<PublishPhoto> {
                 padding: const EdgeInsets.fromLTRB(10, 25, 25, 25),
                 child: Column(
                   children: [
-                    const SizedBox(height: 15),
-
+                    _isLoading
+                        ? const Center(
+                            child: LinearProgressIndicator(),
+                          )
+                        : const SizedBox.shrink(),
                     // First row for image post and the input field
                     Row(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -184,8 +193,7 @@ class _PublishPhotoState extends State<PublishPhoto> {
                       children: [
                         ElevatedButton(
                           onPressed: () {
-                            print(_pickedImageFile);
-                            if (_pickedImageFile == null) {
+                            if (widget._pickedImageFile == null) {
                               ScaffoldMessenger.of(context).showSnackBar(
                                 const SnackBar(
                                   content: Text("Please add a photo!"),
@@ -198,7 +206,8 @@ class _PublishPhotoState extends State<PublishPhoto> {
                                   actualDate,
                                   _inputTextController.text,
                                   _selectedCategory.name.toUpperCase(),
-                                  _pickedImageFile));
+                                  widget._pickedImageFile!,
+                                  widget.address));
                             }
                           },
 

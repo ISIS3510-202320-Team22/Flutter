@@ -11,11 +11,13 @@ class AddPhotoButtonClickedEvent extends PublishEvent {
 }
 
 class PublishPostEvent extends PublishEvent {
-  PublishPostEvent(this.date, this.description, this.category, this.image);
+  PublishPostEvent(
+      this.date, this.description, this.category, this.image, this.location);
   final DateTime date;
   final String description;
   final String category;
   final File? image;
+  final String? location;
   /*
   Map<String, dynamic> toJson() => {
         'date': date,
@@ -31,3 +33,8 @@ class PublishPostEvent extends PublishEvent {
 }
 
 class AddLocationEvent extends PublishEvent {}
+
+class MapLocationEvent extends PublishEvent {
+  MapLocationEvent(this.context);
+  final BuildContext context;
+}

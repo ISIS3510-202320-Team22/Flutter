@@ -2,13 +2,15 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 import 'package:bloc/bloc.dart';
-import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
+import 'package:guarap/components/publish_photos/model/location_model.dart';
 import 'package:guarap/components/publish_photos/repository/posts_repository.dart';
 import 'package:guarap/components/publish_photos/repository/storage_methods.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:location/location.dart';
-import 'package:uuid/uuid.dart';
 import 'package:http/http.dart' as http;
+import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:guarap/components/publish_photos/ui/map.dart';
 part 'publish_event.dart';
 part 'publish_state.dart';
 
@@ -17,6 +19,7 @@ class PublishBloc extends Bloc<PublishEvent, PublishState> {
     on<AddPhotoButtonClickedEvent>(addPhotoButtonClickedEvent);
     on<PublishPostEvent>(publishPostEvent);
     on<AddLocationEvent>(addLocationEvent);
+    on<MapLocationEvent>(mapLocationEvent);
   }
 
   FutureOr<void> addPhotoButtonClickedEvent(
@@ -44,7 +47,7 @@ class PublishBloc extends Bloc<PublishEvent, PublishState> {
         event.description,
         event.category,
         url,
-        // event.location,
+        event.location,
       );
       if (send) {
         emit(PublishSuccessState());
@@ -78,6 +81,7 @@ class PublishBloc extends Bloc<PublishEvent, PublishState> {
       }
     }
 
+    emit(LoadingCircleState());
     locationData = await location.getLocation();
 
     final lat = locationData.latitude;
@@ -95,5 +99,31 @@ class PublishBloc extends Bloc<PublishEvent, PublishState> {
     final resData = json.decode(response.body);
 
     final address = resData["results"][0]["formatted_address"];
+
+    emit(LocationSettedState(location: PhotoLocation(lat, lng, address)));
+  }
+
+  FutureOr<void> mapLocationEvent(
+      MapLocationEvent event, Emitter<PublishState> emit) async {
+    final pickedLocation = await Navigator.of(event.context)
+        .push<LatLng>(MaterialPageRoute(builder: (ctx) => const MapScreen()));
+
+    if (pickedLocation == null) {
+      return;
+    }
+
+    var lat = pickedLocation.latitude;
+    var lng = pickedLocation.longitude;
+
+    final url = Uri.parse(
+        "https://maps.googleapis.com/maps/api/geocode/json?latlng=$lat,$lng&key=AIzaSyAoh4_qFIhQj5RhFOZ3Hxn9Fc0zNR_8-tQ");
+
+    final response = await http.get(url);
+
+    final resData = json.decode(response.body);
+
+    final address = resData["results"][0]["formatted_address"];
+
+    emit(LocationSettedState(location: PhotoLocation(lat, lng, address)));
   }
 }

@@ -13,7 +13,7 @@ import 'package:guarap/components/publish_photos/ui/publish_photo.dart';
 void main() {
   testWidgets('Counter increments smoke test', (WidgetTester tester) async {
     // Build our app and trigger a frame.
-    await tester.pumpWidget(const PublishPhoto());
+    await tester.pumpWidget(PublishPhoto());
 
     // Verify that our counter starts at 0.
     expect(find.text('0'), findsOneWidget);

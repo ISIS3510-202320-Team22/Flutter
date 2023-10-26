@@ -30,8 +30,6 @@ class _TakePhotoState extends State<TakePhoto> {
               final addToCirclePhotoState = state as AddToCirclePhotoState;
               _pickedImageFile = addToCirclePhotoState.pickedImage;
               break;
-            default:
-              _pickedImageFile = null;
           }
           return Column(
             children: [

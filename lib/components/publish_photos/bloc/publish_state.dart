@@ -27,3 +27,12 @@ class PublishPhotoSubmittedState extends PublishActionState {}
 class PublishPhotoNotSubmittedState extends PublishActionState {}
 
 class PublishPhotoErrorState extends PublishActionState {}
+
+// STATES FOR THE LOCATION
+
+class LoadingCircleState extends PublishState {}
+
+class LocationSettedState extends PublishState {
+  LocationSettedState({required this.location});
+  final PhotoLocation location;
+}

@@ -2,7 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:uuid/uuid.dart';
 
 class PostRepository {
-  Future<bool> publishPost(date, description, category, image) async {
+  Future<bool> publishPost(date, description, category, image, address) async {
     final FirebaseFirestore _firestore = FirebaseFirestore.instance;
     try {
       final id = const Uuid().v4();
@@ -19,6 +19,7 @@ class PostRepository {
         'reported': false,
         'category': category,
         'image': image,
+        'address': address,
         //'location': location,
       });
       return true;
