@@ -27,7 +27,7 @@ class AuthMethods {
     }
   }
 
-  Future<String> logoutUser() async{
+  Future<String> logoutUser() async {
     try {
       await _auth.signOut();
       return "success";
@@ -48,6 +48,19 @@ class AuthMethods {
       } else {
         return "Unknown error";
       }
+    }
+  }
+
+  Future<String> createUser(
+      {required String email,
+      required String username,
+      required String password}) async {
+    try {
+      await _auth.createUserWithEmailAndPassword(
+          email: email, password: password);
+      return "success";
+    } on FirebaseAuthException catch (e) {
+      return e.message.toString(); // TODO: Change this
     }
   }
 }

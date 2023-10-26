@@ -38,11 +38,12 @@ class _RecoverAccountState extends State<RecoverAccount> {
               content: Text("Recover account email sent."),
             ),
           );
-          Navigator.push(context, MaterialPageRoute(builder: (context) => const Login()));
+          Navigator.push(
+              context, MaterialPageRoute(builder: (context) => const Login()));
         }
       },
       builder: (context, state) {
-        switch (state.runtimeType){
+        switch (state.runtimeType) {
           case RecoverAccountAttemptState:
             _isLoading = true;
             break;
@@ -57,75 +58,73 @@ class _RecoverAccountState extends State<RecoverAccount> {
         }
         return Scaffold(
           body: SafeArea(
-            child: Container(
-              padding: const EdgeInsets.symmetric(horizontal: 32),
-              width: double.infinity,
-              child: Form(
+              child: Container(
+            padding: const EdgeInsets.symmetric(horizontal: 32),
+            width: double.infinity,
+            child: Form(
                 key: _formKey,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                  const SizedBox(height: 64),
+                    const SizedBox(height: 64),
                     Text(
-                    "Find your account",
-                    style:
-                        GoogleFonts.roboto(color: Colors.black, fontSize: 40),
-                  ),
-                  const SizedBox(height: 20),
-                  Text(
-                    "Enter your email address to recover you account.",
-                    style:
-                        GoogleFonts.roboto(color: Colors.black, fontSize: 20),
-                  ),
-                  const SizedBox(height: 64),
-                  TextFieldInput(
-                    controller: _emailController,
-                    hintText: "Enter your email",
-                    textInputType: TextInputType.emailAddress,
-                    validatorMessage: "Please enter a valid email address"),
+                      "Find your account",
+                      style:
+                          GoogleFonts.roboto(color: Colors.black, fontSize: 40),
+                    ),
+                    const SizedBox(height: 20),
+                    Text(
+                      "Enter your email address to recover you account.",
+                      style:
+                          GoogleFonts.roboto(color: Colors.black, fontSize: 20),
+                    ),
+                    const SizedBox(height: 64),
+                    TextFieldInput(
+                        controller: _emailController,
+                        hintText: "Enter your email",
+                        textInputType: TextInputType.emailAddress,
+                        validatorMessage: "Please enter a valid email address"),
                     const SizedBox(height: 16),
-                  // Login Button
-                  InkWell(
-                    onTap: () {
-                      if (_formKey.currentState!.validate()) {
-                        // If form is valid, proceed with login logic
-                        authBloc.add(RecoverAccountEvent(email: _emailController.text));
-                      }
-                    },
-                    child: Container(
-                      width: double.infinity,
-                      alignment: Alignment.center,
-                      padding: const EdgeInsets.symmetric(vertical: 12),
-                      decoration: const ShapeDecoration(
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.all(Radius.circular(4)),
+                    // Login Button
+                    InkWell(
+                      onTap: () {
+                        if (_formKey.currentState!.validate()) {
+                          // If form is valid, proceed with login logic
+                          authBloc.add(RecoverAccountEvent(
+                              email: _emailController.text));
+                        }
+                      },
+                      child: Container(
+                        width: double.infinity,
+                        alignment: Alignment.center,
+                        padding: const EdgeInsets.symmetric(vertical: 12),
+                        decoration: const ShapeDecoration(
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.all(Radius.circular(4)),
+                          ),
+                          color: Color(0xFFAB003E),
                         ),
-                        color: Color(0xFFAB003E),
+                        child: !_isLoading
+                            ? Text(
+                                "Recover",
+                                style: GoogleFonts.roboto(
+                                    color: Colors.white, fontSize: 18),
+                              )
+                            : const CircularProgressIndicator(
+                                color: Colors.white,
+                              ),
                       ),
-                      child: !_isLoading
-                          ? Text(
-                              "Login",
-                              style: GoogleFonts.roboto(
-                                  color: Colors.white, fontSize: 18),
-                            )
-                          : const CircularProgressIndicator(
-                              color: Colors.white,
-                            ),
                     ),
-                  ),
-                  const SizedBox(height: 16),
-                  if (errorMessage != "") 
-                    Text(
-                      errorMessage,
-                      style: GoogleFonts.roboto(
-                          color: Colors.red, fontSize: 18),
-                    ),
+                    const SizedBox(height: 16),
+                    if (errorMessage != "")
+                      Text(
+                        errorMessage,
+                        style:
+                            GoogleFonts.roboto(color: Colors.red, fontSize: 18),
+                      ),
                   ],
-                )
-                
-                
-              ),
-            )),
+                )),
+          )),
         );
       },
     );
