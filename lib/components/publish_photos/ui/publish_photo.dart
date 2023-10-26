@@ -6,7 +6,7 @@ import 'package:guarap/components/publish_photos/bloc/publish_bloc.dart';
 import 'package:guarap/components/publish_photos/ui/add_location.dart';
 import 'package:guarap/components/publish_photos/ui/take_photo.dart';
 
-enum Category { sports, events, chill, food, study, other }
+enum Category { Generic, Chismes, Atardeceres, Lookingfor, Emprendimientos }
 
 class PublishPhoto extends StatefulWidget {
   PublishPhoto({super.key});
@@ -21,7 +21,7 @@ class PublishPhoto extends StatefulWidget {
 }
 
 class _PublishPhotoState extends State<PublishPhoto> {
-  Category _selectedCategory = Category.sports;
+  Category _selectedCategory = Category.Generic;
   final _inputTextController = TextEditingController();
   final PublishBloc publishBloc = PublishBloc();
   final actualDate = DateTime.now();
@@ -164,7 +164,7 @@ class _PublishPhotoState extends State<PublishPhoto> {
                               items: Category.values
                                   .map((category) => DropdownMenuItem(
                                       value: category,
-                                      child: Text(category.name.toUpperCase())))
+                                      child: Text(category.name)))
                                   .toList(),
                               onChanged: (value) {
                                 if (value == null) return;
@@ -205,7 +205,7 @@ class _PublishPhotoState extends State<PublishPhoto> {
                               publishBloc.add(PublishPostEvent(
                                   actualDate,
                                   _inputTextController.text,
-                                  _selectedCategory.name.toUpperCase(),
+                                  _selectedCategory.name,
                                   widget._pickedImageFile!,
                                   widget.address));
                             }
