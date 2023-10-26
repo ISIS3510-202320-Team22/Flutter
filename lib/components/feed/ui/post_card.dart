@@ -77,10 +77,10 @@ class PostCard extends StatelessWidget {
             ),
             //Image Section
             SizedBox(
-              height: MediaQuery.of(context).size.height * 0.25,
+              height: MediaQuery.of(context).size.height * 0.40,
               width: 380,
               child: Image.network(
-                'https://images.unsplash.com/photo-1693491011113-ad2c9413f212?auto=format&fit=crop&q=80&w=1365&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+                snap["image"],
                 fit: BoxFit.cover,
               ),
             ),
@@ -133,17 +133,16 @@ class PostCard extends StatelessWidget {
                         top: 8,
                       ),
                       child: RichText(
-                          text: const TextSpan(
-                              style: TextStyle(
+                          text: TextSpan(
+                              style: const TextStyle(
                                 color: Colors.black,
                                 fontSize: 15,
                               ),
                               children: [
-                            TextSpan(
+                            const TextSpan(
                                 text: "username",
                                 style: TextStyle(fontWeight: FontWeight.bold)),
-                            TextSpan(
-                                text: "  Parchado esa noche escalando en la U"),
+                            TextSpan(text: '  ${snap["description"]}'),
                           ])))
                 ],
               ),

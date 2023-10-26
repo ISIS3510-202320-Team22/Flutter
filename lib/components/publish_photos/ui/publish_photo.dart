@@ -205,7 +205,7 @@ class _PublishPhotoState extends State<PublishPhoto> {
                               publishBloc.add(PublishPostEvent(
                                   actualDate,
                                   _inputTextController.text,
-                                  _selectedCategory.name.toUpperCase(),
+                                  _selectedCategory.name,
                                   widget._pickedImageFile!,
                                   widget.address));
                             }
