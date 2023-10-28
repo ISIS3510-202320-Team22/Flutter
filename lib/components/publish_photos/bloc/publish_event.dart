@@ -13,7 +13,7 @@ class AddPhotoButtonClickedEvent extends PublishEvent {
 class PublishPostEvent extends PublishEvent {
   PublishPostEvent(
       this.date, this.description, this.category, this.image, this.location);
-  final DateTime date;
+  final String date;
   final String description;
   final String category;
   final File? image;

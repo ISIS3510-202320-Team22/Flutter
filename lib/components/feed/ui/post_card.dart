@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:intl/intl.dart';
 
 class PostCard extends StatelessWidget {
   const PostCard({Key? key, required this.snap}) : super(key: key);
@@ -86,16 +87,20 @@ class PostCard extends StatelessWidget {
             ),
             //Up & Down buttons section
             Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 const Padding(padding: EdgeInsets.only(left: 16)),
                 Expanded(
                   child: Text(
-                    "Universidad de los Andes",
+                    snap["address"] != null ? "${snap["address"]}" : " ",
                     style: GoogleFonts.roboto(
-                      fontSize: 20,
+                      fontSize: 15,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
+                ),
+                const SizedBox(
+                  width: 160,
                 ),
                 Expanded(
                   child: Row(children: [
@@ -154,7 +159,8 @@ class PostCard extends StatelessWidget {
                 padding:
                     const EdgeInsets.symmetric(vertical: 4, horizontal: 16),
                 child: const Text(
-                  "View all 200 comments",
+                  //snap["date"].toString(),
+                  "Comments",
                   style: TextStyle(
                       fontSize: 16,
                       color: Colors.grey,
@@ -162,18 +168,18 @@ class PostCard extends StatelessWidget {
                 ),
               ),
             ),
-
+/*
             Container(
               alignment: Alignment.centerLeft,
               padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 16),
-              child: const Text(
-                "2020/23/22",
-                style: TextStyle(
+              child: Text(
+                snap["address"] != null ? "${snap["address"]}" : " ",
+                style: const TextStyle(
                     fontSize: 16,
                     color: Colors.grey,
                     fontWeight: FontWeight.bold),
               ),
-            ),
+            ),*/
           ],
         ));
   }

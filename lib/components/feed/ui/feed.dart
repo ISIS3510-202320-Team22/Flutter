@@ -24,7 +24,7 @@ class _Feed extends State<Feed> {
       'Emprendimientos',
       'Eventos',
       'Atardeceres',
-      'Looking For',
+      'LookingFor',
     ];
 
     return BlocConsumer<FeedBloc, FeedState>(
@@ -46,7 +46,7 @@ class _Feed extends State<Feed> {
         return Column(
           children: [
             SizedBox(
-              height: 50,
+              height: 55,
               width: double.infinity,
               child: ListView.builder(
                 scrollDirection: Axis.horizontal,

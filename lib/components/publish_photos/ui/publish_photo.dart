@@ -5,8 +5,9 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:guarap/components/publish_photos/bloc/publish_bloc.dart';
 import 'package:guarap/components/publish_photos/ui/add_location.dart';
 import 'package:guarap/components/publish_photos/ui/take_photo.dart';
+import 'package:intl/intl.dart';
 
-enum Category { Generic, Chismes, Atardeceres, Lookingfor, Emprendimientos }
+enum Category { Generic, Chismes, Atardeceres, LookingFor, Emprendimientos }
 
 class PublishPhoto extends StatefulWidget {
   PublishPhoto({super.key});
@@ -24,9 +25,9 @@ class _PublishPhotoState extends State<PublishPhoto> {
   Category _selectedCategory = Category.Generic;
   final _inputTextController = TextEditingController();
   final PublishBloc publishBloc = PublishBloc();
-  final actualDate = DateTime.now();
+  final String actualDate =
+      DateFormat('yyyy-MM-dd HH:mm:ss').format(DateTime.now());
   var _isLoading = false;
-
   @override
   void dispose() {
     _inputTextController.dispose();

@@ -16,7 +16,7 @@ class PostMethods {
           return const Center(child: CircularProgressIndicator());
         }
         return SizedBox(
-          height: 450,
+          height: MediaQuery.of(context).size.height * 0.75,
           child: ListView.builder(
               itemCount: snapshot.data!.docs.length,
               itemBuilder: (context, index) => PostCard(
