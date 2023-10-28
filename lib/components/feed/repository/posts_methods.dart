@@ -5,21 +5,25 @@ import 'package:guarap/components/feed/ui/post_card.dart';
 class PostMethods {
   Widget uploadData(category) {
     return StreamBuilder(
-        stream: FirebaseFirestore.instance
-            .collection('categories')
-            .doc("Emprendimientos")
-            .collection("posts")
-            .snapshots(),
-        builder: (context,
-            AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>> snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Center(child: CircularProgressIndicator());
-          }
-          return ListView.builder(
+      stream: FirebaseFirestore.instance
+          .collection('categories')
+          .doc(category)
+          .collection("posts")
+          .snapshots(),
+      builder: (context,
+          AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>> snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return const Center(child: CircularProgressIndicator());
+        }
+        return SizedBox(
+          height: 450,
+          child: ListView.builder(
               itemCount: snapshot.data!.docs.length,
               itemBuilder: (context, index) => PostCard(
                     snap: snapshot.data!.docs[index].data(),
-                  ));
-        });
+                  )),
+        );
+      },
+    );
   }
 }

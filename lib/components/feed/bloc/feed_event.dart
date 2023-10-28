@@ -5,7 +5,8 @@ abstract class FeedEvent {}
 
 class FeedInitialEvent extends FeedEvent {}
 
-class SelectCategoryEvent extends FeedEvent {
-  SelectCategoryEvent(this.category);
-  Category category;
+class CategorySelectedEvent extends FeedEvent {
+  final String category;
+
+  CategorySelectedEvent({required this.category});
 }
