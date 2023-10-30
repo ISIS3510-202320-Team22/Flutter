@@ -41,6 +41,10 @@ class PostCard extends StatelessWidget {
                             fontWeight: FontWeight.bold,
                           ),
                         ),
+                        Text(snap["date"] != null
+                            ? DateFormat('MMM dd y HH:mm')
+                                .format(snap["date"].toDate())
+                            : " "),
                       ],
                     ),
                   ),

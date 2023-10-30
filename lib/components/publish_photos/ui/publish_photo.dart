@@ -14,7 +14,7 @@ class PublishPhoto extends StatefulWidget {
   PublishPhoto({super.key});
 
   File? _pickedImageFile;
-  String? address;
+  String address = "";
 
   @override
   State<PublishPhoto> createState() {
@@ -26,8 +26,7 @@ class _PublishPhotoState extends State<PublishPhoto> {
   Category _selectedCategory = Category.Generic;
   final _inputTextController = TextEditingController();
   final PublishBloc publishBloc = PublishBloc();
-  final Timestamp actualDate =
-      Timestamp(DateTime.now().year, DateTime.now().month);
+  final Timestamp actualDate = Timestamp.now();
   var _isLoading = false;
   @override
   void dispose() {

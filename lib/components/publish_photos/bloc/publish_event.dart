@@ -17,7 +17,7 @@ class PublishPostEvent extends PublishEvent {
   final String description;
   final String category;
   final File? image;
-  final String? location;
+  String location = "";
   /*
   Map<String, dynamic> toJson() => {
         'date': date,
