@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -25,8 +26,8 @@ class _PublishPhotoState extends State<PublishPhoto> {
   Category _selectedCategory = Category.Generic;
   final _inputTextController = TextEditingController();
   final PublishBloc publishBloc = PublishBloc();
-  final String actualDate =
-      DateFormat('yyyy-MM-dd HH:mm:ss').format(DateTime.now());
+  final Timestamp actualDate =
+      Timestamp(DateTime.now().year, DateTime.now().month);
   var _isLoading = false;
   @override
   void dispose() {

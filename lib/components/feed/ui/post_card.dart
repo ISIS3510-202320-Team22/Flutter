@@ -26,9 +26,9 @@ class PostCard extends StatelessWidget {
                     'https://images.unsplash.com/photo-1695064823570-3a72b0a7daf6?auto=format&fit=crop&q=80&w=1370&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
                   ),
                 ),
-                const Expanded(
+                Expanded(
                   child: Padding(
-                    padding: EdgeInsets.only(
+                    padding: const EdgeInsets.only(
                       left: 8,
                     ),
                     child: Column(
@@ -36,8 +36,8 @@ class PostCard extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          'username',
-                          style: TextStyle(
+                          snap["user"] != null ? "${snap["user"]}" : " ",
+                          style: const TextStyle(
                             fontWeight: FontWeight.bold,
                           ),
                         ),
@@ -144,10 +144,16 @@ class PostCard extends StatelessWidget {
                                 fontSize: 15,
                               ),
                               children: [
-                            const TextSpan(
-                                text: "username",
-                                style: TextStyle(fontWeight: FontWeight.bold)),
-                            TextSpan(text: '  ${snap["description"]}'),
+                            TextSpan(
+                                text: snap["user"] != null
+                                    ? "${snap["user"]}"
+                                    : " ",
+                                style: const TextStyle(
+                                    fontWeight: FontWeight.bold)),
+                            TextSpan(
+                                text: '  ${snap["description"]}' != null
+                                    ? "  ${snap["description"]}"
+                                    : " "),
                           ])))
                 ],
               ),

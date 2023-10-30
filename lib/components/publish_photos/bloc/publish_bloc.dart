@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 import 'package:bloc/bloc.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:guarap/components/publish_photos/model/location_model.dart';
 import 'package:guarap/components/publish_photos/repository/posts_repository.dart';
