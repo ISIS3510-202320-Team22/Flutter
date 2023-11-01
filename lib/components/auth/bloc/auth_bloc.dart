@@ -86,8 +86,26 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   FutureOr<void> signUpValidateEmailEvent(
       SignUpValidateEmailEvent event, Emitter<AuthState> emit) async {
     emit(ValidatingState());
+    if (event.email.trim() == "") {
+      emit(SignUpFailureState(errorMessage: "Email address cannot be empty"));
+      emit(SignUpInitialState());
+    } else if (event.email.trim() != event.email) {
+      emit(SignUpFailureState(
+          errorMessage: "Email address cannot start or end with whitespaces"));
+      emit(SignUpInitialState());
+    }
+    // Check if the email has at least 1 character before the @
+    else if (event.email.split("@")[0].trim().isEmpty) {
+      emit(SignUpFailureState(errorMessage: "Email address must be valid"));
+      emit(SignUpInitialState());
+    }
     // Validate email to be @uniandes.edu.co only
-    if (event.email.endsWith("@uniandes.edu.co")) {
+    else if (!event.email.endsWith("@uniandes.edu.co")) {
+      emit(SignUpFailureState(
+          errorMessage:
+              'Email address must be from a @uniandes.edu.co domain'));
+      emit(SignUpInitialState());
+    } else {
       // Verify the email is not already in use
       String res = await AuthMethods().checkEmail(email: event.email);
       if (res == "success") {
@@ -97,25 +115,38 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         emit(SignUpFailureState(errorMessage: res));
         emit(SignUpInitialState());
       }
-    } else {
-      emit(SignUpFailureState(
-          errorMessage:
-              'Email address must be from a @uniandes.edu.co domain'));
-      emit(SignUpInitialState());
     }
   }
 
   FutureOr<void> signUpValidateUsernameEvent(
       SignUpValidateUsernameEvent event, Emitter<AuthState> emit) async {
     emit(ValidatingState());
-    String res = await AuthMethods().checkUsername(username: event.username);
-    if (res == "success") {
+    if (event.username.trim() == "") {
+      emit(SignUpFailureState(
+          errorMessage: "Username cannot have only whitespaces"));
       emit(SignUpInitialState());
-      emit(NavigateToPasswordPageActionState(
-          email: event.email, username: event.username));
+    } else if (event.username.trim() != event.username) {
+      emit(SignUpFailureState(
+          errorMessage: "Username cannot start or end with whitespaces"));
+      emit(SignUpInitialState());
+    } else if (event.username.trim().length < 5) {
+      emit(SignUpFailureState(
+          errorMessage: "Username must have 5 characters at least"));
+      emit(SignUpInitialState());
+    } else if (event.username.trim().length > 20) {
+      emit(SignUpFailureState(
+          errorMessage: "Username must have 20 characters at most"));
+      emit(SignUpInitialState());
     } else {
-      emit(SignUpFailureState(errorMessage: res));
-      emit(SignUpInitialState());
+      String res = await AuthMethods().checkUsername(username: event.username);
+      if (res == "success") {
+        emit(SignUpInitialState());
+        emit(NavigateToPasswordPageActionState(
+            email: event.email, username: event.username));
+      } else {
+        emit(SignUpFailureState(errorMessage: res));
+        emit(SignUpInitialState());
+      }
     }
   }
 
@@ -132,9 +163,13 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       emit(SignUpFailureState(
           errorMessage: "Password cannot start or end with whitespaces"));
       emit(SignUpInitialState());
-    } else if (event.password.trim().length < 6) {
+    } else if (event.password.trim().length < 7) {
       emit(SignUpFailureState(
-          errorMessage: "Password must have 6 characters at least"));
+          errorMessage: "Password must have 7 characters at least"));
+      emit(SignUpInitialState());
+    } else if (event.password.trim().length > 64) {
+      emit(SignUpFailureState(
+          errorMessage: "Password must have 64 characters at most"));
       emit(SignUpInitialState());
     } else {
       String res = await AuthMethods().createUser(
