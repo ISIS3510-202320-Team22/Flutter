@@ -88,10 +88,15 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     emit(ValidatingState());
     // Validate email to be @uniandes.edu.co only
     if (event.email.endsWith("@uniandes.edu.co")) {
-      // Wait 1 second
-      await Future.delayed(const Duration(seconds: 1));
-      emit(SignUpInitialState());
-      emit(NavigateToSignUpUsernamePageActionState(email: event.email));
+      // Verify the email is not already in use
+      String res = await AuthMethods().checkEmail(email: event.email);
+      if (res == "success") {
+        emit(SignUpInitialState());
+        emit(NavigateToSignUpUsernamePageActionState(email: event.email));
+      } else {
+        emit(SignUpFailureState(errorMessage: res));
+        emit(SignUpInitialState());
+      }
     } else {
       emit(SignUpFailureState(
           errorMessage:
@@ -103,16 +108,31 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   FutureOr<void> signUpValidateUsernameEvent(
       SignUpValidateUsernameEvent event, Emitter<AuthState> emit) async {
     emit(ValidatingState());
-    await Future.delayed(const Duration(seconds: 1));
-    emit(SignUpInitialState());
-    emit(NavigateToPasswordPageActionState(
-        email: event.email, username: event.username));
+    String res = await AuthMethods().checkUsername(username: event.username);
+    if (res == "success") {
+      emit(SignUpInitialState());
+      emit(NavigateToPasswordPageActionState(
+          email: event.email, username: event.username));
+    } else {
+      emit(SignUpFailureState(errorMessage: res));
+      emit(SignUpInitialState());
+    }
   }
 
   FutureOr<void> signUpValidatePasswordEvent(
       SignUpValidatePasswordEvent event, Emitter<AuthState> emit) async {
     emit(ValidatingState());
-    if (event.password.length < 6) {
+    if (event.password.trim() == "") {
+      emit(SignUpFailureState(
+          errorMessage: "Password cannot have only whitespaces"));
+      emit(SignUpInitialState());
+    }
+    // Check if the password starts or ends with whitespaces
+    else if (event.password.trim() != event.password) {
+      emit(SignUpFailureState(
+          errorMessage: "Password cannot start or end with whitespaces"));
+      emit(SignUpInitialState());
+    } else if (event.password.trim().length < 6) {
       emit(SignUpFailureState(
           errorMessage: "Password must have 6 characters at least"));
       emit(SignUpInitialState());
@@ -122,7 +142,6 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
           username: event.username,
           password: event.password);
       if (res == "success") {
-        await Future.delayed(const Duration(seconds: 1));
         emit(SignUpInitialState());
         emit(NavigateToWelcomePageActionState(username: event.username));
         await Future.delayed(const Duration(seconds: 4));

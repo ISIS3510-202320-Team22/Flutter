@@ -39,6 +39,13 @@ class _SignUpUsernameState extends State<SignUpUsername> {
                         email: state.email,
                         username: state.username,
                       )));
+        } else if (state is SignUpFailureState) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(state.errorMessage),
+              backgroundColor: Colors.red,
+            ),
+          );
         }
       },
       builder: (context, state) {
