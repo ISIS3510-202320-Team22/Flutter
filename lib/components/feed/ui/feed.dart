@@ -13,8 +13,10 @@ class Feed extends StatefulWidget {
 }
 
 class _Feed extends State<Feed> {
-  String _selectedCategory = 'Emprendimientos';
+  String _selectedCategory = 'Generic';
   final FeedBloc feedBloc = FeedBloc();
+  bool isTapped = false;
+  Color blue = Colors.blue;
 
   @override
   Widget build(context) {
@@ -35,7 +37,6 @@ class _Feed extends State<Feed> {
       builder: (context, state) {
         switch (state.runtimeType) {
           case FeedLoadingState:
-            final loading = true;
             return const Center(child: CircularProgressIndicator());
 
           case CategorySelectedState:
@@ -57,14 +58,17 @@ class _Feed extends State<Feed> {
                     child: GestureDetector(
                       onTap: () {
                         _selectedCategory = categories[index];
-                        feedBloc.add(
-                            CategorySelectedEvent(category: _selectedCategory));
-                        print(categories[index]);
+                        // Change the feed for the specific category
+                        feedBloc.add(CategorySelectedEvent(
+                          category: _selectedCategory,
+                        ));
                       },
                       child: Container(
                         padding: const EdgeInsets.all(8.0),
                         decoration: BoxDecoration(
-                          color: const Color.fromARGB(255, 171, 0, 72),
+                          color: _selectedCategory == categories[index]
+                              ? const Color.fromARGB(255, 171, 0, 72)
+                              : Colors.grey.withOpacity(0.8),
                           borderRadius: BorderRadius.circular(8.0),
                         ),
                         child: Text(

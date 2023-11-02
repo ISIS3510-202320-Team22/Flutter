@@ -38,3 +38,5 @@ class MapLocationEvent extends PublishEvent {
   MapLocationEvent(this.context);
   final BuildContext context;
 }
+
+class GoToFeedEvent extends PublishEvent {}

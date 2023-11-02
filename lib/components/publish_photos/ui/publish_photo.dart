@@ -3,6 +3,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:guarap/components/feed/ui/feed.dart';
+import 'package:guarap/components/home/ui/home.dart';
 import 'package:guarap/components/publish_photos/bloc/publish_bloc.dart';
 import 'package:guarap/components/publish_photos/ui/add_location.dart';
 import 'package:guarap/components/publish_photos/ui/take_photo.dart';
@@ -62,6 +64,9 @@ class _PublishPhotoState extends State<PublishPhoto> {
               backgroundColor: Colors.red,
             ),
           );
+        } else if (state is GoToFeedActionState) {
+          Navigator.push(
+              context, MaterialPageRoute(builder: (context) => const Home()));
         }
       },
       builder: (context, state) {
@@ -73,9 +78,6 @@ class _PublishPhotoState extends State<PublishPhoto> {
           case LocationSettedState:
             final locationSettedState = state as LocationSettedState;
             widget.address = locationSettedState.location.address;
-            break;
-          case PublishSuccessState:
-            _isLoading = true;
             break;
         }
         return Scaffold(
@@ -193,36 +195,40 @@ class _PublishPhotoState extends State<PublishPhoto> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         ElevatedButton(
-                          onPressed: () {
-                            if (widget._pickedImageFile == null) {
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                const SnackBar(
-                                  content: Text("Please add a photo!"),
-                                  backgroundColor: Colors.red,
-                                ),
-                              );
-                              return;
-                            } else {
-                              publishBloc.add(PublishPostEvent(
-                                  actualDate,
-                                  _inputTextController.text,
-                                  _selectedCategory.name,
-                                  widget._pickedImageFile!,
-                                  widget.address));
-                            }
-                          },
+                            onPressed: () {
+                              if (widget._pickedImageFile == null) {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  const SnackBar(
+                                    content: Text("Please add a photo!"),
+                                    backgroundColor: Colors.red,
+                                  ),
+                                );
+                                return;
+                              } else {
+                                publishBloc.add(GoToFeedEvent());
 
-                          // red color button and text white
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor:
-                                const Color.fromARGB(255, 171, 0, 72),
-                            foregroundColor: Colors.white,
-                            // Expand button width
-                            minimumSize: const Size(250, 30),
-                          ),
-                          child: const Text("Share",
-                              style: TextStyle(fontSize: 20)),
-                        ),
+                                publishBloc.add(PublishPostEvent(
+                                    actualDate,
+                                    _inputTextController.text,
+                                    _selectedCategory.name,
+                                    widget._pickedImageFile!,
+                                    widget.address));
+                              }
+                            },
+
+                            // red color button and text white
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor:
+                                  const Color.fromARGB(255, 171, 0, 72),
+                              foregroundColor: Colors.white,
+                              // Expand button width
+                              minimumSize: const Size(250, 30),
+                            ),
+                            child: Text(
+                              "Share",
+                              style: GoogleFonts.roboto(
+                                  color: Colors.white, fontSize: 18),
+                            )),
                       ],
                     ),
                   ],

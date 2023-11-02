@@ -36,3 +36,7 @@ class LocationSettedState extends PublishState {
   LocationSettedState({required this.location});
   final PhotoLocation location;
 }
+
+// State to go to the feed when published
+
+class GoToFeedActionState extends PublishActionState {}

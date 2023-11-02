@@ -21,6 +21,7 @@ class PublishBloc extends Bloc<PublishEvent, PublishState> {
     on<PublishPostEvent>(publishPostEvent);
     on<AddLocationEvent>(addLocationEvent);
     on<MapLocationEvent>(mapLocationEvent);
+    on<GoToFeedEvent>(goToFeedEvent);
   }
 
   FutureOr<void> addPhotoButtonClickedEvent(
@@ -126,5 +127,10 @@ class PublishBloc extends Bloc<PublishEvent, PublishState> {
     final address = resData["results"][0]["formatted_address"];
 
     emit(LocationSettedState(location: PhotoLocation(lat, lng, address)));
+  }
+
+  FutureOr<void> goToFeedEvent(
+      GoToFeedEvent event, Emitter<PublishState> emit) {
+    emit(GoToFeedActionState());
   }
 }
