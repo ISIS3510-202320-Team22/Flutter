@@ -14,3 +14,5 @@ class CategorySelectedState extends FeedState {
 }
 
 class FeedLoadingState extends FeedState {}
+
+class FeedUpVoteState extends FeedActionState {}

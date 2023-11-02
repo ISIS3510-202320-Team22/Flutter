@@ -24,7 +24,6 @@ class _Feed extends State<Feed> {
       'Generic',
       'Chismes',
       'Emprendimientos',
-      'Eventos',
       'Atardeceres',
       'LookingFor',
     ];

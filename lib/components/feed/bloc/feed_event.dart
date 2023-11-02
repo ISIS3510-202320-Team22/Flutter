@@ -10,3 +10,5 @@ class CategorySelectedEvent extends FeedEvent {
 
   CategorySelectedEvent({required this.category});
 }
+
+class FeedUpvoteEvent extends FeedEvent {}
