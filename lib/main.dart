@@ -33,8 +33,6 @@ class GuarapApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final AuthBloc authBloc = BlocProvider.of<AuthBloc>(context);
-
     return MaterialApp(
         debugShowCheckedModeBanner: false,
         darkTheme: ThemeData.dark()

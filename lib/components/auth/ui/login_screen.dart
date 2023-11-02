@@ -2,11 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:guarap/components/auth/bloc/auth_bloc.dart';
+import 'package:guarap/components/auth/ui/recover_account_screen.dart';
+import 'package:guarap/components/auth/ui/sign_up_email_screen.dart';
 import 'package:guarap/components/auth/ui/text_field_input.dart';
-
-import '../../home/ui/home.dart';
-import 'recover_account_screen.dart';
-import 'sign_up_screen.dart';
+import 'package:guarap/components/home/ui/home.dart';
 
 class Login extends StatefulWidget {
   const Login({super.key});
@@ -44,19 +43,18 @@ class _LoginState extends State<Login> {
       // Do build when States are not AuthActionState, hence UI changes
       buildWhen: (previous, current) => current is! AuthActionState,
       listener: (context, state) {
-        if (state is LoginNavigateToRecoverPageActionState) {
+        if (state is NavigateToRecoverPageActionState) {
           Navigator.push(context,
               MaterialPageRoute(builder: (context) => const RecoverAccount()));
-        } else if (state is LoginNavigateToSignUpPageActionState) {
+        } else if (state is NavigateToSignUpEmailPageActionState) {
           Navigator.push(context,
-              MaterialPageRoute(builder: (context) => const SignUp()));
+              MaterialPageRoute(builder: (context) => const SignUpEmail()));
         } else if (state is LoginSuccessfulState) {
-          Navigator.push(context, 
-              MaterialPageRoute(builder: (context) => const Home()));
+          Navigator.push(
+              context, MaterialPageRoute(builder: (context) => const Home()));
         } else if (state is LoginFailureState) {
           ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(
-              // content: Text(state.errorMessage),
               content: Text("Login failed. Check credentials."),
               backgroundColor: Colors.red,
             ),
@@ -111,7 +109,7 @@ class _LoginState extends State<Login> {
                   InkWell(
                     onTap: () {
                       if (_formKey.currentState!.validate()) {
-                        // If form is valid, proceed with login logic
+                        // If form is valid, proceed with login
                         authBloc.add(LoginEvent(
                             email: _emailController.text,
                             password: _passwordController.text));

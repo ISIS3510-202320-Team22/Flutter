@@ -20,11 +20,19 @@ final class LoginSuccessfulState extends AuthActionState {}
 
 final class LoginFailureState extends AuthActionState {}
 
-final class LoginNavigateToRecoverPageActionState extends AuthActionState {
-  LoginNavigateToRecoverPageActionState();
+// SignUp Screen States
+final class SignUpInitialState extends AuthState {}
+
+final class SignUpAttemptState extends AuthState {}
+
+final class SignUpSuccessfulState extends AuthActionState {}
+
+final class SignUpFailureState extends AuthActionState {
+  final String errorMessage;
+  SignUpFailureState({required this.errorMessage});
 }
 
-final class LoginNavigateToSignUpPageActionState extends AuthActionState {}
+final class ValidatingState extends AuthState {}
 
 // Recover Account Screen States
 final class RecoverAccountInitialState extends AuthState {}
@@ -45,3 +53,26 @@ final class LogoutSuccessfulState extends AuthActionState {}
 
 final class LogoutFailureState extends AuthActionState {}
 
+// Navigation States
+final class NavigateToLoginPageActionState extends AuthActionState {}
+
+final class NavigateToRecoverPageActionState extends AuthActionState {}
+
+final class NavigateToSignUpEmailPageActionState extends AuthActionState {}
+
+final class NavigateToSignUpUsernamePageActionState extends AuthActionState {
+  final String email;
+  NavigateToSignUpUsernamePageActionState({required this.email});
+}
+
+final class NavigateToPasswordPageActionState extends AuthActionState {
+  final String email;
+  final String username;
+  NavigateToPasswordPageActionState(
+      {required this.email, required this.username});
+}
+
+final class NavigateToWelcomePageActionState extends AuthActionState {
+  final String username;
+  NavigateToWelcomePageActionState({required this.username});
+}
