@@ -127,7 +127,12 @@ class PublishBloc extends Bloc<PublishEvent, PublishState> {
 
     final resData = json.decode(response.body);
 
-    final address = resData["results"][0]["formatted_address"];
+    // final address = resData["results"][0]["formatted_address"];
+
+    final address = resData["results"][0]["address_components"][2]["long_name"];
+
+    print(address);
+    print(resData);
 
     emit(LocationSettedState(location: PhotoLocation(lat, lng, address)));
   }
