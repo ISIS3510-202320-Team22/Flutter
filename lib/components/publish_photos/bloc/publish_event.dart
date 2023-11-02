@@ -1,3 +1,5 @@
+// import 'package:guarap/components/publish_photos/ui/publish_photos.dart';
+
 part of 'publish_bloc.dart';
 
 @immutable
@@ -40,3 +42,8 @@ class MapLocationEvent extends PublishEvent {
 }
 
 class GoToFeedEvent extends PublishEvent {}
+
+class CategorySelectedEvent extends PublishEvent {
+  CategorySelectedEvent({required this.category});
+  final String category;
+}

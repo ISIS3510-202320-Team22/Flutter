@@ -79,6 +79,12 @@ class _PublishPhotoState extends State<PublishPhoto> {
             final locationSettedState = state as LocationSettedState;
             widget.address = locationSettedState.location.address;
             break;
+          /*
+          case CategorySelectedState:
+            final categorySelectedState = state as CategorySelectedState;
+            _selectedCategory = categorySelectedState.category;
+            break;
+            */
         }
         return Scaffold(
             appBar: AppBar(
@@ -174,6 +180,8 @@ class _PublishPhotoState extends State<PublishPhoto> {
                                 setState(() {
                                   _selectedCategory = value;
                                 });
+                                // publishBloc.add(CategorySelectedEvent(
+                                // category: _selectedCategory));
                               },
                             ),
                           )

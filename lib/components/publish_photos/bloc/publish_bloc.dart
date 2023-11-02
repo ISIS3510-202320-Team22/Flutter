@@ -3,7 +3,9 @@ import 'dart:convert';
 import 'dart:io';
 import 'package:bloc/bloc.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:guarap/components/feed/bloc/feed_bloc.dart';
 import 'package:guarap/components/publish_photos/model/location_model.dart';
 import 'package:guarap/components/publish_photos/repository/posts_repository.dart';
 import 'package:guarap/components/publish_photos/repository/storage_methods.dart';
@@ -22,6 +24,7 @@ class PublishBloc extends Bloc<PublishEvent, PublishState> {
     on<AddLocationEvent>(addLocationEvent);
     on<MapLocationEvent>(mapLocationEvent);
     on<GoToFeedEvent>(goToFeedEvent);
+    on<CategorySelectedEvent>(categorySelectedEvent);
   }
 
   FutureOr<void> addPhotoButtonClickedEvent(
@@ -132,5 +135,10 @@ class PublishBloc extends Bloc<PublishEvent, PublishState> {
   FutureOr<void> goToFeedEvent(
       GoToFeedEvent event, Emitter<PublishState> emit) {
     emit(GoToFeedActionState());
+  }
+
+  FutureOr<void> categorySelectedEvent(
+      CategorySelectedEvent event, Emitter<PublishState> emit) {
+    emit(CategorySelectedState(category: event.category));
   }
 }
