@@ -24,7 +24,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
   FutureOr<void> homeInitialEvent(
       HomeInitialEvent event, Emitter<HomeState> emit) async {
     emit(HomeLoadingState());
-    await Future.delayed(const Duration(seconds: 1));
+    await Future.delayed(const Duration(seconds: 2));
     emit(HomeLoadedSuccessState(
         photos: PhotosData.dataList
             .map((e) => PhotoDataModel(e["id"], e["@username"], e["imageurl"]))

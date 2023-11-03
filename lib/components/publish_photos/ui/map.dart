@@ -5,7 +5,8 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 class MapScreen extends StatefulWidget {
   const MapScreen(
       {super.key,
-      this.location = const PhotoLocation(37.422, -122.084, ""),
+      this.location =
+          const PhotoLocation(4.600235319708498, -74.06734968029151, ""),
       this.isSelectedLocation = true});
 
   final PhotoLocation location;

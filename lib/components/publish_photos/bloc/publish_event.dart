@@ -1,3 +1,5 @@
+// import 'package:guarap/components/publish_photos/ui/publish_photos.dart';
+
 part of 'publish_bloc.dart';
 
 @immutable
@@ -13,11 +15,11 @@ class AddPhotoButtonClickedEvent extends PublishEvent {
 class PublishPostEvent extends PublishEvent {
   PublishPostEvent(
       this.date, this.description, this.category, this.image, this.location);
-  final String date;
+  final Timestamp date;
   final String description;
   final String category;
   final File? image;
-  final String? location;
+  String location = "";
   /*
   Map<String, dynamic> toJson() => {
         'date': date,
@@ -37,4 +39,11 @@ class AddLocationEvent extends PublishEvent {}
 class MapLocationEvent extends PublishEvent {
   MapLocationEvent(this.context);
   final BuildContext context;
+}
+
+class GoToFeedEvent extends PublishEvent {}
+
+class CategorySelectedEvent extends PublishEvent {
+  CategorySelectedEvent({required this.category});
+  final String category;
 }

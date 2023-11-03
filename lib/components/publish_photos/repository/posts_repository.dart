@@ -17,7 +17,7 @@ class PostRepository {
         'downvotes': 0,
         'upvotes': 0,
         'reported': false,
-        'category': category,
+        'user': "sadio",
         'image': image,
         'address': address,
         //'location': location,

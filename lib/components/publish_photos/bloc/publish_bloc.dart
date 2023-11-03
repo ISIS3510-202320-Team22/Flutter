@@ -2,7 +2,10 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 import 'package:bloc/bloc.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:guarap/components/feed/bloc/feed_bloc.dart';
 import 'package:guarap/components/publish_photos/model/location_model.dart';
 import 'package:guarap/components/publish_photos/repository/posts_repository.dart';
 import 'package:guarap/components/publish_photos/repository/storage_methods.dart';
@@ -20,6 +23,8 @@ class PublishBloc extends Bloc<PublishEvent, PublishState> {
     on<PublishPostEvent>(publishPostEvent);
     on<AddLocationEvent>(addLocationEvent);
     on<MapLocationEvent>(mapLocationEvent);
+    on<GoToFeedEvent>(goToFeedEvent);
+    on<CategorySelectedEvent>(categorySelectedEvent);
   }
 
   FutureOr<void> addPhotoButtonClickedEvent(
@@ -98,9 +103,16 @@ class PublishBloc extends Bloc<PublishEvent, PublishState> {
 
     final resData = json.decode(response.body);
 
-    final address = resData["results"][0]["formatted_address"];
+    // final address = resData["results"][0]["formatted_address"];
+    final address = resData["results"][0]["address_components"][2]["long_name"];
+    final address2 =
+        resData["results"][0]["address_components"][4]["long_name"];
 
-    emit(LocationSettedState(location: PhotoLocation(lat, lng, address)));
+    print(address);
+    print(address2);
+    print(resData);
+    emit(LocationSettedState(
+        location: PhotoLocation(lat, lng, address + ", " + address2)));
   }
 
   FutureOr<void> mapLocationEvent(
@@ -122,8 +134,27 @@ class PublishBloc extends Bloc<PublishEvent, PublishState> {
 
     final resData = json.decode(response.body);
 
-    final address = resData["results"][0]["formatted_address"];
+    // final address = resData["results"][0]["formatted_address"];
 
-    emit(LocationSettedState(location: PhotoLocation(lat, lng, address)));
+    final address = resData["results"][0]["address_components"][2]["long_name"];
+    final address2 =
+        resData["results"][0]["address_components"][4]["long_name"];
+
+    print(address);
+    print(address2);
+    print(resData);
+
+    emit(LocationSettedState(
+        location: PhotoLocation(lat, lng, address + ", " + address2)));
+  }
+
+  FutureOr<void> goToFeedEvent(
+      GoToFeedEvent event, Emitter<PublishState> emit) {
+    emit(GoToFeedActionState());
+  }
+
+  FutureOr<void> categorySelectedEvent(
+      CategorySelectedEvent event, Emitter<PublishState> emit) {
+    emit(CategorySelectedState(category: event.category));
   }
 }
