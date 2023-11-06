@@ -45,14 +45,14 @@ class PublishBloc extends Bloc<PublishEvent, PublishState> {
       emit(PublishPhotoErrorState());
       return;
     } else {
-      final send = await PostRepository().publishPost(
+      final res = await PostRepository().publishPost(
         event.date,
         event.description,
         event.category,
         url,
         event.location,
       );
-      if (send) {
+      if (res == "success") {
         emit(PublishSuccessState());
       } else {
         emit(PublishErrorState());

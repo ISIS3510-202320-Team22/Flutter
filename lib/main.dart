@@ -54,8 +54,7 @@ class GuarapApp extends StatelessWidget {
             builder: (context, snapshot) {
               // Snapshot contains user object if user is logged in
               if (!snapshot.hasData || snapshot.hasError) {
-                // Do login to check user data is valid
-
+                // User was not logged in, do login
                 return const Login();
               } else {
                 // User was logged in, check if user data is still valid
@@ -65,8 +64,6 @@ class GuarapApp extends StatelessWidget {
                   // User data is invalid, do login
                   return const Login();
                 }
-
-                print(snapshot.data);
                 return const Home();
               }
             }));
