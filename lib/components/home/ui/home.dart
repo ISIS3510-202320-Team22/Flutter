@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:guarap/components/widgets/header.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:guarap/components/home/bloc/home_bloc.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:guarap/components/profile/ui/profile.dart';
 import 'package:guarap/components/categories/ui/categories.dart';
 import 'package:guarap/components/publish_photos/ui/publish_photo.dart';
-
-import '../../feed/ui/feed.dart';
-import '../bloc/home_bloc.dart';
+import 'package:guarap/components/feed/ui/feed.dart';
 
 class Home extends StatefulWidget {
   const Home({super.key});
@@ -47,56 +46,80 @@ class _HomeState extends State<Home> {
         }
       },
       builder: (context, state) {
+        String _sortStrategy;
         switch (state.runtimeType) {
           case HomeLoadingState:
             return const Scaffold(
                 body: Center(child: CircularProgressIndicator()));
-          case HomeLoadedSuccessState:
-            return Header(
-              Scaffold(
-                bottomNavigationBar: NavigationBar(destinations: [
-                  NavigationDestination(
-                      icon: IconButton(
-                        onPressed: () {},
-                        icon: const Icon(Icons.home),
-                      ),
-                      label: "Feed"),
-                  NavigationDestination(
-                      icon: IconButton(
-                        onPressed: () {
-                          homeBloc.add(HomePublishButtonNavigateEvent());
-                        },
-                        icon: const Icon(Icons.add_box),
-                      ),
-                      label: "Publish"),
-                  NavigationDestination(
-                      icon: IconButton(
-                        onPressed: () {
-                          homeBloc.add(HomeCategoriesButtonNavigateEvent());
-                        },
-                        icon: const Icon(Icons.category),
-                      ),
-                      label: "Categories"),
-                  NavigationDestination(
-                      icon: IconButton(
-                        onPressed: () {
-                          homeBloc.add(HomeProfileButtonNavigateEvent());
-                        },
-                        icon: const Icon(Icons.person),
-                      ),
-                      label: "Profile"),
-                ]),
-                body: const Feed(),
-              ),
-            );
+          case HomeSortStrategyChangedState:
+            _sortStrategy =
+                (state as HomeSortStrategyChangedState).sortStrategy;
+            break;
           case HomeErrorState:
             return const Scaffold(
                 body: Center(
               child: Text("Error"),
             ));
           default:
-            return const SizedBox();
+            _sortStrategy = "Recent";
         }
+        return Scaffold(
+          appBar: AppBar(
+            title: Row(
+              children: [
+                Text(
+                  "Guarap",
+                  style: GoogleFonts.pattaya(
+                      color: Theme.of(context).colorScheme.onPrimaryContainer,
+                      fontSize: 40),
+                ),
+                const Spacer(),
+                IconButton(
+                  icon: _sortStrategy == "Recent"
+                      ? const Icon(Icons.access_time)
+                      : const Icon(Icons.arrow_upward),
+                  onPressed: () => homeBloc.add(HomeSortPostsButtonClickedEvent(
+                      currentStrategy: _sortStrategy)),
+                )
+              ],
+            ),
+          ),
+          body: Feed(
+            sortStrategy: _sortStrategy,
+          ),
+          bottomNavigationBar: NavigationBar(destinations: [
+            NavigationDestination(
+                icon: IconButton(
+                  onPressed: () {},
+                  icon: const Icon(Icons.home),
+                ),
+                label: "Feed"),
+            NavigationDestination(
+                icon: IconButton(
+                  onPressed: () {
+                    homeBloc.add(HomePublishButtonNavigateEvent());
+                  },
+                  icon: const Icon(Icons.add_box),
+                ),
+                label: "Publish"),
+            NavigationDestination(
+                icon: IconButton(
+                  onPressed: () {
+                    homeBloc.add(HomeCategoriesButtonNavigateEvent());
+                  },
+                  icon: const Icon(Icons.category),
+                ),
+                label: "Categories"),
+            NavigationDestination(
+                icon: IconButton(
+                  onPressed: () {
+                    homeBloc.add(HomeProfileButtonNavigateEvent());
+                  },
+                  icon: const Icon(Icons.person),
+                ),
+                label: "Profile"),
+          ]),
+        );
       },
     );
   }

@@ -4,7 +4,9 @@ import 'package:guarap/components/feed/bloc/feed_bloc.dart';
 import 'package:guarap/components/feed/repository/posts_methods.dart';
 
 class Feed extends StatefulWidget {
-  const Feed({super.key});
+  final String sortStrategy;
+
+  const Feed({required this.sortStrategy, Key? key}) : super(key: key);
 
   @override
   State<Feed> createState() {
@@ -13,8 +15,8 @@ class Feed extends StatefulWidget {
 }
 
 class _Feed extends State<Feed> {
-  String _selectedCategory = 'Generic';
   final FeedBloc feedBloc = FeedBloc();
+  String _selectedCategory = 'Generic';
   bool isTapped = false;
   Color blue = Colors.blue;
 
@@ -83,8 +85,8 @@ class _Feed extends State<Feed> {
                 },
               ),
             ),
-            // Photos Feed
-            PostMethods().uploadData(_selectedCategory),
+            // Retrieve the posts from the selected category and sort them by the current strategy
+            PostMethods().uploadData(_selectedCategory, widget.sortStrategy)
           ],
         );
       },
