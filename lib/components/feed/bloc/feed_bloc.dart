@@ -1,7 +1,6 @@
 import 'dart:async';
 
 import 'package:bloc/bloc.dart';
-import 'package:guarap/components/feed/repository/posts_methods.dart';
 import 'package:meta/meta.dart';
 
 part 'feed_event.dart';
@@ -16,7 +15,7 @@ class FeedBloc extends Bloc<FeedEvent, FeedState> {
   FutureOr<void> selectCategoryEvent(
       CategorySelectedEvent event, Emitter<FeedState> emit) {
     emit(FeedLoadingState());
-    PostMethods().uploadData(event.category);
+    // TODO: Implement the logic to change the feed for the specific category
     emit(CategorySelectedState(event.category));
   }
 

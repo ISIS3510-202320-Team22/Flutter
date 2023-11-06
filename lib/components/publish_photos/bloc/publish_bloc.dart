@@ -55,7 +55,7 @@ class PublishBloc extends Bloc<PublishEvent, PublishState> {
       if (res == "success") {
         emit(PublishSuccessState());
       } else {
-        emit(PublishErrorState());
+        emit(PublishErrorState()); // TODO: Add error message
       }
     }
   }
