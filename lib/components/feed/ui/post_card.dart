@@ -11,8 +11,6 @@ class PostCard extends StatelessWidget {
   Widget build(context) {
     final FeedBloc feedBloc = FeedBloc();
     bool color = false;
-    print(snap);
-    print(snap.runtimeType);
     return BlocConsumer<FeedBloc, FeedState>(
       bloc: feedBloc,
       listenWhen: (previous, current) => current is FeedActionState,
