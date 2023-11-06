@@ -3,9 +3,7 @@ import 'dart:convert';
 import 'dart:io';
 import 'package:bloc/bloc.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:guarap/components/feed/bloc/feed_bloc.dart';
 import 'package:guarap/components/publish_photos/model/location_model.dart';
 import 'package:guarap/components/publish_photos/repository/posts_repository.dart';
 import 'package:guarap/components/publish_photos/repository/storage_methods.dart';
@@ -47,14 +45,14 @@ class PublishBloc extends Bloc<PublishEvent, PublishState> {
       emit(PublishPhotoErrorState());
       return;
     } else {
-      final send = await PostRepository().publishPost(
+      final res = await PostRepository().publishPost(
         event.date,
         event.description,
         event.category,
         url,
         event.location,
       );
-      if (send) {
+      if (res == "success") {
         emit(PublishSuccessState());
       } else {
         emit(PublishErrorState());

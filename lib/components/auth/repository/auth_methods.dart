@@ -86,7 +86,7 @@ class AuthMethods {
       } else {
         return "success";
       }
-    } on FirebaseException catch (e) {
+    } on FirebaseException {
       return "Unknown error";
     }
   }
@@ -104,7 +104,7 @@ class AuthMethods {
       } else {
         return "success";
       }
-    } on FirebaseException catch (e) {
+    } on FirebaseException {
       return "Unknown error";
     }
   }

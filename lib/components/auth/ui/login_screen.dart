@@ -170,7 +170,7 @@ class _LoginState extends State<Login> {
                       )
                     ],
                   ),
-                  Flexible(child: Container(), flex: 2),
+                  Flexible(flex: 2, child: Container()),
                   const Divider(
                     color: Colors.grey,
                   ),
