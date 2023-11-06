@@ -91,7 +91,7 @@ class _MapScreenState extends State<MapScreen> {
                 alignment: Alignment.bottomCenter,
                 child: Container(
                     width: MediaQuery.of(context).size.width,
-                    height: 200,
+                    height: 240,
                     child: ListView.builder(
                         scrollDirection: Axis.horizontal,
                         itemCount: nearbyLocations.length,

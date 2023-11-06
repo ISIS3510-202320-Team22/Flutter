@@ -108,10 +108,6 @@ class PublishBloc extends Bloc<PublishEvent, PublishState> {
     final address = resData["results"][0]["address_components"][2]["long_name"];
     final address2 =
         resData["results"][0]["address_components"][4]["long_name"];
-
-    print(address);
-    print(address2);
-    print(resData);
     emit(LocationSettedState(
         location: PhotoLocation(lat, lng, address + ", " + address2)));
   }
