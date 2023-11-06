@@ -72,7 +72,7 @@ class _Profile extends State<Profile> {
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
                           const SizedBox(height: 64),
-                          Icon(  // This line adds the user icon
+                          const Icon(  // This line adds the user icon
                             Icons.person,  // This is a Material icon
                             size: 100,  // Adjust the size as needed
                             color: Colors.black,  // Adjust the color as needed
@@ -80,12 +80,12 @@ class _Profile extends State<Profile> {
                           const SizedBox(height: 16),  // Optional: add some spacing
                           Text(
                               FirebaseAuth.instance.currentUser?.email ?? 'No email',  // This line will display the UID
-                              style: TextStyle(fontSize: 20),
+                              style: const TextStyle(fontSize: 20),
                           ),
                           Expanded(
                             child: Column(
                               children: [
-                                Spacer(),
+                                const Spacer(),
                                 //const SizedBox(height: 16),  // Optional: add some spacing
                                 InkWell(
                                   onTap: () {

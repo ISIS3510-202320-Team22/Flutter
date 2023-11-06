@@ -3,10 +3,10 @@ import 'package:uuid/uuid.dart';
 
 class PostRepository {
   Future<bool> publishPost(date, description, category, image, address) async {
-    final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+    final FirebaseFirestore firestore = FirebaseFirestore.instance;
     try {
       final id = const Uuid().v4();
-      await _firestore
+      await firestore
           .collection('categories')
           .doc(category)
           .collection('posts')

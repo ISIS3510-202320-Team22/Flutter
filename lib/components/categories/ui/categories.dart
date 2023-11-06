@@ -21,7 +21,7 @@ class _Categories extends State<Categories> {
           ),
           centerTitle: true,
       ),
-      body: Center(
+      body: const Center(
         child: Text("Categories"),
       )
     );

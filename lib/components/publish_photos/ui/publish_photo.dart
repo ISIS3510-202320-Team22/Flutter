@@ -3,12 +3,10 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:guarap/components/feed/ui/feed.dart';
 import 'package:guarap/components/home/ui/home.dart';
 import 'package:guarap/components/publish_photos/bloc/publish_bloc.dart';
 import 'package:guarap/components/publish_photos/ui/add_location.dart';
 import 'package:guarap/components/publish_photos/ui/take_photo.dart';
-import 'package:intl/intl.dart';
 
 enum Category { Generic, Chismes, Atardeceres, LookingFor, Emprendimientos }
 
@@ -29,7 +27,7 @@ class _PublishPhotoState extends State<PublishPhoto> {
   final _inputTextController = TextEditingController();
   final PublishBloc publishBloc = PublishBloc();
   final Timestamp actualDate = Timestamp.now();
-  var _isLoading = false;
+  final _isLoading = false;
   @override
   void dispose() {
     _inputTextController.dispose();

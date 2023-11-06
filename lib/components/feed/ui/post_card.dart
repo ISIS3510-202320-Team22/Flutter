@@ -130,7 +130,7 @@ class PostCard extends StatelessWidget {
                             //upvote
                             feedBloc.add(FeedUpvoteEvent());
                           },
-                          icon: Icon(
+                          icon: const Icon(
                             Icons.thumb_up,
                             size: 35,
                             //color: color ? Colors.green : Colors.blue
