@@ -47,3 +47,8 @@ class CategorySelectedState extends PublishState {
   CategorySelectedState({required this.category});
   final String category;
 }
+
+class NearbyPlacesState extends PublishState {
+  NearbyPlacesState({required this.nearby});
+  final List<Nearby> nearby;
+}

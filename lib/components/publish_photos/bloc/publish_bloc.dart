@@ -5,8 +5,10 @@ import 'package:bloc/bloc.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:guarap/components/publish_photos/model/location_model.dart';
+import 'package:guarap/components/publish_photos/repository/nearby_location_api.dart';
 import 'package:guarap/components/publish_photos/repository/posts_repository.dart';
 import 'package:guarap/components/publish_photos/repository/storage_methods.dart';
+import 'package:guarap/components/publish_photos/ui/nearby.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:location/location.dart';
 import 'package:http/http.dart' as http;
@@ -23,6 +25,7 @@ class PublishBloc extends Bloc<PublishEvent, PublishState> {
     on<MapLocationEvent>(mapLocationEvent);
     on<GoToFeedEvent>(goToFeedEvent);
     on<CategorySelectedEvent>(categorySelectedEvent);
+    on<NearbyLocationsEvent>(nearbyLocationsEvent);
   }
 
   FutureOr<void> addPhotoButtonClickedEvent(
@@ -115,8 +118,9 @@ class PublishBloc extends Bloc<PublishEvent, PublishState> {
 
   FutureOr<void> mapLocationEvent(
       MapLocationEvent event, Emitter<PublishState> emit) async {
-    final pickedLocation = await Navigator.of(event.context)
-        .push<LatLng>(MaterialPageRoute(builder: (ctx) => const MapScreen()));
+    final pickedLocation = await Navigator.of(event.context).push<LatLng>(
+        MaterialPageRoute(
+            builder: (ctx) => MapScreen(publishBloc: event.publishBloc)));
 
     if (pickedLocation == null) {
       return;
@@ -154,5 +158,12 @@ class PublishBloc extends Bloc<PublishEvent, PublishState> {
   FutureOr<void> categorySelectedEvent(
       CategorySelectedEvent event, Emitter<PublishState> emit) {
     emit(CategorySelectedState(category: event.category));
+  }
+
+  FutureOr<void> nearbyLocationsEvent(
+      NearbyLocationsEvent event, Emitter<PublishState> emit) async {
+    final List<Nearby> result = await NearbyLocationApi.instance
+        .getNearby(event.currentLocation, 300, "restaurant", "");
+    emit(NearbyPlacesState(nearby: result));
   }
 }
