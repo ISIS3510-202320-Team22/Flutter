@@ -37,8 +37,9 @@ class PublishPostEvent extends PublishEvent {
 class AddLocationEvent extends PublishEvent {}
 
 class MapLocationEvent extends PublishEvent {
-  MapLocationEvent(this.context);
+  MapLocationEvent(this.context, this.publishBloc);
   final BuildContext context;
+  final PublishBloc publishBloc;
 }
 
 class GoToFeedEvent extends PublishEvent {}
@@ -46,4 +47,14 @@ class GoToFeedEvent extends PublishEvent {}
 class CategorySelectedEvent extends PublishEvent {
   CategorySelectedEvent({required this.category});
   final String category;
+}
+
+class LocationSelectedEvent extends PublishEvent {
+  LocationSelectedEvent({required this.location});
+  final String location;
+}
+
+class NearbyLocationsEvent extends PublishEvent {
+  NearbyLocationsEvent({required this.currentLocation});
+  final LatLng currentLocation;
 }
