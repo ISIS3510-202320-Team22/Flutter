@@ -125,7 +125,7 @@ class PostCard extends StatelessWidget {
                       ),
                     ),
                     const SizedBox(
-                      width: 125,
+                      width: 90,
                     ),
                     Expanded(
                       child: Row(children: [
