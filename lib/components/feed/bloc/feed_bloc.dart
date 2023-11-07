@@ -23,7 +23,6 @@ class FeedBloc extends Bloc<FeedEvent, FeedState> {
     String connectionStatus = await FeedMethods().checkInternetConnection();
     if (connectionStatus != "success") {
       emit(FeedErrorState(connectionStatus));
-      return;
     }
     // Retrieve the feed for the selected category
     await FeedMethods()
@@ -38,7 +37,6 @@ class FeedBloc extends Bloc<FeedEvent, FeedState> {
     String connectionStatus = await FeedMethods().checkInternetConnection();
     if (connectionStatus != "success") {
       emit(FeedErrorState(connectionStatus));
-      return;
     }
     // Retrieve the feed for the selected category
     List<PostModel> posts = await FeedMethods()
@@ -54,6 +52,11 @@ class FeedBloc extends Bloc<FeedEvent, FeedState> {
   FutureOr<void> feedSortPostsButtonClickedEvent(
       FeedSortPostsButtonClickedEvent event, Emitter<FeedState> emit) async {
     emit(FeedLoadingState(event.category, event.sortStrategy));
+    // Check connectivity
+    String connectionStatus = await FeedMethods().checkInternetConnection();
+    if (connectionStatus != "success") {
+      emit(FeedErrorState(connectionStatus));
+    }
     // Retrieve the feed for the selected category
     List<PostModel> posts = await FeedMethods()
         .getPostsByCategory(event.category, event.sortStrategy);

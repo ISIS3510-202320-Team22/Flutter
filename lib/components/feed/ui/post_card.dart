@@ -4,6 +4,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:guarap/components/feed/bloc/feed_bloc.dart';
 import 'package:guarap/models/post_model.dart';
 import 'package:intl/intl.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 
 class PostCard extends StatelessWidget {
   const PostCard({Key? key, required this.post}) : super(key: key);
@@ -38,8 +39,8 @@ class PostCard extends StatelessWidget {
                   child: Row(children: [
                     const CircleAvatar(
                       radius: 18,
-                      backgroundImage: NetworkImage(
-                          'https://upload.wikimedia.org/wikipedia/commons/thumb/4/49/A_black_image.jpg/640px-A_black_image.jpg'),
+                      backgroundImage: CachedNetworkImageProvider(
+                          'https://plus.unsplash.com/premium_photo-1670588776057-cf5cd890fb98?auto=format&fit=crop&q=80&w=1374&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'),
                     ),
                     Expanded(
                       child: Padding(
@@ -100,9 +101,13 @@ class PostCard extends StatelessWidget {
                 SizedBox(
                   height: MediaQuery.of(context).size.height * 0.40,
                   width: 380,
-                  child: Image.network(
-                    post.image != null ? "${post.image}" : " ",
+                  child: CachedNetworkImage(
+                    imageUrl: post.image!,
                     fit: BoxFit.cover,
+                    placeholder: (context, url) =>
+                        const Center(child: CircularProgressIndicator()),
+                    errorWidget: (context, url, error) =>
+                        const Icon(Icons.error),
                   ),
                 ),
                 //Up & Down buttons section

@@ -22,7 +22,6 @@ class FeedMethods {
 
     return query.get().then((snapshot) {
       List<PostModel> posts = [];
-      print(PostModel.fromDocument(snapshot.docs[0]).date?.toDate().toString());
       for (QueryDocumentSnapshot doc in snapshot.docs) {
         posts.add(PostModel.fromDocument(doc));
       }
@@ -40,7 +39,7 @@ class FeedMethods {
         return "Unknown error";
       }
     } on DioException catch (e) {
-      return e.toString();
+      return "No internet connection";
     }
   }
 }
