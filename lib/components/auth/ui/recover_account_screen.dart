@@ -1,3 +1,4 @@
+import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -31,7 +32,7 @@ class _RecoverAccountState extends State<RecoverAccount> {
       bloc: authBloc,
       listenWhen: (previous, current) => current is AuthActionState,
       buildWhen: (previous, current) => current is! AuthActionState,
-      listener: (context, state) {
+      listener: (context, state) async {
         if (state is RecoverAccountSuccessfulState) {
           ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(
@@ -40,6 +41,13 @@ class _RecoverAccountState extends State<RecoverAccount> {
           );
           Navigator.push(
               context, MaterialPageRoute(builder: (context) => const Login()));
+          await FirebaseAnalytics.instance.logEvent(
+            name: 'screen_view',
+            parameters: {
+              'firebase_screen': "Login",
+              'firebase_screen_class': Login,
+            },
+          );
         }
       },
       builder: (context, state) {

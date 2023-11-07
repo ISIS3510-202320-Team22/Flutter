@@ -1,3 +1,4 @@
+import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:guarap/components/home/bloc/home_bloc.dart';
@@ -33,16 +34,37 @@ class _HomeState extends State<Home> {
       listenWhen: (previous, current) => current is HomeActionState,
       // Callback that determines whether the builder should rebuild when the state changes
       buildWhen: (previous, current) => current is! HomeActionState,
-      listener: (context, state) {
+      listener: (context, state) async {
         if (state is HomeNavigateToPublishPageActionState) {
           Navigator.push(
               context, MaterialPageRoute(builder: (context) => PublishPhoto()));
+          await FirebaseAnalytics.instance.logEvent(
+            name: 'screen_view',
+            parameters: {
+              'firebase_screen': "PublishPhoto",
+              'firebase_screen_class': PublishPhoto,
+            },
+          );
         } else if (state is HomeNavigateToProfilePageActionState) {
           Navigator.push(context,
               MaterialPageRoute(builder: (context) => const Profile()));
+          await FirebaseAnalytics.instance.logEvent(
+            name: 'screen_view',
+            parameters: {
+              'firebase_screen': "Profile",
+              'firebase_screen_class': Profile,
+            },
+          );
         } else if (state is HomeNavigateToCategoriesPageActionState) {
           Navigator.push(context,
               MaterialPageRoute(builder: (context) => const Categories()));
+          await FirebaseAnalytics.instance.logEvent(
+            name: 'screen_view',
+            parameters: {
+              'firebase_screen': "Categories",
+              'firebase_screen_class': Categories,
+            },
+          );
         }
       },
       builder: (context, state) {
