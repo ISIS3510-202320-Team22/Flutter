@@ -20,13 +20,7 @@ class FeedBloc extends Bloc<FeedEvent, FeedState> {
 
   FutureOr<void> feedInitialEvent(
       FeedInitialEvent event, Emitter<FeedState> emit) async {
-    await FirebaseAnalytics.instance.logEvent(
-      name: 'screen_view',
-      parameters: {
-        'firebase_screen': "Feed",
-        'firebase_screen_class': Feed,
-      },
-    );
+    print("FeedInitialEvent");
     emit(FeedLoadingState());
     // Check connectivity
     String connectionStatus = await FeedMethods().checkInternetConnection();
@@ -34,9 +28,9 @@ class FeedBloc extends Bloc<FeedEvent, FeedState> {
       emit(FeedErrorState(connectionStatus));
     }
     // Retrieve the feed for the selected category
-    await FeedMethods()
-        .getPostsByCategory("Generic", "Recent")
-        .then((posts) => emit(FeedLoadedState("Generic", "Recent", posts)));
+    List<PostModel> posts =
+        await FeedMethods().getPostsByCategory("Generic", "Recent");
+    emit(FeedLoadedState("Generic", "Recent", posts));
   }
 
   FutureOr<void> categorySelectedEvent(
