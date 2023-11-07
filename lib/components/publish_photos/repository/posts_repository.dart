@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:guarap/components/publish_photos/model/user_model.dart';
+import 'package:guarap/models/user_model.dart';
 import 'package:uuid/uuid.dart';
 
 class PostRepository {

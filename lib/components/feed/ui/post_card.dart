@@ -2,11 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:guarap/components/feed/bloc/feed_bloc.dart';
+import 'package:guarap/models/post_model.dart';
 import 'package:intl/intl.dart';
 
 class PostCard extends StatelessWidget {
-  const PostCard({Key? key, required this.snap}) : super(key: key);
-  final snap;
+  const PostCard({Key? key, required this.post}) : super(key: key);
+  final PostModel post;
   @override
   Widget build(context) {
     final FeedBloc feedBloc = FeedBloc();
@@ -38,7 +39,7 @@ class PostCard extends StatelessWidget {
                     const CircleAvatar(
                       radius: 18,
                       backgroundImage: NetworkImage(
-                          'https://plus.unsplash.com/premium_photo-1670588776057-cf5cd890fb98?auto=format&fit=crop&q=80&w=1374&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'),
+                          'https://upload.wikimedia.org/wikipedia/commons/thumb/4/49/A_black_image.jpg/640px-A_black_image.jpg'),
                     ),
                     Expanded(
                       child: Padding(
@@ -50,14 +51,14 @@ class PostCard extends StatelessWidget {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              snap["user"] != null ? "${snap["user"]}" : " ",
+                              post.user != null ? "${post.user}" : " ",
                               style: const TextStyle(
                                 fontWeight: FontWeight.bold,
                               ),
                             ),
-                            Text(snap["date"] != null
+                            Text(post.date != null
                                 ? DateFormat('MMM dd y HH:mm')
-                                    .format(snap["date"].toDate())
+                                    .format(post.date!.toDate())
                                 : " "),
                           ],
                         ),
@@ -74,7 +75,7 @@ class PostCard extends StatelessWidget {
                                         vertical: 16),
                                     shrinkWrap: true,
                                     children: [
-                                      'Delete',
+                                      'Report',
                                     ]
                                         .map(
                                           (e) => InkWell(
@@ -100,7 +101,7 @@ class PostCard extends StatelessWidget {
                   height: MediaQuery.of(context).size.height * 0.40,
                   width: 380,
                   child: Image.network(
-                    snap["image"],
+                    post.image != null ? "${post.image}" : " ",
                     fit: BoxFit.cover,
                   ),
                 ),
@@ -111,7 +112,7 @@ class PostCard extends StatelessWidget {
                     const Padding(padding: EdgeInsets.only(left: 16)),
                     Expanded(
                       child: Text(
-                        snap["address"] != null ? "${snap["address"]}" : " ",
+                        post.address != null ? "${post.address}" : " ",
                         style: GoogleFonts.roboto(
                           fontSize: 15,
                           fontWeight: FontWeight.bold,
@@ -135,7 +136,7 @@ class PostCard extends StatelessWidget {
                           ),
                         ),
                         //upvotes
-                        Text(snap["upvotes"].toString()),
+                        Text(post.upvotes.toString()),
                         IconButton(
                             onPressed: () {},
                             icon: const Icon(
@@ -143,7 +144,7 @@ class PostCard extends StatelessWidget {
                               size: 35,
                             )),
                         //downvotes
-                        Text(snap["downvotes"].toString()),
+                        Text(post.downvotes.toString()),
                       ]),
                     )
                   ],
@@ -172,12 +173,12 @@ class PostCard extends StatelessWidget {
                                   ),
                                   children: [
                                 TextSpan(
-                                    text: snap["user"] != null
-                                        ? "${snap["user"]}"
+                                    text: post.user != null
+                                        ? "${post.user}"
                                         : " ",
                                     style: const TextStyle(
                                         fontWeight: FontWeight.bold)),
-                                TextSpan(text: '  ${snap["description"]}')
+                                TextSpan(text: '  ${post.description}')
                               ])))
                     ],
                   ),
@@ -198,18 +199,6 @@ class PostCard extends StatelessWidget {
                     ),
                   ),
                 ),
-                /*
-                Container(
-                  alignment: Alignment.centerLeft,
-                  padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 16),
-                  child: Text(
-                    snap["address"] != null ? "${snap["address"]}" : " ",
-                    style: const TextStyle(
-                        fontSize: 16,
-                        color: Colors.grey,
-                        fontWeight: FontWeight.bold),
-                  ),
-                ),*/
               ],
             ));
       },
