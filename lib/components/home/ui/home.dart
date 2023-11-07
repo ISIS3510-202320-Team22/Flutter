@@ -46,14 +46,14 @@ class _HomeState extends State<Home> {
         }
       },
       builder: (context, state) {
-        String _sortStrategy;
+        String sortStrategy;
         switch (state.runtimeType) {
           case HomeLoadingState:
             return const Scaffold(
                 body: Center(child: CircularProgressIndicator()));
           case HomeSortStrategyChangedState:
-            _sortStrategy =
-                (state as HomeSortStrategyChangedState).sortStrategy;
+            sortStrategy = (state as HomeSortStrategyChangedState).sortStrategy;
+            print("SORT STRATEGY: $sortStrategy");
             break;
           case HomeErrorState:
             return const Scaffold(
@@ -61,32 +61,10 @@ class _HomeState extends State<Home> {
               child: Text("Error"),
             ));
           default:
-            _sortStrategy = "Recent";
+            sortStrategy = "Recent";
         }
         return Scaffold(
-          appBar: AppBar(
-            title: Row(
-              children: [
-                Text(
-                  "Guarap",
-                  style: GoogleFonts.pattaya(
-                      color: Theme.of(context).colorScheme.onPrimaryContainer,
-                      fontSize: 40),
-                ),
-                const Spacer(),
-                IconButton(
-                  icon: _sortStrategy == "Recent"
-                      ? const Icon(Icons.access_time)
-                      : const Icon(Icons.arrow_upward),
-                  onPressed: () => homeBloc.add(HomeSortPostsButtonClickedEvent(
-                      currentStrategy: _sortStrategy)),
-                )
-              ],
-            ),
-          ),
-          body: Feed(
-            sortStrategy: _sortStrategy,
-          ),
+          body: Feed(),
           bottomNavigationBar: NavigationBar(destinations: [
             NavigationDestination(
                 icon: IconButton(
