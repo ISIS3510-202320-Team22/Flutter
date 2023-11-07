@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -40,13 +41,22 @@ class _PublishPhotoState extends State<PublishPhoto> {
       bloc: publishBloc,
       listenWhen: (previous, current) => current is PublishActionState,
       buildWhen: (previous, current) => current is! PublishActionState,
-      listener: (context, state) {
+      listener: (context, state) async {
         if (state is PublishSuccessState) {
           ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(
               content: Text("Posted!"),
               backgroundColor: Colors.blue,
             ),
+          );
+          Navigator.push(
+              context, MaterialPageRoute(builder: (context) => const Home()));
+          await FirebaseAnalytics.instance.logEvent(
+            name: 'screen_view',
+            parameters: {
+              'firebase_screen': "Home",
+              'firebase_screen_class': Home,
+            },
           );
         } else if (state is PublishErrorState) {
           ScaffoldMessenger.of(context).showSnackBar(
@@ -65,6 +75,21 @@ class _PublishPhotoState extends State<PublishPhoto> {
         } else if (state is GoToFeedActionState) {
           Navigator.push(
               context, MaterialPageRoute(builder: (context) => const Home()));
+          await FirebaseAnalytics.instance.logEvent(
+            name: 'screen_view',
+            parameters: {
+              'firebase_screen': "Home",
+              'firebase_screen_class': Home,
+            },
+          );
+        } else if (state is NoInternetErrorActionState) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text(
+                  "Error: No internet connection! Please try again later."),
+              backgroundColor: Colors.yellow,
+            ),
+          );
         }
       },
       builder: (context, state) {
@@ -211,8 +236,6 @@ class _PublishPhotoState extends State<PublishPhoto> {
                                 );
                                 return;
                               } else {
-                                publishBloc.add(GoToFeedEvent());
-
                                 publishBloc.add(PublishPostEvent(
                                     actualDate,
                                     _inputTextController.text,

@@ -52,3 +52,5 @@ class NearbyPlacesState extends PublishState {
   NearbyPlacesState({required this.nearby});
   final List<Nearby> nearby;
 }
+
+class NoInternetErrorActionState extends PublishActionState {}

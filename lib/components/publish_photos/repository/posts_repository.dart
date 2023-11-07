@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:dio/dio.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:guarap/models/user_model.dart';
 import 'package:uuid/uuid.dart';
@@ -41,6 +42,19 @@ class PostRepository {
       return "success";
     } catch (e) {
       return e.toString();
+    }
+  }
+
+  Future<String> checkInternetConnection() async {
+    try {
+      final response = await Dio().get('https://www.google.com/');
+      if (response.statusCode == 200) {
+        return "success";
+      } else {
+        return "Unknown error";
+      }
+    } on DioException catch (e) {
+      return "No internet connection";
     }
   }
 }

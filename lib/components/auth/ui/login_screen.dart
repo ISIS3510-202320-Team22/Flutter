@@ -1,3 +1,4 @@
+import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -42,16 +43,37 @@ class _LoginState extends State<Login> {
       listenWhen: (previous, current) => current is AuthActionState,
       // Do build when States are not AuthActionState, hence UI changes
       buildWhen: (previous, current) => current is! AuthActionState,
-      listener: (context, state) {
+      listener: (context, state) async {
         if (state is NavigateToRecoverPageActionState) {
           Navigator.push(context,
               MaterialPageRoute(builder: (context) => const RecoverAccount()));
+          await FirebaseAnalytics.instance.logEvent(
+            name: 'screen_view',
+            parameters: {
+              'firebase_screen': "RecoverAccount",
+              'firebase_screen_class': RecoverAccount,
+            },
+          );
         } else if (state is NavigateToSignUpEmailPageActionState) {
           Navigator.push(context,
               MaterialPageRoute(builder: (context) => const SignUpEmail()));
+          await FirebaseAnalytics.instance.logEvent(
+            name: 'screen_view',
+            parameters: {
+              'firebase_screen': "SignUp",
+              'firebase_screen_class': SignUpEmail,
+            },
+          );
         } else if (state is LoginSuccessfulState) {
           Navigator.push(
               context, MaterialPageRoute(builder: (context) => const Home()));
+          await FirebaseAnalytics.instance.logEvent(
+            name: 'screen_view',
+            parameters: {
+              'firebase_screen': "Home",
+              'firebase_screen_class': Home,
+            },
+          );
         } else if (state is LoginFailureState) {
           ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(

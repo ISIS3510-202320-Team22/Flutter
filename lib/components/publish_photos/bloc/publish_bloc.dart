@@ -42,6 +42,12 @@ class PublishBloc extends Bloc<PublishEvent, PublishState> {
   FutureOr<void> publishPostEvent(
       PublishPostEvent event, Emitter<PublishState> emit) async {
     emit(PublishingPostState());
+    String internetConnection =
+        await PostRepository().checkInternetConnection();
+    if (internetConnection != "success") {
+      emit(NoInternetErrorActionState());
+      return;
+    }
     final url = await StorageMethods()
         .uploadImageToStorage('images/', File(event.image!.path), true);
     if (url == 'failed') {
