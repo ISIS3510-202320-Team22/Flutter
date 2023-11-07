@@ -1,18 +1,21 @@
 import 'dart:io';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:guarap/components/home/ui/home.dart';
 import 'package:guarap/components/publish_photos/bloc/publish_bloc.dart';
 import 'package:guarap/components/publish_photos/ui/add_location.dart';
 import 'package:guarap/components/publish_photos/ui/take_photo.dart';
 
-enum Category { Generic, Chismes, Atardeceres, Lookingfor, Emprendimientos }
+enum Category { Generic, Chismes, Atardeceres, LookingFor, Emprendimientos }
 
 class PublishPhoto extends StatefulWidget {
   PublishPhoto({super.key});
 
   File? _pickedImageFile;
-  String? address;
+  String address = "";
 
   @override
   State<PublishPhoto> createState() {
@@ -24,9 +27,8 @@ class _PublishPhotoState extends State<PublishPhoto> {
   Category _selectedCategory = Category.Generic;
   final _inputTextController = TextEditingController();
   final PublishBloc publishBloc = PublishBloc();
-  final actualDate = DateTime.now();
-  var _isLoading = false;
-
+  final Timestamp actualDate = Timestamp.now();
+  final _isLoading = false;
   @override
   void dispose() {
     _inputTextController.dispose();
@@ -39,13 +41,22 @@ class _PublishPhotoState extends State<PublishPhoto> {
       bloc: publishBloc,
       listenWhen: (previous, current) => current is PublishActionState,
       buildWhen: (previous, current) => current is! PublishActionState,
-      listener: (context, state) {
+      listener: (context, state) async {
         if (state is PublishSuccessState) {
           ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(
               content: Text("Posted!"),
               backgroundColor: Colors.blue,
             ),
+          );
+          Navigator.push(
+              context, MaterialPageRoute(builder: (context) => const Home()));
+          await FirebaseAnalytics.instance.logEvent(
+            name: 'screen_view',
+            parameters: {
+              'firebase_screen': "Home",
+              'firebase_screen_class': Home,
+            },
           );
         } else if (state is PublishErrorState) {
           ScaffoldMessenger.of(context).showSnackBar(
@@ -61,6 +72,24 @@ class _PublishPhotoState extends State<PublishPhoto> {
               backgroundColor: Colors.red,
             ),
           );
+        } else if (state is GoToFeedActionState) {
+          Navigator.push(
+              context, MaterialPageRoute(builder: (context) => const Home()));
+          await FirebaseAnalytics.instance.logEvent(
+            name: 'screen_view',
+            parameters: {
+              'firebase_screen': "Home",
+              'firebase_screen_class': Home,
+            },
+          );
+        } else if (state is NoInternetErrorActionState) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text(
+                  "Error: No internet connection! Please try again later."),
+              backgroundColor: Colors.yellow,
+            ),
+          );
         }
       },
       builder: (context, state) {
@@ -73,9 +102,12 @@ class _PublishPhotoState extends State<PublishPhoto> {
             final locationSettedState = state as LocationSettedState;
             widget.address = locationSettedState.location.address;
             break;
-          case PublishSuccessState:
-            _isLoading = true;
+          /*
+          case CategorySelectedState:
+            final categorySelectedState = state as CategorySelectedState;
+            _selectedCategory = categorySelectedState.category;
             break;
+            */
         }
         return Scaffold(
             appBar: AppBar(
@@ -171,6 +203,8 @@ class _PublishPhotoState extends State<PublishPhoto> {
                                 setState(() {
                                   _selectedCategory = value;
                                 });
+                                // publishBloc.add(CategorySelectedEvent(
+                                // category: _selectedCategory));
                               },
                             ),
                           )
@@ -192,36 +226,38 @@ class _PublishPhotoState extends State<PublishPhoto> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         ElevatedButton(
-                          onPressed: () {
-                            if (widget._pickedImageFile == null) {
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                const SnackBar(
-                                  content: Text("Please add a photo!"),
-                                  backgroundColor: Colors.red,
-                                ),
-                              );
-                              return;
-                            } else {
-                              publishBloc.add(PublishPostEvent(
-                                  actualDate,
-                                  _inputTextController.text,
-                                  _selectedCategory.name,
-                                  widget._pickedImageFile!,
-                                  widget.address));
-                            }
-                          },
+                            onPressed: () {
+                              if (widget._pickedImageFile == null) {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  const SnackBar(
+                                    content: Text("Please add a photo!"),
+                                    backgroundColor: Colors.red,
+                                  ),
+                                );
+                                return;
+                              } else {
+                                publishBloc.add(PublishPostEvent(
+                                    actualDate,
+                                    _inputTextController.text,
+                                    _selectedCategory.name,
+                                    widget._pickedImageFile!,
+                                    widget.address));
+                              }
+                            },
 
-                          // red color button and text white
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor:
-                                const Color.fromARGB(255, 171, 0, 72),
-                            foregroundColor: Colors.white,
-                            // Expand button width
-                            minimumSize: const Size(250, 30),
-                          ),
-                          child: const Text("Share",
-                              style: TextStyle(fontSize: 20)),
-                        ),
+                            // red color button and text white
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor:
+                                  const Color.fromARGB(255, 171, 0, 72),
+                              foregroundColor: Colors.white,
+                              // Expand button width
+                              minimumSize: const Size(250, 30),
+                            ),
+                            child: Text(
+                              "Share",
+                              style: GoogleFonts.roboto(
+                                  color: Colors.white, fontSize: 18),
+                            )),
                       ],
                     ),
                   ],

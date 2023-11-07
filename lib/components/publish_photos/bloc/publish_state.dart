@@ -36,3 +36,21 @@ class LocationSettedState extends PublishState {
   LocationSettedState({required this.location});
   final PhotoLocation location;
 }
+
+// State to go to the feed when published
+
+class GoToFeedActionState extends PublishActionState {}
+
+// Change the view when a category is selected
+
+class CategorySelectedState extends PublishState {
+  CategorySelectedState({required this.category});
+  final String category;
+}
+
+class NearbyPlacesState extends PublishState {
+  NearbyPlacesState({required this.nearby});
+  final List<Nearby> nearby;
+}
+
+class NoInternetErrorActionState extends PublishActionState {}

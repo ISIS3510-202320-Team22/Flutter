@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:guarap/components/publish_photos/bloc/publish_bloc.dart';
 import 'package:guarap/components/publish_photos/model/location_model.dart';
 
@@ -8,6 +9,8 @@ class AddLocation extends StatefulWidget {
   const AddLocation({super.key, required this.publishBloc});
 
   final PublishBloc publishBloc;
+
+  get latlng => null;
 
   @override
   State<AddLocation> createState() {
@@ -22,6 +25,12 @@ class _AddLocationState extends State<AddLocation> {
     final lat = _pickedLocation!.latitude;
     final lng = _pickedLocation!.longitude;
     return 'https://maps.googleapis.com/maps/api/staticmap?center=$lat,$lng&zoom=16&size=600x300&maptype=roadmap&markers=color:red%7Clabel:A%7C$lat,$lng&key=AIzaSyAoh4_qFIhQj5RhFOZ3Hxn9Fc0zNR_8-tQ';
+  }
+
+  LatLng get latlng {
+    final lat = _pickedLocation!.latitude;
+    final lng = _pickedLocation!.longitude;
+    return LatLng(lat, lng);
   }
 
   @override
@@ -85,7 +94,8 @@ class _AddLocationState extends State<AddLocation> {
                   icon: const Icon(Icons.map),
                   label: const Text("Map"),
                   onPressed: () {
-                    widget.publishBloc.add(MapLocationEvent(context));
+                    widget.publishBloc
+                        .add(MapLocationEvent(context, widget.publishBloc));
                   },
                 )
               ],

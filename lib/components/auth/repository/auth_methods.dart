@@ -1,5 +1,4 @@
 import 'dart:async';
-
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
@@ -58,9 +57,54 @@ class AuthMethods {
     try {
       await _auth.createUserWithEmailAndPassword(
           email: email, password: password);
+      await _firestore.collection('users').doc(_auth.currentUser!.uid).set({
+        'username': username,
+        'email': email,
+        'uid': _auth.currentUser!.uid,
+        'createdAt': DateTime.now(),
+        'updatedAt': DateTime.now(),
+      });
       return "success";
     } on FirebaseAuthException catch (e) {
-      return e.message.toString(); // TODO: Change this
+      return e.message.toString();
+    } on FirebaseException catch (e) {
+      return e.message.toString();
+    }
+  }
+
+  Future<String> checkUsername({required String username}) async {
+    // Check if the username already exists
+    try {
+      final QuerySnapshot result = await _firestore
+          .collection('users')
+          .where('username', isEqualTo: username)
+          .get();
+      final List<DocumentSnapshot> documents = result.docs;
+      if (documents.isNotEmpty) {
+        return "Username already exists";
+      } else {
+        return "success";
+      }
+    } on FirebaseException {
+      return "Unknown error";
+    }
+  }
+
+  Future<String> checkEmail({required String email}) async {
+    // Check if the email already exists
+    try {
+      final QuerySnapshot result = await _firestore
+          .collection('users')
+          .where('email', isEqualTo: email)
+          .get();
+      final List<DocumentSnapshot> documents = result.docs;
+      if (documents.isNotEmpty) {
+        return "Email already exists";
+      } else {
+        return "success";
+      }
+    } on FirebaseException catch (e) {
+      return e.toString();
     }
   }
 }

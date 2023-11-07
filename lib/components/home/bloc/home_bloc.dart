@@ -19,12 +19,13 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     on<HomeProfileButtonNavigateEvent>(homeProfileButtonNavigateEvent);
     on<HomePublishButtonNavigateEvent>(homePublishButtonNavigateEvent);
     on<HomeCategoriesButtonNavigateEvent>(homeCategoriesButtonNavigateEvent);
+    on<HomeSortPostsButtonClickedEvent>(homeSortPostsButtonClickedEvent);
   }
 
   FutureOr<void> homeInitialEvent(
       HomeInitialEvent event, Emitter<HomeState> emit) async {
     emit(HomeLoadingState());
-    await Future.delayed(const Duration(seconds: 1));
+    await Future.delayed(const Duration(seconds: 2));
     emit(HomeLoadedSuccessState(
         photos: PhotosData.dataList
             .map((e) => PhotoDataModel(e["id"], e["@username"], e["imageurl"]))
@@ -54,5 +55,16 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
   FutureOr<void> homeCategoriesButtonNavigateEvent(
       HomeCategoriesButtonNavigateEvent event, Emitter<HomeState> emit) {
     emit(HomeNavigateToCategoriesPageActionState());
+  }
+
+  FutureOr<void> homeSortPostsButtonClickedEvent(
+      HomeSortPostsButtonClickedEvent event, Emitter<HomeState> emit) {
+    String sortStrategy = event.currentStrategy;
+    if (sortStrategy == "Recent") {
+      sortStrategy = "Popular";
+    } else {
+      sortStrategy = "Recent";
+    }
+    emit(HomeSortStrategyChangedState(sortStrategy: sortStrategy));
   }
 }

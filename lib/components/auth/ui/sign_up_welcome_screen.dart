@@ -1,3 +1,4 @@
+import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -14,12 +15,19 @@ class SignUpWelcome extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocConsumer<AuthBloc, AuthState>(
       bloc: authBloc,
-      listener: (context, state) {
+      listener: (context, state) async {
         if (state is SignUpSuccessfulState) {
           Navigator.pushAndRemoveUntil(
               context,
               MaterialPageRoute(builder: (context) => const Home()),
               (route) => false);
+          await FirebaseAnalytics.instance.logEvent(
+            name: 'screen_view',
+            parameters: {
+              'firebase_screen': "Home",
+              'firebase_screen_class': Home,
+            },
+          );
         }
       },
       builder: (BuildContext context, AuthState state) {

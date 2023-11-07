@@ -1,3 +1,4 @@
+import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -29,16 +30,30 @@ class _SignUpPasswordState extends State<SignUpPassword> {
       bloc: authBloc,
       listenWhen: (previous, current) => current is AuthActionState,
       buildWhen: (previous, current) => current is! AuthActionState,
-      listener: (context, state) {
+      listener: (context, state) async {
         if (state is NavigateToLoginPageActionState) {
           Navigator.push(
               context, MaterialPageRoute(builder: (context) => const Login()));
+          await FirebaseAnalytics.instance.logEvent(
+            name: 'screen_view',
+            parameters: {
+              'firebase_screen': "Login",
+              'firebase_screen_class': Login,
+            },
+          );
         } else if (state is NavigateToWelcomePageActionState) {
           Navigator.push(
               context,
               MaterialPageRoute(
                   builder: (context) => SignUpWelcome(
                       authBloc: authBloc, username: state.username)));
+          await FirebaseAnalytics.instance.logEvent(
+            name: 'screen_view',
+            parameters: {
+              'firebase_screen': "SignUpWelcome",
+              'firebase_screen_class': SignUpWelcome,
+            },
+          );
         } else if (state is SignUpFailureState) {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(

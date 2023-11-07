@@ -1,12 +1,12 @@
+import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/material.dart';
-import 'package:guarap/components/widgets/header.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:guarap/components/home/bloc/home_bloc.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:guarap/components/profile/ui/profile.dart';
 import 'package:guarap/components/categories/ui/categories.dart';
 import 'package:guarap/components/publish_photos/ui/publish_photo.dart';
-
-import '../../feed/ui/feed.dart';
-import '../bloc/home_bloc.dart';
+import 'package:guarap/components/feed/ui/feed.dart';
 
 class Home extends StatefulWidget {
   const Home({super.key});
@@ -34,69 +34,92 @@ class _HomeState extends State<Home> {
       listenWhen: (previous, current) => current is HomeActionState,
       // Callback that determines whether the builder should rebuild when the state changes
       buildWhen: (previous, current) => current is! HomeActionState,
-      listener: (context, state) {
+      listener: (context, state) async {
         if (state is HomeNavigateToPublishPageActionState) {
           Navigator.push(
               context, MaterialPageRoute(builder: (context) => PublishPhoto()));
+          await FirebaseAnalytics.instance.logEvent(
+            name: 'screen_view',
+            parameters: {
+              'firebase_screen': "PublishPhoto",
+              'firebase_screen_class': PublishPhoto,
+            },
+          );
         } else if (state is HomeNavigateToProfilePageActionState) {
           Navigator.push(context,
               MaterialPageRoute(builder: (context) => const Profile()));
+          await FirebaseAnalytics.instance.logEvent(
+            name: 'screen_view',
+            parameters: {
+              'firebase_screen': "Profile",
+              'firebase_screen_class': Profile,
+            },
+          );
         } else if (state is HomeNavigateToCategoriesPageActionState) {
           Navigator.push(context,
               MaterialPageRoute(builder: (context) => const Categories()));
+          await FirebaseAnalytics.instance.logEvent(
+            name: 'screen_view',
+            parameters: {
+              'firebase_screen': "Categories",
+              'firebase_screen_class': Categories,
+            },
+          );
         }
       },
       builder: (context, state) {
+        String sortStrategy;
         switch (state.runtimeType) {
           case HomeLoadingState:
             return const Scaffold(
                 body: Center(child: CircularProgressIndicator()));
-          case HomeLoadedSuccessState:
-            return Header(
-              Scaffold(
-                bottomNavigationBar: NavigationBar(destinations: [
-                  NavigationDestination(
-                      icon: IconButton(
-                        onPressed: () {},
-                        icon: const Icon(Icons.home),
-                      ),
-                      label: "Feed"),
-                  NavigationDestination(
-                      icon: IconButton(
-                        onPressed: () {
-                          homeBloc.add(HomePublishButtonNavigateEvent());
-                        },
-                        icon: const Icon(Icons.add_box),
-                      ),
-                      label: "Publish"),
-                  NavigationDestination(
-                      icon: IconButton(
-                        onPressed: () {
-                          homeBloc.add(HomeCategoriesButtonNavigateEvent());
-                        },
-                        icon: const Icon(Icons.category),
-                      ),
-                      label: "Categories"),
-                  NavigationDestination(
-                      icon: IconButton(
-                        onPressed: () {
-                          homeBloc.add(HomeProfileButtonNavigateEvent());
-                        },
-                        icon: const Icon(Icons.person),
-                      ),
-                      label: "Profile"),
-                ]),
-                body: const Feed(),
-              ),
-            );
+          case HomeSortStrategyChangedState:
+            sortStrategy = (state as HomeSortStrategyChangedState).sortStrategy;
+            print("SORT STRATEGY: $sortStrategy");
+            break;
           case HomeErrorState:
             return const Scaffold(
                 body: Center(
               child: Text("Error"),
             ));
           default:
-            return const SizedBox();
+            sortStrategy = "Recent";
         }
+        return Scaffold(
+          body: Feed(),
+          bottomNavigationBar: NavigationBar(destinations: [
+            NavigationDestination(
+                icon: IconButton(
+                  onPressed: () {},
+                  icon: const Icon(Icons.home),
+                ),
+                label: "Feed"),
+            NavigationDestination(
+                icon: IconButton(
+                  onPressed: () {
+                    homeBloc.add(HomePublishButtonNavigateEvent());
+                  },
+                  icon: const Icon(Icons.add_box),
+                ),
+                label: "Publish"),
+            NavigationDestination(
+                icon: IconButton(
+                  onPressed: () {
+                    homeBloc.add(HomeCategoriesButtonNavigateEvent());
+                  },
+                  icon: const Icon(Icons.category),
+                ),
+                label: "Categories"),
+            NavigationDestination(
+                icon: IconButton(
+                  onPressed: () {
+                    homeBloc.add(HomeProfileButtonNavigateEvent());
+                  },
+                  icon: const Icon(Icons.person),
+                ),
+                label: "Profile"),
+          ]),
+        );
       },
     );
   }
