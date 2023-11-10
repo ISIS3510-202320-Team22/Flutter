@@ -28,6 +28,7 @@ class _RecoverAccountState extends State<RecoverAccount> {
 
   @override
   Widget build(BuildContext context) {
+    FirebaseAnalytics analytics = FirebaseAnalytics.instance;
     return BlocConsumer<AuthBloc, AuthState>(
       bloc: authBloc,
       listenWhen: (previous, current) => current is AuthActionState,
@@ -41,7 +42,7 @@ class _RecoverAccountState extends State<RecoverAccount> {
           );
           Navigator.push(
               context, MaterialPageRoute(builder: (context) => const Login()));
-          await FirebaseAnalytics.instance.logEvent(
+          analytics.logEvent(
             name: 'screen_view',
             parameters: {
               'firebase_screen': "Login",

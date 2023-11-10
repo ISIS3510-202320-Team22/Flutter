@@ -28,7 +28,7 @@ class _PublishPhotoState extends State<PublishPhoto> {
   final _inputTextController = TextEditingController();
   final PublishBloc publishBloc = PublishBloc();
   final Timestamp actualDate = Timestamp.now();
-  final _isLoading = false;
+  bool _isLoading = false;
   @override
   void dispose() {
     _inputTextController.dispose();
@@ -37,6 +37,7 @@ class _PublishPhotoState extends State<PublishPhoto> {
 
   @override
   Widget build(context) {
+    FirebaseAnalytics analytics = FirebaseAnalytics.instance;
     return BlocConsumer<PublishBloc, PublishState>(
       bloc: publishBloc,
       listenWhen: (previous, current) => current is PublishActionState,
@@ -49,9 +50,11 @@ class _PublishPhotoState extends State<PublishPhoto> {
               backgroundColor: Colors.blue,
             ),
           );
-          Navigator.push(
-              context, MaterialPageRoute(builder: (context) => const Home()));
-          await FirebaseAnalytics.instance.logEvent(
+          Navigator.pushAndRemoveUntil(
+              context,
+              MaterialPageRoute(builder: (context) => const Home()),
+              (route) => false);
+          analytics.logEvent(
             name: 'screen_view',
             parameters: {
               'firebase_screen': "Home",
@@ -60,22 +63,22 @@ class _PublishPhotoState extends State<PublishPhoto> {
           );
         } else if (state is PublishErrorState) {
           ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(
-              content: Text("Error, post not published!"),
+            SnackBar(
+              content: Text(state.errorMessage),
               backgroundColor: Colors.red,
             ),
           );
         } else if (state is PublishPhotoErrorState) {
           ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(
-              content: Text("Error: Could not send photo. Try again later!"),
+            SnackBar(
+              content: Text(state.errorMessage),
               backgroundColor: Colors.red,
             ),
           );
         } else if (state is GoToFeedActionState) {
           Navigator.push(
               context, MaterialPageRoute(builder: (context) => const Home()));
-          await FirebaseAnalytics.instance.logEvent(
+          analytics.logEvent(
             name: 'screen_view',
             parameters: {
               'firebase_screen': "Home",
@@ -102,12 +105,11 @@ class _PublishPhotoState extends State<PublishPhoto> {
             final locationSettedState = state as LocationSettedState;
             widget.address = locationSettedState.location.address;
             break;
-          /*
-          case CategorySelectedState:
-            final categorySelectedState = state as CategorySelectedState;
-            _selectedCategory = categorySelectedState.category;
+          case PublishingPostState:
+            _isLoading = true;
             break;
-            */
+          default:
+            _isLoading = false;
         }
         return Scaffold(
             appBar: AppBar(
@@ -253,11 +255,15 @@ class _PublishPhotoState extends State<PublishPhoto> {
                               // Expand button width
                               minimumSize: const Size(250, 30),
                             ),
-                            child: Text(
-                              "Share",
-                              style: GoogleFonts.roboto(
-                                  color: Colors.white, fontSize: 18),
-                            )),
+                            child: !_isLoading
+                                ? Text(
+                                    "Share",
+                                    style: GoogleFonts.roboto(
+                                        color: Colors.white, fontSize: 18),
+                                  )
+                                : const CircularProgressIndicator(
+                                    color: Colors.white,
+                                  )),
                       ],
                     ),
                   ],

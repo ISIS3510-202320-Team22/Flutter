@@ -1,3 +1,4 @@
+import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:guarap/components/auth/bloc/auth_bloc.dart';
@@ -33,6 +34,7 @@ class GuarapApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    FirebaseAnalytics analytics = FirebaseAnalytics.instance;
     return MaterialApp(
         debugShowCheckedModeBanner: false,
         darkTheme: ThemeData.dark()
@@ -55,6 +57,9 @@ class GuarapApp extends StatelessWidget {
               // Snapshot contains user object if user is logged in
               if (!snapshot.hasData || snapshot.hasError) {
                 // User was not logged in, do login
+                analytics.logEvent(name: 'screen_view', parameters: {
+                  'screen_name': 'login',
+                });
                 return const Login();
               } else {
                 // User was logged in, check if user data is still valid
@@ -62,8 +67,15 @@ class GuarapApp extends StatelessWidget {
                   FirebaseAuth.instance.currentUser!.reload();
                 } catch (e) {
                   // User data is invalid, do login
+                  analytics.logEvent(name: 'screen_view', parameters: {
+                    'screen_name': 'login',
+                  });
                   return const Login();
                 }
+                // User data is valid, do home
+                analytics.logEvent(name: 'screen_view', parameters: {
+                  'screen_name': 'home',
+                });
                 return const Home();
               }
             }));

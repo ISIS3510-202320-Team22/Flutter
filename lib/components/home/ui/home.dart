@@ -27,6 +27,7 @@ class _HomeState extends State<Home> {
   final HomeBloc homeBloc = HomeBloc();
   @override
   Widget build(context) {
+    FirebaseAnalytics analytics = FirebaseAnalytics.instance;
     //BlocConsumer for listening to events
     return BlocConsumer<HomeBloc, HomeState>(
       bloc: homeBloc,
@@ -38,7 +39,7 @@ class _HomeState extends State<Home> {
         if (state is HomeNavigateToPublishPageActionState) {
           Navigator.push(
               context, MaterialPageRoute(builder: (context) => PublishPhoto()));
-          await FirebaseAnalytics.instance.logEvent(
+          analytics.logEvent(
             name: 'screen_view',
             parameters: {
               'firebase_screen': "PublishPhoto",
@@ -48,7 +49,7 @@ class _HomeState extends State<Home> {
         } else if (state is HomeNavigateToProfilePageActionState) {
           Navigator.push(context,
               MaterialPageRoute(builder: (context) => const Profile()));
-          await FirebaseAnalytics.instance.logEvent(
+          analytics.logEvent(
             name: 'screen_view',
             parameters: {
               'firebase_screen': "Profile",
@@ -58,7 +59,7 @@ class _HomeState extends State<Home> {
         } else if (state is HomeNavigateToCategoriesPageActionState) {
           Navigator.push(context,
               MaterialPageRoute(builder: (context) => const Categories()));
-          await FirebaseAnalytics.instance.logEvent(
+          analytics.logEvent(
             name: 'screen_view',
             parameters: {
               'firebase_screen': "Categories",

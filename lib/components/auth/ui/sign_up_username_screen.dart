@@ -24,6 +24,7 @@ class _SignUpUsernameState extends State<SignUpUsername> {
 
   @override
   Widget build(BuildContext context) {
+    FirebaseAnalytics analytics = FirebaseAnalytics.instance;
     return BlocConsumer<AuthBloc, AuthState>(
       bloc: authBloc,
       listenWhen: (previous, current) => current is AuthActionState,
@@ -32,7 +33,7 @@ class _SignUpUsernameState extends State<SignUpUsername> {
         if (state is NavigateToLoginPageActionState) {
           Navigator.push(
               context, MaterialPageRoute(builder: (context) => const Login()));
-          await FirebaseAnalytics.instance.logEvent(
+          analytics.logEvent(
             name: 'screen_view',
             parameters: {
               'firebase_screen': "Login",
@@ -47,7 +48,7 @@ class _SignUpUsernameState extends State<SignUpUsername> {
                         email: state.email,
                         username: state.username,
                       )));
-          await FirebaseAnalytics.instance.logEvent(
+          analytics.logEvent(
             name: 'screen_view',
             parameters: {
               'firebase_screen': "SignUpPassword",
