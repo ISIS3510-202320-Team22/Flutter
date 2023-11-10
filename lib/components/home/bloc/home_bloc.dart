@@ -1,10 +1,6 @@
 import 'dart:async';
-
 import 'package:bloc/bloc.dart';
-import 'package:guarap/models/PhotosDataModel.dart';
 import 'package:meta/meta.dart';
-
-import '../../../data/photos_data.dart';
 
 part 'home_event.dart';
 part 'home_state.dart';
@@ -26,10 +22,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
       HomeInitialEvent event, Emitter<HomeState> emit) async {
     emit(HomeLoadingState());
     await Future.delayed(const Duration(seconds: 2));
-    emit(HomeLoadedSuccessState(
-        photos: PhotosData.dataList
-            .map((e) => PhotoDataModel(e["id"], e["@username"], e["imageurl"]))
-            .toList()));
+    emit(HomeLoadedSuccessState());
   }
 
   FutureOr<void> homeProfileButtonClickedEvent(
