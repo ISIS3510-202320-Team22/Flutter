@@ -37,6 +37,7 @@ class _LoginState extends State<Login> {
 
   @override
   Widget build(BuildContext context) {
+    FirebaseAnalytics analytics = FirebaseAnalytics.instance;
     return BlocConsumer<AuthBloc, AuthState>(
       bloc: authBloc,
       // Do listen when States are AuthActionState, hence Navigation or other small actions
@@ -47,7 +48,7 @@ class _LoginState extends State<Login> {
         if (state is NavigateToRecoverPageActionState) {
           Navigator.push(context,
               MaterialPageRoute(builder: (context) => const RecoverAccount()));
-          await FirebaseAnalytics.instance.logEvent(
+          analytics.logEvent(
             name: 'screen_view',
             parameters: {
               'firebase_screen': "RecoverAccount",
@@ -57,7 +58,7 @@ class _LoginState extends State<Login> {
         } else if (state is NavigateToSignUpEmailPageActionState) {
           Navigator.push(context,
               MaterialPageRoute(builder: (context) => const SignUpEmail()));
-          await FirebaseAnalytics.instance.logEvent(
+          analytics.logEvent(
             name: 'screen_view',
             parameters: {
               'firebase_screen': "SignUp",
@@ -67,7 +68,7 @@ class _LoginState extends State<Login> {
         } else if (state is LoginSuccessfulState) {
           Navigator.push(
               context, MaterialPageRoute(builder: (context) => const Home()));
-          await FirebaseAnalytics.instance.logEvent(
+          analytics.logEvent(
             name: 'screen_view',
             parameters: {
               'firebase_screen': "Home",

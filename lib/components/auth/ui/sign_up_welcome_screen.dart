@@ -13,6 +13,7 @@ class SignUpWelcome extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    FirebaseAnalytics analytics = FirebaseAnalytics.instance;
     return BlocConsumer<AuthBloc, AuthState>(
       bloc: authBloc,
       listener: (context, state) async {
@@ -21,7 +22,7 @@ class SignUpWelcome extends StatelessWidget {
               context,
               MaterialPageRoute(builder: (context) => const Home()),
               (route) => false);
-          await FirebaseAnalytics.instance.logEvent(
+          analytics.logEvent(
             name: 'screen_view',
             parameters: {
               'firebase_screen': "Home",

@@ -37,6 +37,7 @@ class _PublishPhotoState extends State<PublishPhoto> {
 
   @override
   Widget build(context) {
+    FirebaseAnalytics analytics = FirebaseAnalytics.instance;
     return BlocConsumer<PublishBloc, PublishState>(
       bloc: publishBloc,
       listenWhen: (previous, current) => current is PublishActionState,
@@ -53,7 +54,7 @@ class _PublishPhotoState extends State<PublishPhoto> {
               context,
               MaterialPageRoute(builder: (context) => const Home()),
               (route) => false);
-          await FirebaseAnalytics.instance.logEvent(
+          analytics.logEvent(
             name: 'screen_view',
             parameters: {
               'firebase_screen': "Home",
@@ -77,7 +78,7 @@ class _PublishPhotoState extends State<PublishPhoto> {
         } else if (state is GoToFeedActionState) {
           Navigator.push(
               context, MaterialPageRoute(builder: (context) => const Home()));
-          await FirebaseAnalytics.instance.logEvent(
+          analytics.logEvent(
             name: 'screen_view',
             parameters: {
               'firebase_screen': "Home",

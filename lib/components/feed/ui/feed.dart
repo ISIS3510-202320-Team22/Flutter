@@ -1,3 +1,4 @@
+import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -30,6 +31,8 @@ class _Feed extends State<Feed> {
 
   @override
   Widget build(context) {
+    FirebaseAnalytics analytics = FirebaseAnalytics.instance;
+
     final List<String> categories = [
       'Generic',
       'Chismes',
@@ -61,6 +64,12 @@ class _Feed extends State<Feed> {
             _feedLoading = true;
             _selectedCategory = (state as FeedLoadingState).category;
             _sortStrategy = state.sortStrategy;
+            analytics.logEvent(name: 'screen_view', parameters: {
+              'screen_name': 'feed',
+              'category': _selectedCategory,
+              'sort_strategy': _sortStrategy,
+            });
+            break;
 
           case FeedLoadedState:
             _feedLoading = false;
@@ -68,12 +77,22 @@ class _Feed extends State<Feed> {
             _selectedCategory = feedLoadedState.category;
             _posts = feedLoadedState.posts;
             _sortStrategy = feedLoadedState.sortStrategy;
+            analytics.logEvent(name: 'screen_view', parameters: {
+              'screen_name': 'feed',
+              'category': _selectedCategory,
+              'sort_strategy': _sortStrategy,
+            });
             break;
           default:
             _feedLoading = false;
             _selectedCategory = "Generic";
             _posts = [];
             _sortStrategy = "Recent";
+            analytics.logEvent(name: 'screen_view', parameters: {
+              'screen_name': 'feed',
+              'category': _selectedCategory,
+              'sort_strategy': _sortStrategy,
+            });
         }
         return Scaffold(
           appBar: AppBar(
