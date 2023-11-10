@@ -46,25 +46,30 @@ class PublishBloc extends Bloc<PublishEvent, PublishState> {
         await PostRepository().checkInternetConnection();
     if (internetConnection != "success") {
       emit(NoInternetErrorActionState());
+      emit(PublishInitial());
       return;
     }
-    final url = await StorageMethods()
+    // Url is a list with two elements, the first one is the status of the upload
+    // and the second one is the url of the image (or the error message)
+    final List<String> url = await StorageMethods()
         .uploadImageToStorage('images/', File(event.image!.path), true);
-    if (url == 'failed') {
-      emit(PublishPhotoErrorState());
+    if (url[0] == 'failed') {
+      emit(PublishPhotoErrorState(errorMessage: url[1]));
+      emit(PublishInitial());
       return;
     } else {
       final res = await PostRepository().publishPost(
         event.date,
         event.description,
         event.category,
-        url,
+        url[1],
         event.location,
       );
       if (res == "success") {
         emit(PublishSuccessState());
       } else {
-        emit(PublishErrorState()); // TODO: Add error message
+        emit(PublishErrorState(errorMessage: res));
+        emit(PublishInitial());
       }
     }
   }

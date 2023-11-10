@@ -7,7 +7,7 @@ import 'package:firebase_storage/firebase_storage.dart';
 class StorageMethods {
   final FirebaseStorage _storage = FirebaseStorage.instance;
   final FirebaseAuth _auth = FirebaseAuth.instance;
-  Future<String> uploadImageToStorage(
+  Future<List<String>> uploadImageToStorage(
       String childName, File imageFile, bool isPost) async {
     try {
       Reference ref =
@@ -20,10 +20,9 @@ class StorageMethods {
       UploadTask uploadTask = ref.putFile(imageFile);
       TaskSnapshot taskSnapshot = await uploadTask;
       String url = await taskSnapshot.ref.getDownloadURL();
-      return url;
+      return ['success', url];
     } catch (e) {
-      print(e);
-      return 'failed';
+      return ['failed', e.toString()];
     }
   }
 }

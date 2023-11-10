@@ -28,7 +28,7 @@ class _PublishPhotoState extends State<PublishPhoto> {
   final _inputTextController = TextEditingController();
   final PublishBloc publishBloc = PublishBloc();
   final Timestamp actualDate = Timestamp.now();
-  final _isLoading = false;
+  bool _isLoading = false;
   @override
   void dispose() {
     _inputTextController.dispose();
@@ -49,8 +49,10 @@ class _PublishPhotoState extends State<PublishPhoto> {
               backgroundColor: Colors.blue,
             ),
           );
-          Navigator.push(
-              context, MaterialPageRoute(builder: (context) => const Home()));
+          Navigator.pushAndRemoveUntil(
+              context,
+              MaterialPageRoute(builder: (context) => const Home()),
+              (route) => false);
           await FirebaseAnalytics.instance.logEvent(
             name: 'screen_view',
             parameters: {
@@ -60,15 +62,15 @@ class _PublishPhotoState extends State<PublishPhoto> {
           );
         } else if (state is PublishErrorState) {
           ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(
-              content: Text("Error, post not published!"),
+            SnackBar(
+              content: Text(state.errorMessage),
               backgroundColor: Colors.red,
             ),
           );
         } else if (state is PublishPhotoErrorState) {
           ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(
-              content: Text("Error: Could not send photo. Try again later!"),
+            SnackBar(
+              content: Text(state.errorMessage),
               backgroundColor: Colors.red,
             ),
           );
@@ -102,12 +104,11 @@ class _PublishPhotoState extends State<PublishPhoto> {
             final locationSettedState = state as LocationSettedState;
             widget.address = locationSettedState.location.address;
             break;
-          /*
-          case CategorySelectedState:
-            final categorySelectedState = state as CategorySelectedState;
-            _selectedCategory = categorySelectedState.category;
+          case PublishingPostState:
+            _isLoading = true;
             break;
-            */
+          default:
+            _isLoading = false;
         }
         return Scaffold(
             appBar: AppBar(
@@ -253,11 +254,15 @@ class _PublishPhotoState extends State<PublishPhoto> {
                               // Expand button width
                               minimumSize: const Size(250, 30),
                             ),
-                            child: Text(
-                              "Share",
-                              style: GoogleFonts.roboto(
-                                  color: Colors.white, fontSize: 18),
-                            )),
+                            child: !_isLoading
+                                ? Text(
+                                    "Share",
+                                    style: GoogleFonts.roboto(
+                                        color: Colors.white, fontSize: 18),
+                                  )
+                                : const CircularProgressIndicator(
+                                    color: Colors.white,
+                                  )),
                       ],
                     ),
                   ],

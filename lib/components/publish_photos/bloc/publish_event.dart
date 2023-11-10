@@ -20,18 +20,6 @@ class PublishPostEvent extends PublishEvent {
   final String category;
   final File? image;
   String location = "";
-  /*
-  Map<String, dynamic> toJson() => {
-        'date': date,
-        'description': description,
-        'downvotes': downvotes,
-        'upvotes': upvotes,
-        'image': image,
-        'location': location,
-        'reported': reported,
-        'user': uuid,
-      };
-  */
 }
 
 class AddLocationEvent extends PublishEvent {}

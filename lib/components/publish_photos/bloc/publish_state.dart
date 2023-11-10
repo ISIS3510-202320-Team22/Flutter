@@ -14,11 +14,14 @@ class AddToCirclePhotoState extends PublishState {
 }
 
 // Action State to publish the data
-class PublishingPostState extends PublishActionState {}
+class PublishingPostState extends PublishState {}
 
 class PublishSuccessState extends PublishActionState {}
 
-class PublishErrorState extends PublishActionState {}
+class PublishErrorState extends PublishActionState {
+  final String errorMessage;
+  PublishErrorState({required this.errorMessage});
+}
 
 // Action State to show the photo submitted
 class PublishPhotoSubmittedState extends PublishActionState {}
@@ -26,7 +29,10 @@ class PublishPhotoSubmittedState extends PublishActionState {}
 // Action State to show the photo not sbmitted
 class PublishPhotoNotSubmittedState extends PublishActionState {}
 
-class PublishPhotoErrorState extends PublishActionState {}
+class PublishPhotoErrorState extends PublishActionState {
+  final String errorMessage;
+  PublishPhotoErrorState({required this.errorMessage});
+}
 
 // STATES FOR THE LOCATION
 
