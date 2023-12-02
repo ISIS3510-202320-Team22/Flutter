@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:guarap/components/settings/bloc/settings_bloc.dart';
+import 'package:guarap/components/settings/ui/report.dart';
 
 class Settings extends StatefulWidget {
   const Settings({super.key});
@@ -104,7 +105,14 @@ class _Settings extends State<Settings> {
                         ),
                         IconButton(
                           icon: Icon(Icons.arrow_forward_ios),
-                          onPressed: () {},
+                          onPressed: () {
+                            showModalBottomSheet(
+                                isScrollControlled: true,
+                                context: context,
+                                builder: (context) => Report(
+                                      settingsBloc: settingsBloc,
+                                    ));
+                          },
                         )
                       ],
                     ),
