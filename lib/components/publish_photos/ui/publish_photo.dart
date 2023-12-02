@@ -108,6 +108,10 @@ class _PublishPhotoState extends State<PublishPhoto> {
           case PublishingPostState:
             _isLoading = true;
             break;
+          case CategorySelectedState:
+            final categorySelectedState = state as CategorySelectedState;
+            _selectedCategory = categorySelectedState.category;
+            break;
           default:
             _isLoading = false;
         }
@@ -202,11 +206,11 @@ class _PublishPhotoState extends State<PublishPhoto> {
                                   .toList(),
                               onChanged: (value) {
                                 if (value == null) return;
-                                setState(() {
-                                  _selectedCategory = value;
-                                });
-                                // publishBloc.add(CategorySelectedEvent(
-                                // category: _selectedCategory));
+
+                                _selectedCategory = value;
+
+                                publishBloc.add(CategorySelectedEvent(
+                                    category: _selectedCategory));
                               },
                             ),
                           )
