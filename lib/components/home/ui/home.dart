@@ -108,7 +108,7 @@ class _HomeState extends State<Home> {
                   onPressed: () {
                     homeBloc.add(HomeSettingsButtonNavigateEvent());
                   },
-                  icon: const Icon(Icons.category),
+                  icon: const Icon(Icons.settings),
                 ),
                 label: "Settings"),
             NavigationDestination(

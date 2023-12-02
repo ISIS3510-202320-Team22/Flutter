@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:guarap/components/settings/bloc/settings_bloc.dart';
 
 class Settings extends StatefulWidget {
   const Settings({super.key});
@@ -11,19 +13,87 @@ class Settings extends StatefulWidget {
 }
 
 class _Settings extends State<Settings> {
+  bool isSwitch = false;
+  final SettingsBloc settingsBloc = SettingsBloc();
+
   @override
   Widget build(context) {
-    return Scaffold(
-        appBar: AppBar(
-          title: Text(
-            "Settings",
-            style: GoogleFonts.arima(
-                color: Colors.black, fontSize: 40, fontWeight: FontWeight.bold),
-          ),
-          centerTitle: true,
-        ),
-        body: const Center(
-          child: Text("Settings"),
-        ));
+    return BlocConsumer<SettingsBloc, SettingsState>(
+        bloc: settingsBloc,
+        listenWhen: (previous, current) => current is SettingsActionState,
+        buildWhen: (previous, current) => current is! SettingsActionState,
+        listener: (context, state) {},
+        builder: (context, state) {
+          return Scaffold(
+              appBar: AppBar(
+                title: Text(
+                  "Settings",
+                  style: GoogleFonts.arima(
+                      color: Colors.black,
+                      fontSize: 40,
+                      fontWeight: FontWeight.bold),
+                ),
+                centerTitle: true,
+              ),
+              body: Column(
+                children: [
+                  const SizedBox(height: 32.0),
+                  Container(
+                    child: Row(
+                      children: [
+                        Text(
+                          "Notifications",
+                          style: GoogleFonts.roboto(
+                            color: Theme.of(context)
+                                .colorScheme
+                                .onPrimaryContainer,
+                            fontSize: 20,
+                          ),
+                        )
+                      ],
+                    ),
+                  ),
+                  const SizedBox(height: 32.0),
+                  Container(
+                    child: Row(
+                      children: [
+                        Text(
+                          "About us",
+                          style: GoogleFonts.roboto(
+                            color: Theme.of(context)
+                                .colorScheme
+                                .onPrimaryContainer,
+                            fontSize: 20,
+                          ),
+                        ),
+                        Switch(
+                            value: isSwitch,
+                            onChanged: (value) {
+                              setState(() {
+                                isSwitch = value;
+                              });
+                            })
+                      ],
+                    ),
+                  ),
+                  const SizedBox(height: 32.0),
+                  Container(
+                    child: Row(
+                      children: [
+                        Text(
+                          "Report a bug or issue",
+                          style: GoogleFonts.roboto(
+                            color: Theme.of(context)
+                                .colorScheme
+                                .onPrimaryContainer,
+                            fontSize: 20,
+                          ),
+                        )
+                      ],
+                    ),
+                  ),
+                ],
+              ));
+        });
   }
 }
