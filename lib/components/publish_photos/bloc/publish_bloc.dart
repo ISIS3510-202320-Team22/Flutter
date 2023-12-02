@@ -9,6 +9,7 @@ import 'package:guarap/components/publish_photos/repository/nearby_location_api.
 import 'package:guarap/components/publish_photos/repository/posts_repository.dart';
 import 'package:guarap/components/publish_photos/repository/storage_methods.dart';
 import 'package:guarap/components/publish_photos/ui/nearby.dart';
+import 'package:guarap/components/publish_photos/ui/publish_photo.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:location/location.dart';
 import 'package:http/http.dart' as http;
