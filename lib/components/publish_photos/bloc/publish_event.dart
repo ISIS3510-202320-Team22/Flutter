@@ -34,7 +34,7 @@ class GoToFeedEvent extends PublishEvent {}
 
 class CategorySelectedEvent extends PublishEvent {
   CategorySelectedEvent({required this.category});
-  final Category category;
+  final String category;
 }
 
 class LocationSelectedEvent extends PublishEvent {
