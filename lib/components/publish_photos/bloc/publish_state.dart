@@ -51,7 +51,7 @@ class GoToFeedActionState extends PublishActionState {}
 
 class CategorySelectedState extends PublishState {
   CategorySelectedState({required this.category});
-  final Category category;
+  final String category;
 }
 
 class NearbyPlacesState extends PublishState {
