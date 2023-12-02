@@ -1,4 +1,9 @@
 part of 'settings_bloc.dart';
 
 @immutable
-sealed class SettingsEvent {}
+abstract class SettingsEvent {}
+
+class ChangeSwitchEvent extends SettingsEvent {
+  ChangeSwitchEvent(this.switched);
+  final bool switched;
+}

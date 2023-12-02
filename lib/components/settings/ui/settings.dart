@@ -24,6 +24,13 @@ class _Settings extends State<Settings> {
         buildWhen: (previous, current) => current is! SettingsActionState,
         listener: (context, state) {},
         builder: (context, state) {
+          switch (state.runtimeType) {
+            case ChangeSwitchState:
+              final changeSwitchState = state as ChangeSwitchState;
+              isSwitch = changeSwitchState.switched;
+              break;
+          }
+
           return Scaffold(
               appBar: AppBar(
                 title: Text(
@@ -40,25 +47,10 @@ class _Settings extends State<Settings> {
                   const SizedBox(height: 32.0),
                   Container(
                     child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text(
                           "Notifications",
-                          style: GoogleFonts.roboto(
-                            color: Theme.of(context)
-                                .colorScheme
-                                .onPrimaryContainer,
-                            fontSize: 20,
-                          ),
-                        )
-                      ],
-                    ),
-                  ),
-                  const SizedBox(height: 32.0),
-                  Container(
-                    child: Row(
-                      children: [
-                        Text(
-                          "About us",
                           style: GoogleFonts.roboto(
                             color: Theme.of(context)
                                 .colorScheme
@@ -69,9 +61,8 @@ class _Settings extends State<Settings> {
                         Switch(
                             value: isSwitch,
                             onChanged: (value) {
-                              setState(() {
-                                isSwitch = value;
-                              });
+                              isSwitch = value;
+                              settingsBloc.add(ChangeSwitchEvent(isSwitch));
                             })
                       ],
                     ),
@@ -79,6 +70,28 @@ class _Settings extends State<Settings> {
                   const SizedBox(height: 32.0),
                   Container(
                     child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          "About us",
+                          style: GoogleFonts.roboto(
+                            color: Theme.of(context)
+                                .colorScheme
+                                .onPrimaryContainer,
+                            fontSize: 20,
+                          ),
+                        ),
+                        IconButton(
+                          icon: Icon(Icons.arrow_forward_ios),
+                          onPressed: () {},
+                        )
+                      ],
+                    ),
+                  ),
+                  const SizedBox(height: 32.0),
+                  Container(
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text(
                           "Report a bug or issue",
@@ -88,6 +101,10 @@ class _Settings extends State<Settings> {
                                 .onPrimaryContainer,
                             fontSize: 20,
                           ),
+                        ),
+                        IconButton(
+                          icon: Icon(Icons.arrow_forward_ios),
+                          onPressed: () {},
                         )
                       ],
                     ),
