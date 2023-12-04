@@ -22,8 +22,8 @@ class FeedMethods {
 
     return query.get().then((snapshot) {
       List<PostModel> posts = [];
-      for (QueryDocumentSnapshot doc in snapshot.docs) {
-        posts.add(PostModel.fromDocument(doc));
+      for (int i = 0; i < snapshot.docs.length; i++) {
+        posts.add(PostModel.fromDocument(snapshot.docs[i]));
       }
       return posts;
     });
