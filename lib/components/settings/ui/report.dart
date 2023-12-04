@@ -5,9 +5,11 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:guarap/components/settings/bloc/settings_bloc.dart';
 
 class Report extends StatefulWidget {
-  Report({super.key, required this.settingsBloc});
+  Report({super.key, required this.settingsBloc, required this.isLoaded});
 
   final SettingsBloc settingsBloc;
+  bool isLoaded;
+
   @override
   State<Report> createState() {
     return _Report();
@@ -19,6 +21,13 @@ class _Report extends State<Report> {
   final _inputDescriptionController = TextEditingController();
 
   @override
+  void dispose() {
+    _inputTitleController.dispose();
+    _inputDescriptionController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(context) {
     return BlocConsumer<SettingsBloc, SettingsState>(
         bloc: widget.settingsBloc,
@@ -26,7 +35,11 @@ class _Report extends State<Report> {
         buildWhen: (previous, current) => current is! SettingsActionState,
         listener: (context, state) {},
         builder: (context, state) {
-          switch (state.runtimeType) {}
+          switch (state.runtimeType) {
+            case LoginAttemptSettingsState:
+              widget.isLoaded = (state as LoginAttemptSettingsState).isLoaded;
+              break;
+          }
 
           return Padding(
               padding: const EdgeInsets.all(16.0),
@@ -102,30 +115,38 @@ class _Report extends State<Report> {
 
                   // Button to send the feedback
                   const SizedBox(height: 20),
-                  ElevatedButton(
-                    onPressed: () {
+                  InkWell(
+                    onTap: () {
+                      bool loader = true;
                       widget.settingsBloc.add(SettingsActionEvent(
                           _inputTitleController.text,
                           _inputDescriptionController.text,
-                          context));
+                          context,
+                          loader));
                     },
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Theme.of(context).colorScheme.primary,
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 32, vertical: 16),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(8),
+                    child: Container(
+                      width: double.infinity,
+                      alignment: Alignment.center,
+                      padding: const EdgeInsets.symmetric(vertical: 12),
+                      decoration: const ShapeDecoration(
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(4)),
+                        ),
+                        color: Color(0xFFAB003E),
                       ),
+                      child: !widget.isLoaded
+                          ? Text(
+                              "Send",
+                              style: GoogleFonts.roboto(
+                                color: Colors.white,
+                                fontSize: 18,
+                              ),
+                            )
+                          : const CircularProgressIndicator(
+                              color: Colors.white,
+                            ),
                     ),
-                    child: Text(
-                      "Send",
-                      style: GoogleFonts.roboto(
-                        color: Theme.of(context).colorScheme.onPrimary,
-                        fontSize: 15,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ),
+                  )
                 ],
               ));
         });

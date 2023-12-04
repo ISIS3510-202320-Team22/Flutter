@@ -16,7 +16,7 @@ class Settings extends StatefulWidget {
 class _Settings extends State<Settings> {
   bool isSwitch = false;
   final SettingsBloc settingsBloc = SettingsBloc();
-
+  bool isLoaded = false;
   @override
   Widget build(context) {
     return BlocConsumer<SettingsBloc, SettingsState>(
@@ -41,6 +41,21 @@ class _Settings extends State<Settings> {
               );
               break;
 
+            case NoInternetErrorActionState:
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  content: Text(
+                    "No internet connection. Please try again later.",
+                    style: GoogleFonts.roboto(
+                      color: Colors.yellow,
+                      fontSize: 15,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  backgroundColor: Theme.of(context).colorScheme.primary,
+                ),
+              );
+              break;
             case PublishErrorSettingsState:
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(
@@ -64,6 +79,11 @@ class _Settings extends State<Settings> {
               final changeSwitchState = state as ChangeSwitchState;
               isSwitch = changeSwitchState.switched;
               break;
+            case LoginAttemptSettingsState:
+              isLoaded = true;
+              break;
+            default:
+              isLoaded = false;
           }
 
           return Scaffold(
@@ -117,7 +137,7 @@ class _Settings extends State<Settings> {
                           ),
                         ),
                         IconButton(
-                          icon: Icon(Icons.arrow_forward_ios),
+                          icon: const Icon(Icons.arrow_forward_ios),
                           onPressed: () {},
                         )
                       ],
@@ -138,7 +158,7 @@ class _Settings extends State<Settings> {
                           ),
                         ),
                         IconButton(
-                          icon: Icon(Icons.arrow_forward_ios),
+                          icon: const Icon(Icons.arrow_forward_ios),
                           onPressed: () {
                             showModalBottomSheet(
                                 enableDrag: true,
@@ -149,8 +169,8 @@ class _Settings extends State<Settings> {
                                 ),
                                 context: context,
                                 builder: (context) => Report(
-                                      settingsBloc: settingsBloc,
-                                    ));
+                                    settingsBloc: settingsBloc,
+                                    isLoaded: isLoaded));
                           },
                         )
                       ],
