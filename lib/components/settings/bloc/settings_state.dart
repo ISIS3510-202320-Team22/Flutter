@@ -12,3 +12,11 @@ final class ChangeSwitchState extends SettingsState {
 
   final bool switched;
 }
+
+class PublishSuccessSettingsState extends SettingsActionState {}
+
+class PublishErrorSettingsState extends SettingsActionState {
+  PublishErrorSettingsState({required this.errorMessage});
+
+  final String errorMessage;
+}

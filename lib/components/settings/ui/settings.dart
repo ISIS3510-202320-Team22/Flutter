@@ -23,7 +23,41 @@ class _Settings extends State<Settings> {
         bloc: settingsBloc,
         listenWhen: (previous, current) => current is SettingsActionState,
         buildWhen: (previous, current) => current is! SettingsActionState,
-        listener: (context, state) {},
+        listener: (context, state) {
+          switch (state.runtimeType) {
+            case PublishSuccessSettingsState:
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  content: Text(
+                    "Report sent successfully",
+                    style: GoogleFonts.roboto(
+                      color: Theme.of(context).colorScheme.onPrimaryContainer,
+                      fontSize: 15,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  backgroundColor: Colors.blue,
+                ),
+              );
+              break;
+
+            case PublishErrorSettingsState:
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  content: Text(
+                    "Error uploading report. Please try again later.",
+                    style: GoogleFonts.roboto(
+                      color: Theme.of(context).colorScheme.onPrimaryContainer,
+                      fontSize: 15,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  backgroundColor: Theme.of(context).colorScheme.primary,
+                ),
+              );
+              break;
+          }
+        },
         builder: (context, state) {
           switch (state.runtimeType) {
             case ChangeSwitchState:
@@ -107,7 +141,12 @@ class _Settings extends State<Settings> {
                           icon: Icon(Icons.arrow_forward_ios),
                           onPressed: () {
                             showModalBottomSheet(
+                                enableDrag: true,
                                 isScrollControlled: true,
+                                shape: const RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.vertical(
+                                      top: Radius.circular(20.0)),
+                                ),
                                 context: context,
                                 builder: (context) => Report(
                                       settingsBloc: settingsBloc,
