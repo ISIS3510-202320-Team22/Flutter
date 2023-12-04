@@ -6,13 +6,22 @@ import 'package:guarap/models/post_model.dart';
 import 'package:intl/intl.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 
-class PostCard extends StatelessWidget {
-  const PostCard({Key? key, required this.post}) : super(key: key);
+class PostCard extends StatefulWidget {
   final PostModel post;
+
+  const PostCard({Key? key, required this.post}) : super(key: key);
+
+  @override
+  _PostCardState createState() => _PostCardState();
+}
+
+class _PostCardState extends State<PostCard> {
+  bool color = false;
+
   @override
   Widget build(context) {
     final FeedBloc feedBloc = FeedBloc();
-    bool color = false;
+
     return BlocConsumer<FeedBloc, FeedState>(
       bloc: feedBloc,
       listenWhen: (previous, current) => current is FeedActionState,
@@ -52,14 +61,14 @@ class PostCard extends StatelessWidget {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              post.user != null ? "${post.user}" : " ",
+                              widget.post.user != null ? "${widget.post.user}" : " ",
                               style: const TextStyle(
                                 fontWeight: FontWeight.bold,
                               ),
                             ),
-                            Text(post.date != null
+                            Text(widget.post.date != null
                                 ? DateFormat('MMM dd y HH:mm')
-                                    .format(post.date!.toDate())
+                                    .format(widget.post.date!.toDate())
                                 : " "),
                           ],
                         ),
@@ -102,7 +111,7 @@ class PostCard extends StatelessWidget {
                   height: MediaQuery.of(context).size.height * 0.40,
                   width: 380,
                   child: CachedNetworkImage(
-                    imageUrl: post.image!,
+                    imageUrl: widget.post.image!,
                     fit: BoxFit.cover,
                     placeholder: (context, url) =>
                         const Center(child: CircularProgressIndicator()),
@@ -120,7 +129,7 @@ class PostCard extends StatelessWidget {
                     const Padding(padding: EdgeInsets.only(left: 16)),
                     Expanded(
                       child: Text(
-                        post.address != null ? "${post.address}" : " ",
+                        widget.post.address != null ? "${widget.post.address}" : " ",
                         style: GoogleFonts.roboto(
                           fontSize: 15,
                           fontWeight: FontWeight.bold,
@@ -144,7 +153,7 @@ class PostCard extends StatelessWidget {
                           ),
                         ),
                         //upvotes
-                        Text(post.upvotes.toString()),
+                        Text(widget.post.upvotes.toString()),
                         IconButton(
                             onPressed: () {},
                             icon: const Icon(
@@ -152,7 +161,7 @@ class PostCard extends StatelessWidget {
                               size: 35,
                             )),
                         //downvotes
-                        Text(post.downvotes.toString()),
+                        Text(widget.post.downvotes.toString()),
                       ]),
                     )
                   ],
@@ -181,12 +190,12 @@ class PostCard extends StatelessWidget {
                                   ),
                                   children: [
                                 TextSpan(
-                                    text: post.user != null
-                                        ? "${post.user}"
+                                    text: widget.post.user != null
+                                        ? "${widget.post.user}"
                                         : " ",
                                     style: const TextStyle(
                                         fontWeight: FontWeight.bold)),
-                                TextSpan(text: '  ${post.description}')
+                                TextSpan(text: '  ${widget.post.description}')
                               ])))
                     ],
                   ),
