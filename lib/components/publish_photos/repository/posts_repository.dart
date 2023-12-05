@@ -6,7 +6,7 @@ import 'package:uuid/uuid.dart';
 
 class PostRepository {
   Future<String> publishPost(
-      date, description, category, image, address) async {
+      date, description, category, image, address, upvotes) async {
     try {
       // TODO: Check user session is still valid before publishing
       final FirebaseFirestore firestore = FirebaseFirestore.instance;
@@ -32,12 +32,11 @@ class PostRepository {
         'date': date,
         'description': description,
         'downvotes': 0,
-        'upvotes': 0,
+        'upvotes': upvotes,
         'reported': false,
         'user': username,
         'image': image,
         'address': address,
-        //'location': location,
       });
       return "success";
     } catch (e) {

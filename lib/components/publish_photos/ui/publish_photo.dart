@@ -7,9 +7,17 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:guarap/components/home/ui/home.dart';
 import 'package:guarap/components/publish_photos/bloc/publish_bloc.dart';
 import 'package:guarap/components/publish_photos/ui/add_location.dart';
+import 'package:guarap/components/publish_photos/ui/sponsor.dart';
 import 'package:guarap/components/publish_photos/ui/take_photo.dart';
 
-enum Category { Generic, Chismes, Atardeceres, LookingFor, Emprendimientos }
+enum Category {
+  Generic,
+  Chismes,
+  Atardeceres,
+  LookingFor,
+  Emprendimientos,
+  Promociones
+}
 
 class PublishPhoto extends StatefulWidget {
   PublishPhoto({super.key});
@@ -29,9 +37,14 @@ class _PublishPhotoState extends State<PublishPhoto> {
   final PublishBloc publishBloc = PublishBloc();
   final Timestamp actualDate = Timestamp.now();
   bool _isLoading = false;
+  bool isSwitched = false;
+  bool showWidget = false;
+  final _inputAmountController = TextEditingController();
+
   @override
   void dispose() {
     _inputTextController.dispose();
+    _inputAmountController.dispose();
     super.dispose();
   }
 
@@ -111,6 +124,14 @@ class _PublishPhotoState extends State<PublishPhoto> {
           case CategorySelectedState:
             final categorySelectedState = state as CategorySelectedState;
             _selectedCategory = categorySelectedState.category;
+            break;
+          case ChangeSwitchAddState:
+            final changeSwitchAddState = state as ChangeSwitchAddState;
+            isSwitched = changeSwitchAddState.switched;
+            break;
+          case AddInputMoneyState:
+            final addInputMoneyState = state as AddInputMoneyState;
+            showWidget = addInputMoneyState.inputMoney;
             break;
           default:
             _isLoading = false;
@@ -218,9 +239,100 @@ class _PublishPhotoState extends State<PublishPhoto> {
                       ),
                     ),
 
-                    const SizedBox(
-                      height: 20,
-                    ),
+                    // Second row for the Adds
+                    Container(
+                        // Give some padding to inner elements
+                        padding: const EdgeInsets.symmetric(horizontal: 10),
+                        // Container border but only the top and bottom
+                        decoration: const BoxDecoration(
+                          border: Border(
+                            top: BorderSide(width: 1.0, color: Colors.grey),
+                          ),
+                        ),
+                        child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            children: [
+                              Expanded(
+                                child: TextField(
+                                  keyboardType: TextInputType.multiline,
+                                  decoration: InputDecoration(
+                                    hintText: "Post an add",
+                                    border: InputBorder.none,
+                                    // text styling
+                                    hintStyle: GoogleFonts.roboto(
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .onPrimaryContainer,
+                                        fontSize: 20,
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                ),
+                              ),
+                              // add button
+                              ElevatedButton(
+                                  onPressed: () {
+                                    showModalBottomSheet(
+                                        enableDrag: true,
+                                        isScrollControlled: true,
+                                        shape: const RoundedRectangleBorder(
+                                          borderRadius: BorderRadius.vertical(
+                                              top: Radius.circular(20.0)),
+                                        ),
+                                        context: context,
+                                        builder: (context) =>
+                                            Sponsor(publishBloc: publishBloc));
+                                  },
+                                  style: ElevatedButton.styleFrom(
+                                    backgroundColor: Colors.white,
+                                    foregroundColor: Colors.black,
+                                    // Expand button width
+                                    minimumSize: const Size(50, 30),
+                                  ),
+                                  child: const Text(
+                                    "Add",
+                                    style: TextStyle(
+                                        color: Colors.black, fontSize: 18),
+                                  )),
+                              /*
+                              Switch(
+                                  value: isSwitched,
+                                  onChanged: (value) {
+                                    isSwitched = value;
+                                    publishBloc
+                                        .add(ChangeSwitchAddEvent(isSwitched));
+                                    showWidget = !showWidget;
+                                    publishBloc
+                                        .add(AddInputMoneyEvent(showWidget));
+                                  })*/
+                            ])),
+
+                    !showWidget
+                        ? const SizedBox.shrink()
+                        : Container(
+                            // Give some padding to inner elements
+                            padding: const EdgeInsets.symmetric(horizontal: 10),
+                            child: Row(
+                              children: [
+                                Expanded(
+                                    child: TextField(
+                                  controller: _inputAmountController,
+                                  keyboardType: TextInputType.number,
+                                  style: GoogleFonts.roboto(
+                                      color: Theme.of(context)
+                                          .colorScheme
+                                          .onPrimaryContainer,
+                                      fontSize: 20,
+                                      fontWeight: FontWeight.bold),
+                                  decoration: const InputDecoration(
+                                    hintText: "\$ _________",
+                                    border: InputBorder.none,
+                                    // text styling
+                                    hintStyle: TextStyle(
+                                        color: Colors.green, fontSize: 20),
+                                  ),
+                                ))
+                              ],
+                            )),
 
                     //Third row for the location of the user
                     AddLocation(publishBloc: publishBloc),
@@ -247,7 +359,9 @@ class _PublishPhotoState extends State<PublishPhoto> {
                                     _inputTextController.text,
                                     _selectedCategory.name,
                                     widget._pickedImageFile!,
-                                    widget.address));
+                                    widget.address,
+                                    isSwitched,
+                                    int.parse(_inputAmountController.text)));
                               }
                             },
 

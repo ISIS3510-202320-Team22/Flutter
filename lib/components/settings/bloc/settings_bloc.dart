@@ -21,9 +21,7 @@ class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
 
   FutureOr<void> settingsActionEvent(
       SettingsActionEvent event, Emitter<SettingsState> emit) async {
-    bool isLoaded = event.isLoaded;
-
-    emit(LoginAttemptSettingsState(isLoaded));
+    emit(LoginAttemptSettingsState(event.isLoaded));
 
     String internetConnection =
         await SettingsMethods().checkInternetConnection();

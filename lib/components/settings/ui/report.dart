@@ -117,12 +117,12 @@ class _Report extends State<Report> {
                   const SizedBox(height: 20),
                   InkWell(
                     onTap: () {
-                      bool loader = true;
+                      widget.isLoaded = !widget.isLoaded;
                       widget.settingsBloc.add(SettingsActionEvent(
                           _inputTitleController.text,
                           _inputDescriptionController.text,
                           context,
-                          loader));
+                          widget.isLoaded));
                     },
                     child: Container(
                       width: double.infinity,

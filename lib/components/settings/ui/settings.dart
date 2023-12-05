@@ -97,6 +97,7 @@ class _Settings extends State<Settings> {
                 ),
                 centerTitle: true,
               ),
+              resizeToAvoidBottomInset: true,
               body: Column(
                 children: [
                   const SizedBox(height: 32.0),

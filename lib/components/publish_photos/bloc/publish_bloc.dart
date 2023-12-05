@@ -27,6 +27,10 @@ class PublishBloc extends Bloc<PublishEvent, PublishState> {
     on<GoToFeedEvent>(goToFeedEvent);
     on<CategorySelectedEvent>(categorySelectedEvent);
     on<NearbyLocationsEvent>(nearbyLocationsEvent);
+    on<ChangeSwitchAddEvent>(changeSwitchAddEvent);
+    on<AddInputMoneyEvent>(addInputMoneyEvent);
+    on<AddPhotoButtonClickedSponsorEvent>(addPhotoButtonClickedSponsorEvent);
+    on<SendSponsorDataEvent>(sendSponsorDataEvent);
   }
 
   FutureOr<void> addPhotoButtonClickedEvent(
@@ -59,13 +63,8 @@ class PublishBloc extends Bloc<PublishEvent, PublishState> {
       emit(PublishInitial());
       return;
     } else {
-      final res = await PostRepository().publishPost(
-        event.date,
-        event.description,
-        event.category,
-        url[1],
-        event.location,
-      );
+      final res = await PostRepository().publishPost(event.date,
+          event.description, event.category, url[1], event.location, 0);
       if (res == "success") {
         emit(PublishSuccessState());
       } else {
@@ -173,5 +172,65 @@ class PublishBloc extends Bloc<PublishEvent, PublishState> {
     final List<Nearby> result = await NearbyLocationApi.instance
         .getNearby(event.currentLocation, 300, "restaurant", "");
     emit(NearbyPlacesState(nearby: result));
+  }
+
+  FutureOr<void> changeSwitchAddEvent(
+      ChangeSwitchAddEvent event, Emitter<PublishState> emit) {
+    emit(ChangeSwitchAddState(switched: event.switched));
+  }
+
+  FutureOr<void> addInputMoneyEvent(
+      AddInputMoneyEvent event, Emitter<PublishState> emit) {
+    emit(AddInputMoneyState(inputMoney: event.moneyWidget));
+  }
+
+  FutureOr<void> addPhotoButtonClickedSponsorEvent(
+      AddPhotoButtonClickedSponsorEvent event,
+      Emitter<PublishState> emit) async {
+    print("hola");
+    final pickedImageSponsor = await ImagePicker().pickImage(
+        source: ImageSource.gallery,
+        imageQuality: 50,
+        maxHeight: double.infinity,
+        maxWidth: double.infinity);
+
+    emit(AddToCircleSponsorPhotoState(
+        pickedImageSponsor: File(pickedImageSponsor!.path)));
+  }
+
+  FutureOr<void> sendSponsorDataEvent(
+      SendSponsorDataEvent event, Emitter<PublishState> emit) async {
+    String internetConnection =
+        await PostRepository().checkInternetConnection();
+    if (internetConnection != "success") {
+      emit(NoInternetErrorActionState());
+      emit(PublishInitial());
+      return;
+    }
+    // Url is a list with two elements, the first one is the status of the upload
+    // and the second one is the url of the image (or the error message)
+    final List<String> url = await StorageMethods()
+        .uploadImageToStorage('images/', File(event.sponsorImage!.path), true);
+    if (url[0] == 'failed') {
+      emit(PublishPhotoErrorState(errorMessage: url[1]));
+      emit(PublishInitial());
+      return;
+    } else {
+      final res = await PostRepository().publishPost(
+        Timestamp.now(),
+        event.sponsorDescription,
+        "Promociones",
+        url[1],
+        "",
+        event.sponsorMoney ~/ 4,
+      );
+      if (res == "success") {
+        emit(PublishSuccessState());
+        Navigator.pop(event.context);
+      } else {
+        emit(PublishErrorState(errorMessage: res));
+        emit(PublishInitial());
+      }
+    }
   }
 }

@@ -39,6 +39,7 @@ class _Feed extends State<Feed> {
       'Emprendimientos',
       'Atardeceres',
       'LookingFor',
+      'Promociones'
     ];
 
     return BlocConsumer<FeedBloc, FeedState>(
