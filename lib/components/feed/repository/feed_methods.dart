@@ -248,4 +248,33 @@ class FeedMethods {
       return e.message!;
     }
   }
+
+  Future<String> checkPostVote(postId) async {
+    try {
+      // Check if the user is logged in
+      User user = FirebaseAuth.instance.currentUser!;
+      // Check if the user has an entry in the postLikes collection
+      DocumentSnapshot postLikesSnapshot =
+          await _firestore.collection('postLikes').doc(user.uid).get();
+      if (!postLikesSnapshot.exists) {
+        // Create a new entry for the user
+        await _firestore.collection('postLikes').doc(user.uid).set({
+          'upvotedPosts': [],
+          'downvotedPosts': [],
+        });
+        return "none";
+      } else {
+        List userUpvotes = postLikesSnapshot.get("upvotedPosts");
+        List userDownvotes = postLikesSnapshot.get("downvotedPosts");
+        if (userUpvotes.contains(postId)) {
+          return "upvoted";
+        } else if (userDownvotes.contains(postId)) {
+          return "downvoted";
+        }
+        return "none";
+      }
+    } on FirebaseException catch (e) {
+      return e.message!;
+    }
+  }
 }

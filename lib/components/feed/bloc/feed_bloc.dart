@@ -65,12 +65,21 @@ class FeedBloc extends Bloc<FeedEvent, FeedState> {
   }
 
   // Post Card Events
-  FutureOr<void> postCardInitialEvent(PostCardInitialEvent event, Emitter<FeedState> emit) async {
-    // Get the post upvotes and downvotes
-    
+  FutureOr<void> postCardInitialEvent(
+      PostCardInitialEvent event, Emitter<FeedState> emit) async {
+    // Check if the user has already voted on the post
+    String res = await FeedMethods().checkPostVote(event.post.id!);
+    if (res == "upvoted") {
+      emit(PostUpvoteState(event.post.id!));
+    } else if (res == "downvoted") {
+      emit(PostDownvoteState(event.post.id!));
+    }
   }
 
-  FutureOr<void> postCardUpvoteEvent(PostCardUpvoteEvent event, Emitter<FeedState> emit) async {
+  FutureOr<void> postCardUpvoteEvent(
+      PostCardUpvoteEvent event, Emitter<FeedState> emit) async {
+    // Update the ui
+    emit(PostUpvoteState(event.post.id!));
     String connectionStatus = await FeedMethods().checkInternetConnection();
     if (connectionStatus != "success") {
       emit(FeedErrorState(connectionStatus));
@@ -82,11 +91,12 @@ class FeedBloc extends Bloc<FeedEvent, FeedState> {
       emit(FeedErrorState(res));
       return;
     }
-    // Update the ui
-    emit(PostUpvoteState(event.post.id!));
   }
 
-  FutureOr<void> postCardDownvoteEvent(PostCardDownvoteEvent event, Emitter<FeedState> emit) async {
+  FutureOr<void> postCardDownvoteEvent(
+      PostCardDownvoteEvent event, Emitter<FeedState> emit) async {
+    // Update the ui
+    emit(PostDownvoteState(event.post.id!));
     String connectionStatus = await FeedMethods().checkInternetConnection();
     if (connectionStatus != "success") {
       emit(FeedErrorState(connectionStatus));
@@ -98,10 +108,12 @@ class FeedBloc extends Bloc<FeedEvent, FeedState> {
       emit(FeedErrorState(res));
       return;
     }
-    emit(PostDownvoteState(event.post.id!));
   }
 
-  FutureOr<void> postCardCancelUpvoteEvent(PostCardCancelUpvoteEvent event, Emitter<FeedState> emit) async {
+  FutureOr<void> postCardCancelUpvoteEvent(
+      PostCardCancelUpvoteEvent event, Emitter<FeedState> emit) async {
+    // Update the ui
+    emit(PostCancelUpvoteState(event.post.id!, event.downVoted));
     String connectionStatus = await FeedMethods().checkInternetConnection();
     if (connectionStatus != "success") {
       emit(FeedErrorState(connectionStatus));
@@ -120,11 +132,11 @@ class FeedBloc extends Bloc<FeedEvent, FeedState> {
         return;
       }
     }
-    // Update the ui
-    emit(PostCancelUpvoteState(event.post.id!, event.downVoted));
   }
 
-  FutureOr<void> postCardCancelDownvoteEvent(PostCardCancelDownvoteEvent event, Emitter<FeedState> emit) async {
+  FutureOr<void> postCardCancelDownvoteEvent(
+      PostCardCancelDownvoteEvent event, Emitter<FeedState> emit) async {
+    emit(PostCancelDownvoteState(event.post.id!, event.upVoted));
     String connectionStatus = await FeedMethods().checkInternetConnection();
     if (connectionStatus != "success") {
       emit(FeedErrorState(connectionStatus));
@@ -144,6 +156,5 @@ class FeedBloc extends Bloc<FeedEvent, FeedState> {
         return;
       }
     }
-    emit(PostCancelDownvoteState(event.post.id!, event.upVoted));
   }
 }
