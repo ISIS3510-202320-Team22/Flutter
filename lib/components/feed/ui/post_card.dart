@@ -12,15 +12,27 @@ class PostCard extends StatefulWidget {
   const PostCard({Key? key, required this.post}) : super(key: key);
 
   @override
-  _PostCardState createState() => _PostCardState();
+  State<PostCard> createState() {
+     return _PostCardState();
+  }
 }
 
 class _PostCardState extends State<PostCard> {
   bool color = false;
 
   @override
+  void initState() {
+    feedBloc.add(PostCardInitialEvent(post: widget.post));
+    super.initState();
+  }
+
+  final FeedBloc feedBloc = FeedBloc();
+
+  @override
   Widget build(context) {
-    final FeedBloc feedBloc = FeedBloc();
+    
+    bool upVoted = false;
+    bool downVoted = false;
 
     return BlocConsumer<FeedBloc, FeedState>(
       bloc: feedBloc,
@@ -29,8 +41,28 @@ class _PostCardState extends State<PostCard> {
       listener: (context, state) {},
       builder: (context, state) {
         switch (state.runtimeType) {
-          case FeedUpVoteState:
-            color = true;
+          case PostCardInitial:
+            state as PostCardInitial;
+            upVoted = state.upVoted;
+            downVoted = state.downVoted;
+            break;
+          case PostUpvoteState:
+            upVoted = true;
+            downVoted = false;
+            break;
+          case PostDownvoteState:
+            upVoted = false;
+            downVoted = true;
+            break;
+          case PostCancelUpvoteState:
+            state as PostCancelUpvoteState;
+            upVoted = false;
+            downVoted = state.downVoted;
+            break;
+          case PostCancelDownvoteState:
+            state as PostCancelDownvoteState;
+            upVoted = state.upVoted;
+            downVoted = false;
             break;
         }
         return Container(
@@ -65,6 +97,7 @@ class _PostCardState extends State<PostCard> {
                               style: const TextStyle(
                                 fontWeight: FontWeight.bold,
                               ),
+                              
                             ),
                             Text(widget.post.date != null
                                 ? DateFormat('MMM dd y HH:mm')
@@ -143,11 +176,19 @@ class _PostCardState extends State<PostCard> {
                       child: Row(children: [
                         IconButton(
                           onPressed: () {
-                            //upvote
-                            feedBloc.add(FeedUpvoteEvent());
+                            // Upvote event
+                            if (downVoted) {
+                              feedBloc.add(PostCardCancelDownvoteEvent(post: widget.post, upVoted: true));
+                            }
+                            else if (upVoted) {
+                              feedBloc.add(PostCardCancelUpvoteEvent(post: widget.post, downVoted: false));
+                            }
+                            else {
+                              feedBloc.add(PostCardUpvoteEvent(post: widget.post));
+                            }
                           },
-                          icon: const Icon(
-                            Icons.thumb_up,
+                          icon: Icon(
+                              upVoted ? Icons.thumb_up : Icons.thumb_up_alt_outlined,
                             size: 35,
                             //color: color ? Colors.green : Colors.blue
                           ),
@@ -155,9 +196,20 @@ class _PostCardState extends State<PostCard> {
                         //upvotes
                         Text(widget.post.upvotes.toString()),
                         IconButton(
-                            onPressed: () {},
-                            icon: const Icon(
-                              Icons.thumb_down,
+                            onPressed: () {
+                              // Downvote event
+                              if (upVoted) {
+                                feedBloc.add(PostCardCancelUpvoteEvent(post: widget.post, downVoted: true));
+                              }
+                              else if (downVoted) {
+                                feedBloc.add(PostCardCancelDownvoteEvent(post: widget.post, upVoted: false));
+                              }
+                              else {
+                                feedBloc.add(PostCardDownvoteEvent(post: widget.post));
+                              }
+                            },
+                            icon: Icon(
+                              downVoted ? Icons.thumb_down : Icons.thumb_down_alt_outlined,
                               size: 35,
                             )),
                         //downvotes

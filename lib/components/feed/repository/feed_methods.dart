@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:guarap/models/post_model.dart';
 import 'package:dio/dio.dart';
 
@@ -42,4 +43,6 @@ class FeedMethods {
       return "No internet connection";
     }
   }
+
+  
 }
