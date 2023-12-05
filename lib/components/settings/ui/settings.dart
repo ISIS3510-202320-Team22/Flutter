@@ -82,8 +82,6 @@ class _Settings extends State<Settings> {
             case LoginAttemptSettingsState:
               isLoaded = true;
               break;
-            default:
-              isLoaded = false;
           }
 
           return Scaffold(
