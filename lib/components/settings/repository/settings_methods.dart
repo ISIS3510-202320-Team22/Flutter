@@ -4,14 +4,12 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:guarap/models/user_model.dart';
 import 'package:uuid/uuid.dart';
 
-class PostRepository {
-  Future<String> publishPost(
-      date, description, category, image, address, upvotes) async {
+class SettingsMethods {
+  Future<String> publishReportBug(title, description) async {
+    final bugReportId = const Uuid().v4();
     try {
       // TODO: Check user session is still valid before publishing
       final FirebaseFirestore firestore = FirebaseFirestore.instance;
-      final postId = const Uuid().v4();
-      // Get the current user's uuid
       final uuid = FirebaseAuth.instance.currentUser!.uid;
       // Get the document reference
       final userDocRef = firestore.collection('users').doc(uuid).withConverter(
@@ -23,20 +21,10 @@ class PostRepository {
         return "User not found";
       }
       final username = user.username;
-      await firestore
-          .collection('categories')
-          .doc(category)
-          .collection('posts')
-          .doc(postId)
-          .set({
-        'date': date,
+      await firestore.collection('bugReports').doc(bugReportId).set({
+        'title': title,
         'description': description,
-        'downvotes': 0,
-        'upvotes': upvotes,
-        'reported': false,
         'user': username,
-        'image': image,
-        'address': address,
       });
       return "success";
     } catch (e) {

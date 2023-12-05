@@ -26,3 +26,31 @@ class FeedSortPostsButtonClickedEvent extends FeedEvent {
       required this.category,
       required this.posts});
 }
+
+// Post Card Events
+class PostCardInitialEvent extends FeedEvent {
+  final PostModel post;
+  PostCardInitialEvent({required this.post});
+}
+
+class PostCardUpvoteEvent extends FeedEvent {
+  final PostModel post;
+  PostCardUpvoteEvent({required this.post});
+}
+
+class PostCardDownvoteEvent extends FeedEvent {
+  final PostModel post;
+  PostCardDownvoteEvent({required this.post});
+}
+
+class PostCardCancelUpvoteEvent extends FeedEvent {
+  final PostModel post;
+  final bool downVoted;
+  PostCardCancelUpvoteEvent({required this.post, required this.downVoted});
+}
+
+class PostCardCancelDownvoteEvent extends FeedEvent {
+  final PostModel post;
+  final bool upVoted;
+  PostCardCancelDownvoteEvent({required this.post, required this.upVoted});
+}

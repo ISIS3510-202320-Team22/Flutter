@@ -51,7 +51,7 @@ class GoToFeedActionState extends PublishActionState {}
 
 class CategorySelectedState extends PublishState {
   CategorySelectedState({required this.category});
-  final String category;
+  final Category category;
 }
 
 class NearbyPlacesState extends PublishState {
@@ -60,3 +60,18 @@ class NearbyPlacesState extends PublishState {
 }
 
 class NoInternetErrorActionState extends PublishActionState {}
+
+class ChangeSwitchAddState extends PublishState {
+  ChangeSwitchAddState({required this.switched});
+  final bool switched;
+}
+
+class AddInputMoneyState extends PublishState {
+  AddInputMoneyState({required this.inputMoney});
+  final bool inputMoney;
+}
+
+class AddToCircleSponsorPhotoState extends PublishState {
+  AddToCircleSponsorPhotoState({required this.pickedImageSponsor});
+  final File? pickedImageSponsor;
+}
