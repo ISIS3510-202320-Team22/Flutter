@@ -21,9 +21,37 @@ class FeedLoadingState extends FeedState {
   FeedLoadingState([this.category = "Generic", this.sortStrategy = "Recent"]);
 }
 
-class FeedUpVoteState extends FeedActionState {}
-
 class FeedErrorState extends FeedActionState {
   final String message;
   FeedErrorState(this.message);
+}
+
+// Post Card States
+
+class PostCardInitial extends FeedState {
+  final bool upVoted;
+  final bool downVoted;
+  PostCardInitial(this.upVoted, this.downVoted);
+}
+
+class PostUpvoteState extends FeedState {
+  final String postId;
+  PostUpvoteState(this.postId);
+}
+
+class PostDownvoteState extends FeedState {
+  final String postId;
+  PostDownvoteState(this.postId);
+}
+
+class PostCancelUpvoteState extends FeedState {
+  final String postId;
+  final bool downVoted;
+  PostCancelUpvoteState(this.postId, this.downVoted);
+}
+
+class PostCancelDownvoteState extends FeedState {
+  final String postId;
+  final bool upVoted;
+  PostCancelDownvoteState(this.postId, this.upVoted);
 }

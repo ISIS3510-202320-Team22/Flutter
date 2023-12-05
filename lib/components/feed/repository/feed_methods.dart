@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:guarap/models/post_model.dart';
 import 'package:dio/dio.dart';
 
@@ -40,6 +41,150 @@ class FeedMethods {
       }
     } on DioException catch (e) {
       return "No internet connection";
+    }
+  }
+
+  Future<String> upvotePost(postId) async {
+    try {
+      // Check if the user is logged in
+      User? user = FirebaseAuth.instance.currentUser;
+      if (user == null) {
+        return "You must be logged in to vote";
+      }
+      // Loop over all the categories
+      QuerySnapshot categoriesSnapshot =
+          await _firestore.collection('categories').get();
+      for (int i = 0; i < categoriesSnapshot.docs.length; i++) {
+        // Loop over all the posts in the category
+        QuerySnapshot postsSnapshot = await _firestore
+            .collection('categories')
+            .doc(categoriesSnapshot.docs[i].id)
+            .collection('posts')
+            .get();
+        for (int j = 0; j < postsSnapshot.docs.length; j++) {
+          // Check if the post is the one we want to upvote
+          if (postsSnapshot.docs[j].id == postId) {
+            // Add upvote to the post
+            await _firestore
+                .collection('categories')
+                .doc(categoriesSnapshot.docs[i].id)
+                .collection('posts')
+                .doc(postsSnapshot.docs[j].id)
+                .update({'upvotes': FieldValue.increment(1)});
+          }
+        }
+      }
+      return "success";
+    } on FirebaseException catch (e) {
+      return e.message!;
+    }
+  }
+
+  Future<String> downvotePost(postId) async {
+    try {
+      // Check if the user is logged in
+      User? user = FirebaseAuth.instance.currentUser;
+      if (user == null) {
+        return "You must be logged in to vote";
+      }
+      // Loop over all the categories
+      QuerySnapshot categoriesSnapshot =
+          await _firestore.collection('categories').get();
+      for (int i = 0; i < categoriesSnapshot.docs.length; i++) {
+        // Loop over all the posts in the category
+        QuerySnapshot postsSnapshot = await _firestore
+            .collection('categories')
+            .doc(categoriesSnapshot.docs[i].id)
+            .collection('posts')
+            .get();
+        for (int j = 0; j < postsSnapshot.docs.length; j++) {
+          // Check if the post is the one we want to upvote
+          if (postsSnapshot.docs[j].id == postId) {
+            // Add upvote to the post
+            await _firestore
+                .collection('categories')
+                .doc(categoriesSnapshot.docs[i].id)
+                .collection('posts')
+                .doc(postsSnapshot.docs[j].id)
+                .update({'downvotes': FieldValue.increment(1)});
+          }
+        }
+      }
+      return "success";
+    } on FirebaseException catch (e) {
+      return e.message!;
+    }
+  }
+
+  Future<String> cancelUpvotePost(postId) async {
+    try {
+      // Check if the user is logged in
+      User? user = FirebaseAuth.instance.currentUser;
+      if (user == null) {
+        return "You must be logged in to vote";
+      }
+      // Loop over all the categories
+      QuerySnapshot categoriesSnapshot =
+          await _firestore.collection('categories').get();
+      for (int i = 0; i < categoriesSnapshot.docs.length; i++) {
+        // Loop over all the posts in the category
+        QuerySnapshot postsSnapshot = await _firestore
+            .collection('categories')
+            .doc(categoriesSnapshot.docs[i].id)
+            .collection('posts')
+            .get();
+        for (int j = 0; j < postsSnapshot.docs.length; j++) {
+          // Check if the post is the one we want to upvote
+          if (postsSnapshot.docs[j].id == postId) {
+            // Add upvote to the post
+            await _firestore
+                .collection('categories')
+                .doc(categoriesSnapshot.docs[i].id)
+                .collection('posts')
+                .doc(postsSnapshot.docs[j].id)
+                .update({'upvotes': FieldValue.increment(-1)});
+          }
+        }
+      }
+      return "success";
+    } on FirebaseException catch (e) {
+      return e.message!;
+    }
+  }
+
+  Future<String> cancelDownvotePost(postId) async {
+    try {
+      // Check if the user is logged in
+      User? user = FirebaseAuth.instance.currentUser;
+      if (user == null) {
+        return "You must be logged in to vote";
+      }
+      // Loop over all the categories
+      QuerySnapshot categoriesSnapshot =
+          await _firestore.collection('categories').get();
+      for (int i = 0; i < categoriesSnapshot.docs.length; i++) {
+        // Loop over all the posts in the category
+        QuerySnapshot postsSnapshot = await _firestore
+            .collection('categories')
+            .doc(categoriesSnapshot.docs[i].id)
+            .collection('posts')
+            .get();
+        for (int j = 0; j < postsSnapshot.docs.length; j++) {
+          // Check if the post is the one we want to upvote
+          if (postsSnapshot.docs[j].id == postId) {
+            // Add upvote to the post
+            await _firestore
+                .collection('categories')
+                .doc(categoriesSnapshot.docs[i].id)
+                .collection('posts')
+                .doc(postsSnapshot.docs[j].id)
+                .update({'downvotes': FieldValue.increment(-1)});
+          }
+        }
+      }
+      return "success";
+    } on FirebaseException catch (e) {
+      return e.message!;
     }
   }
 }

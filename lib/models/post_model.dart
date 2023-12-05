@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class PostModel {
+  final String? id;
   final String? user;
   final String? address;
   final String? description;
@@ -11,6 +12,7 @@ class PostModel {
   final int? downvotes;
 
   PostModel({
+    this.id,
     this.user,
     this.address,
     this.description,
@@ -27,6 +29,7 @@ class PostModel {
   ) {
     final data = snapshot.data();
     return PostModel(
+      id: snapshot.id,
       user: data?['user'],
       address: data?['address'],
       description: data?['description'],
@@ -40,6 +43,7 @@ class PostModel {
 
   factory PostModel.fromDocument(QueryDocumentSnapshot doc) {
     return PostModel(
+      id: doc.id,
       user: doc['user'],
       address: doc['address'],
       description: doc['description'],
