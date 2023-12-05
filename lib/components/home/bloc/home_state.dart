@@ -25,8 +25,8 @@ class HomeNavigateToProfilePageActionState extends HomeActionState {}
 // Action State to navigate the publish view
 class HomeNavigateToPublishPageActionState extends HomeActionState {}
 
-// Action State to navigate the categories view
-class HomeNavigateToCategoriesPageActionState extends HomeActionState {}
+// Action State to navigate the settings view
+class HomeNavigateToSettingsPageActionState extends HomeActionState {}
 
 // State to change the sort strategy
 class HomeSortStrategyChangedState extends HomeState {

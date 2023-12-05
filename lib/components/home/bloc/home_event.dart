@@ -11,8 +11,8 @@ class HomeProfileButtonClickedEvent extends HomeEvent {}
 // Event when the publish button is clicked
 class HomePublishButtonClickedEvent extends HomeEvent {}
 
-// Event when the categories button is clicked
-class HomeCategoriesButtonClickedEvent extends HomeEvent {}
+// Event when the settings button is clicked
+class HomeSettingsButtonNavigateEvent extends HomeEvent {}
 
 // Event when the profile button is clicked to navigate to this page
 class HomeProfileButtonNavigateEvent extends HomeEvent {}

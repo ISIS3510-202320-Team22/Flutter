@@ -11,10 +11,9 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     on<HomeInitialEvent>(homeInitialEvent);
     on<HomeProfileButtonClickedEvent>(homeProfileButtonClickedEvent);
     on<HomePublishButtonClickedEvent>(homePublishButtonClickedEvent);
-    on<HomeCategoriesButtonClickedEvent>(homeCategoriesButtonClickedEvent);
+    on<HomeSettingsButtonNavigateEvent>(homeSettingsButtonNavigateEvent);
     on<HomeProfileButtonNavigateEvent>(homeProfileButtonNavigateEvent);
     on<HomePublishButtonNavigateEvent>(homePublishButtonNavigateEvent);
-    on<HomeCategoriesButtonNavigateEvent>(homeCategoriesButtonNavigateEvent);
     on<HomeSortPostsButtonClickedEvent>(homeSortPostsButtonClickedEvent);
   }
 
@@ -31,9 +30,6 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
   FutureOr<void> homePublishButtonClickedEvent(
       HomePublishButtonClickedEvent event, Emitter<HomeState> emit) {}
 
-  FutureOr<void> homeCategoriesButtonClickedEvent(
-      HomeCategoriesButtonClickedEvent event, Emitter<HomeState> emit) {}
-
   FutureOr<void> homeProfileButtonNavigateEvent(
       HomeProfileButtonNavigateEvent event, Emitter<HomeState> emit) {
     // When I get this state, for performing an action
@@ -45,9 +41,9 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     emit(HomeNavigateToPublishPageActionState());
   }
 
-  FutureOr<void> homeCategoriesButtonNavigateEvent(
-      HomeCategoriesButtonNavigateEvent event, Emitter<HomeState> emit) {
-    emit(HomeNavigateToCategoriesPageActionState());
+  FutureOr<void> homeSettingsButtonNavigateEvent(
+      HomeSettingsButtonNavigateEvent event, Emitter<HomeState> emit) {
+    emit(HomeNavigateToSettingsPageActionState());
   }
 
   FutureOr<void> homeSortPostsButtonClickedEvent(

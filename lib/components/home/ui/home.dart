@@ -4,7 +4,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:guarap/components/home/bloc/home_bloc.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:guarap/components/profile/ui/profile.dart';
-import 'package:guarap/components/categories/ui/categories.dart';
+import 'package:guarap/components/settings/ui/settings.dart';
 import 'package:guarap/components/publish_photos/ui/publish_photo.dart';
 import 'package:guarap/components/feed/ui/feed.dart';
 
@@ -56,14 +56,14 @@ class _HomeState extends State<Home> {
               'firebase_screen_class': Profile,
             },
           );
-        } else if (state is HomeNavigateToCategoriesPageActionState) {
+        } else if (state is HomeNavigateToSettingsPageActionState) {
           Navigator.push(context,
-              MaterialPageRoute(builder: (context) => const Categories()));
+              MaterialPageRoute(builder: (context) => const Settings()));
           analytics.logEvent(
             name: 'screen_view',
             parameters: {
-              'firebase_screen': "Categories",
-              'firebase_screen_class': Categories,
+              'firebase_screen': "Settings",
+              'firebase_screen_class': Settings,
             },
           );
         }
@@ -106,11 +106,11 @@ class _HomeState extends State<Home> {
             NavigationDestination(
                 icon: IconButton(
                   onPressed: () {
-                    homeBloc.add(HomeCategoriesButtonNavigateEvent());
+                    homeBloc.add(HomeSettingsButtonNavigateEvent());
                   },
-                  icon: const Icon(Icons.category),
+                  icon: const Icon(Icons.settings),
                 ),
-                label: "Categories"),
+                label: "Settings"),
             NavigationDestination(
                 icon: IconButton(
                   onPressed: () {

@@ -119,6 +119,13 @@ class _PostCardState extends State<PostCard> {
                         ),
                       ),
                     ),
+                    /*
+                    post.sponsored == true
+                        /? const Icon(
+                            Icons.verified,
+                            color: Colors.blue,
+                          )
+                        : const SizedBox.shrink(),*/
                     IconButton(
                       icon: const Icon(Icons.more_vert),
                       onPressed: () {

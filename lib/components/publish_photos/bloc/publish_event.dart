@@ -9,17 +9,19 @@ class PublishInitialEvent extends PublishEvent {}
 
 // Event when the add photo button is pressed
 class AddPhotoButtonClickedEvent extends PublishEvent {
-  AddPhotoButtonClickedEvent();
+  // AddPhotoButtonClickedEvent();
 }
 
 class PublishPostEvent extends PublishEvent {
-  PublishPostEvent(
-      this.date, this.description, this.category, this.image, this.location);
+  PublishPostEvent(this.date, this.description, this.category, this.image,
+      this.location, this.sponsorWidget, this.money);
   final Timestamp date;
   final String description;
   final String category;
   final File? image;
   String location = "";
+  bool sponsorWidget;
+  final int money;
 }
 
 class AddLocationEvent extends PublishEvent {}
@@ -34,7 +36,7 @@ class GoToFeedEvent extends PublishEvent {}
 
 class CategorySelectedEvent extends PublishEvent {
   CategorySelectedEvent({required this.category});
-  final String category;
+  final Category category;
 }
 
 class LocationSelectedEvent extends PublishEvent {
@@ -45,4 +47,25 @@ class LocationSelectedEvent extends PublishEvent {
 class NearbyLocationsEvent extends PublishEvent {
   NearbyLocationsEvent({required this.currentLocation});
   final LatLng currentLocation;
+}
+
+class ChangeSwitchAddEvent extends PublishEvent {
+  ChangeSwitchAddEvent(this.switched);
+  final bool switched;
+}
+
+class AddInputMoneyEvent extends PublishEvent {
+  AddInputMoneyEvent(this.moneyWidget);
+  final bool moneyWidget;
+}
+
+class AddPhotoButtonClickedSponsorEvent extends PublishEvent {}
+
+class SendSponsorDataEvent extends PublishEvent {
+  SendSponsorDataEvent(this.sponsorImage, this.sponsorDescription,
+      this.sponsorMoney, this.context);
+  final String sponsorDescription;
+  final File sponsorImage;
+  final int sponsorMoney;
+  final context;
 }
