@@ -115,6 +115,9 @@ class PostCard extends StatelessWidget {
                         const Center(child: CircularProgressIndicator()),
                     errorWidget: (context, url, error) =>
                         const Icon(Icons.error),
+                    placeholderFadeInDuration: const Duration(milliseconds: 0),
+                    fadeOutDuration: const Duration(milliseconds: 0),
+                    fadeInDuration: const Duration(milliseconds: 0),
                   ),
                 ),
                 //Up & Down buttons section
