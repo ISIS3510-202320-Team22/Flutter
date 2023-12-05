@@ -74,6 +74,21 @@ class FeedMethods {
           }
         }
       }
+      // Check if the user has an entry in the postLikes collection
+      DocumentSnapshot postLikesSnapshot =
+          await _firestore.collection('postLikes').doc(user.uid).get();
+      if (!postLikesSnapshot.exists) {
+        // Create a new entry for the user
+        await _firestore.collection('postLikes').doc(user.uid).set({
+          'upvotedPosts': [postId],
+          'downvotedPosts': [],
+        });
+      } else {
+        // Update the user's upvoted posts
+        await _firestore.collection('postLikes').doc(user.uid).update({
+          'upvotedPosts': FieldValue.arrayUnion([postId])
+        });
+      }
       return "success";
     } on FirebaseException catch (e) {
       return e.message!;
@@ -110,6 +125,22 @@ class FeedMethods {
           }
         }
       }
+      // Check if the user has an entry in the postLikes collection
+      DocumentSnapshot postLikesSnapshot =
+          await _firestore.collection('postLikes').doc(user.uid).get();
+      if (!postLikesSnapshot.exists) {
+        // Create a new entry for the user
+        await _firestore.collection('postLikes').doc(user.uid).set({
+          'upvotedPosts': [],
+          'downvotedPosts': [postId],
+        });
+      } else {
+        // Update the user's downvoted posts
+        await _firestore.collection('postLikes').doc(user.uid).update({
+          'downvotedPosts': FieldValue.arrayUnion([postId])
+        });
+      }
+
       return "success";
     } on FirebaseException catch (e) {
       return e.message!;
@@ -146,6 +177,21 @@ class FeedMethods {
           }
         }
       }
+      // Check if the user has an entry in the postLikes collection
+      DocumentSnapshot postLikesSnapshot =
+          await _firestore.collection('postLikes').doc(user.uid).get();
+      if (!postLikesSnapshot.exists) {
+        // Create a new entry for the user
+        await _firestore.collection('postLikes').doc(user.uid).set({
+          'upvotedPosts': [],
+          'downvotedPosts': [],
+        });
+      } else {
+        // Update the user's upvoted posts
+        await _firestore.collection('postLikes').doc(user.uid).update({
+          'upvotedPosts': FieldValue.arrayRemove([postId])
+        });
+      }
       return "success";
     } on FirebaseException catch (e) {
       return e.message!;
@@ -181,6 +227,21 @@ class FeedMethods {
                 .update({'downvotes': FieldValue.increment(-1)});
           }
         }
+      }
+      // Check if the user has an entry in the postLikes collection
+      DocumentSnapshot postLikesSnapshot =
+          await _firestore.collection('postLikes').doc(user.uid).get();
+      if (!postLikesSnapshot.exists) {
+        // Create a new entry for the user
+        await _firestore.collection('postLikes').doc(user.uid).set({
+          'upvotedPosts': [],
+          'downvotedPosts': [],
+        });
+      } else {
+        // Update the user's downvoted posts
+        await _firestore.collection('postLikes').doc(user.uid).update({
+          'downvotedPosts': FieldValue.arrayRemove([postId])
+        });
       }
       return "success";
     } on FirebaseException catch (e) {
