@@ -200,6 +200,7 @@ class PublishBloc extends Bloc<PublishEvent, PublishState> {
 
   FutureOr<void> sendSponsorDataEvent(
       SendSponsorDataEvent event, Emitter<PublishState> emit) async {
+    emit(PublishingPostSponsorState());
     String internetConnection =
         await PostRepository().checkInternetConnection();
     if (internetConnection != "success") {
