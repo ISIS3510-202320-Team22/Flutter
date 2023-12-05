@@ -33,6 +33,8 @@ class _PostCardState extends State<PostCard> {
     
     bool upVoted = false;
     bool downVoted = false;
+    int upvotes = widget.post.upvotes!;
+    int downvotes = widget.post.downvotes!;
 
     return BlocConsumer<FeedBloc, FeedState>(
       bloc: feedBloc,
@@ -48,21 +50,31 @@ class _PostCardState extends State<PostCard> {
             break;
           case PostUpvoteState:
             upVoted = true;
+            upvotes++;
             downVoted = false;
             break;
           case PostDownvoteState:
             upVoted = false;
             downVoted = true;
+            downvotes++;
             break;
           case PostCancelUpvoteState:
             state as PostCancelUpvoteState;
             upVoted = false;
+            upvotes--;
             downVoted = state.downVoted;
+            if (state.downVoted) {
+              downvotes++;
+            }
             break;
           case PostCancelDownvoteState:
             state as PostCancelDownvoteState;
             upVoted = state.upVoted;
+            if (state.upVoted) {
+              upvotes++;
+            }
             downVoted = false;
+            downvotes--;
             break;
         }
         return Container(
@@ -194,7 +206,7 @@ class _PostCardState extends State<PostCard> {
                           ),
                         ),
                         //upvotes
-                        Text(widget.post.upvotes.toString()),
+                        Text(upvotes.toString()),
                         IconButton(
                             onPressed: () {
                               // Downvote event
@@ -213,7 +225,7 @@ class _PostCardState extends State<PostCard> {
                               size: 35,
                             )),
                         //downvotes
-                        Text(widget.post.downvotes.toString()),
+                        Text(downvotes.toString()),
                       ]),
                     )
                   ],

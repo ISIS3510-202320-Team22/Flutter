@@ -76,6 +76,12 @@ class FeedBloc extends Bloc<FeedEvent, FeedState> {
       emit(FeedErrorState(connectionStatus));
       return;
     }
+    // Update firebase
+    String res = await FeedMethods().upvotePost(event.post.id!);
+    if (res != "success") {
+      emit(FeedErrorState(res));
+      return;
+    }
     // Update the ui
     emit(PostUpvoteState(event.post.id!));
   }
@@ -84,6 +90,12 @@ class FeedBloc extends Bloc<FeedEvent, FeedState> {
     String connectionStatus = await FeedMethods().checkInternetConnection();
     if (connectionStatus != "success") {
       emit(FeedErrorState(connectionStatus));
+      return;
+    }
+    // Update firebase
+    String res = await FeedMethods().downvotePost(event.post.id!);
+    if (res != "success") {
+      emit(FeedErrorState(res));
       return;
     }
     emit(PostDownvoteState(event.post.id!));
@@ -95,6 +107,19 @@ class FeedBloc extends Bloc<FeedEvent, FeedState> {
       emit(FeedErrorState(connectionStatus));
       return;
     }
+    // Update firebase
+    String res = await FeedMethods().cancelUpvotePost(event.post.id!);
+    if (res != "success") {
+      emit(FeedErrorState(res));
+      return;
+    }
+    if (event.downVoted) {
+      String res = await FeedMethods().downvotePost(event.post.id!);
+      if (res != "success") {
+        emit(FeedErrorState(res));
+        return;
+      }
+    }
     // Update the ui
     emit(PostCancelUpvoteState(event.post.id!, event.downVoted));
   }
@@ -105,11 +130,20 @@ class FeedBloc extends Bloc<FeedEvent, FeedState> {
       emit(FeedErrorState(connectionStatus));
       return;
     }
+    // Update firebase
+    String res = await FeedMethods().cancelDownvotePost(event.post.id!);
+    if (res != "success") {
+      emit(FeedErrorState(res));
+      return;
+    }
     // Update the ui
     if (event.upVoted) {
-      print("upvoted");
+      String res = await FeedMethods().upvotePost(event.post.id!);
+      if (res != "success") {
+        emit(FeedErrorState(res));
+        return;
+      }
     }
-    print("downvoted Canceled");
     emit(PostCancelDownvoteState(event.post.id!, event.upVoted));
   }
 }
