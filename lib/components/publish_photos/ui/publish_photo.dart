@@ -129,6 +129,7 @@ class _PublishPhotoState extends State<PublishPhoto> {
             final changeSwitchAddState = state as ChangeSwitchAddState;
             isSwitched = changeSwitchAddState.switched;
             break;
+          //Not working right now. Was left here for future implementation
           case AddInputMoneyState:
             final addInputMoneyState = state as AddInputMoneyState;
             showWidget = addInputMoneyState.inputMoney;
@@ -153,11 +154,6 @@ class _PublishPhotoState extends State<PublishPhoto> {
                 padding: const EdgeInsets.fromLTRB(10, 25, 25, 25),
                 child: Column(
                   children: [
-                    _isLoading
-                        ? const Center(
-                            child: LinearProgressIndicator(),
-                          )
-                        : const SizedBox.shrink(),
                     // First row for image post and the input field
                     Row(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -305,6 +301,7 @@ class _PublishPhotoState extends State<PublishPhoto> {
                                         .add(AddInputMoneyEvent(showWidget));
                                   })*/
                             ])),
+                    //Not working right now. Was left here for future implementation
 
                     !showWidget
                         ? const SizedBox.shrink()

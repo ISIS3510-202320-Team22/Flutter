@@ -19,6 +19,7 @@ class _Sponsor extends State<Sponsor> {
   File? _pickedImageSponsorFile;
   final _inputAmountControllerSponsor = TextEditingController();
   final _inputTextControllerSponsor = TextEditingController();
+  bool _isLoadingSend = false;
 
   @override
   void dispose() {
@@ -50,6 +51,9 @@ class _Sponsor extends State<Sponsor> {
                   state as AddToCircleSponsorPhotoState;
               _pickedImageSponsorFile =
                   addToCircleSponsorPhotoState.pickedImageSponsor;
+              break;
+            case PublishingPostSponsorState:
+              _isLoadingSend = true;
               break;
           }
 
@@ -160,7 +164,7 @@ class _Sponsor extends State<Sponsor> {
                             // Expand button width
                             minimumSize: const Size(250, 30),
                           ),
-                          child: true
+                          child: !_isLoadingSend
                               ? Text(
                                   "Post Ad",
                                   style: GoogleFonts.roboto(

@@ -79,9 +79,6 @@ class _Settings extends State<Settings> {
               final changeSwitchState = state as ChangeSwitchState;
               isSwitch = changeSwitchState.switched;
               break;
-            case LoginAttemptSettingsState:
-              isLoaded = true;
-              break;
           }
 
           return Scaffold(

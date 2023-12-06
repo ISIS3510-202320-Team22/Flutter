@@ -8,7 +8,7 @@ class Report extends StatefulWidget {
   Report({super.key, required this.settingsBloc, required this.isLoaded});
 
   final SettingsBloc settingsBloc;
-  bool isLoaded;
+  bool isLoaded = false;
 
   @override
   State<Report> createState() {
@@ -37,7 +37,7 @@ class _Report extends State<Report> {
         builder: (context, state) {
           switch (state.runtimeType) {
             case LoginAttemptSettingsState:
-              widget.isLoaded = (state as LoginAttemptSettingsState).isLoaded;
+              widget.isLoaded = true;
               break;
           }
 
@@ -117,12 +117,10 @@ class _Report extends State<Report> {
                   const SizedBox(height: 20),
                   InkWell(
                     onTap: () {
-                      widget.isLoaded = !widget.isLoaded;
                       widget.settingsBloc.add(SettingsActionEvent(
                           _inputTitleController.text,
                           _inputDescriptionController.text,
-                          context,
-                          widget.isLoaded));
+                          context));
                     },
                     child: Container(
                       width: double.infinity,
