@@ -37,10 +37,23 @@ class GuarapApp extends StatelessWidget {
     FirebaseAnalytics analytics = FirebaseAnalytics.instance;
     return MaterialApp(
         debugShowCheckedModeBanner: false,
-        darkTheme: ThemeData.dark()
-            .copyWith(useMaterial3: true, colorScheme: kDarkColorScheme),
+        darkTheme: ThemeData.dark().copyWith(
+          colorScheme: kDarkColorScheme,
+          textTheme: ThemeData.dark().textTheme.copyWith(
+              titleLarge: const TextStyle(
+                  fontWeight: FontWeight.normal,
+                  color: Color.fromARGB(255, 255, 255, 255)),
+              titleMedium: const TextStyle(
+                  fontWeight: FontWeight.bold,
+                  color: Color.fromARGB(255, 255, 255, 255)),
+              titleSmall: const TextStyle(
+                  fontWeight: FontWeight.normal,
+                  color: Color.fromARGB(255, 255, 255, 255)),
+              bodyMedium: const TextStyle(
+                  fontWeight: FontWeight.normal,
+                  color: Color.fromARGB(255, 255, 255, 255))),
+        ),
         theme: ThemeData().copyWith(
-            useMaterial3: true,
             colorScheme: kColorScheme,
             elevatedButtonTheme: ElevatedButtonThemeData(
               style: ElevatedButton.styleFrom(
