@@ -352,13 +352,12 @@ class _PublishPhotoState extends State<PublishPhoto> {
                                 return;
                               } else {
                                 publishBloc.add(PublishPostEvent(
-                                    actualDate,
-                                    _inputTextController.text,
-                                    _selectedCategory.name,
-                                    widget._pickedImageFile!,
-                                    widget.address,
-                                    isSwitched,
-                                    int.parse(_inputAmountController.text)));
+                                  actualDate,
+                                  _inputTextController.text,
+                                  _selectedCategory.name,
+                                  widget._pickedImageFile!,
+                                  widget.address,
+                                ));
                               }
                             },
 
