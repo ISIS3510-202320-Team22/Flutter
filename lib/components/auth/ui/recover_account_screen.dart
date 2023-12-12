@@ -78,14 +78,18 @@ class _RecoverAccountState extends State<RecoverAccount> {
                     const SizedBox(height: 64),
                     Text(
                       "Find your account",
-                      style:
-                          GoogleFonts.roboto(color: Colors.black, fontSize: 40),
+                      style: GoogleFonts.roboto(
+                          color:
+                              Theme.of(context).colorScheme.onPrimaryContainer,
+                          fontSize: 40),
                     ),
                     const SizedBox(height: 20),
                     Text(
                       "Enter your email address to recover you account.",
-                      style:
-                          GoogleFonts.roboto(color: Colors.black, fontSize: 20),
+                      style: GoogleFonts.roboto(
+                          color:
+                              Theme.of(context).colorScheme.onPrimaryContainer,
+                          fontSize: 20),
                     ),
                     const SizedBox(height: 64),
                     TextFieldInput(

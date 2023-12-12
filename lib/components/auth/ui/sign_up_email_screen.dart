@@ -85,7 +85,8 @@ class _SignUpEmailState extends State<SignUpEmail> {
                     Text(
                       "Add your email",
                       style: GoogleFonts.roboto(
-                          color: Colors.black,
+                          color:
+                              Theme.of(context).colorScheme.onPrimaryContainer,
                           fontSize: 36,
                           fontWeight: FontWeight.bold),
                     ),
@@ -94,7 +95,8 @@ class _SignUpEmailState extends State<SignUpEmail> {
                     Text(
                       "You will use this email to login to your account",
                       style: GoogleFonts.roboto(
-                          color: Colors.black,
+                          color:
+                              Theme.of(context).colorScheme.onPrimaryContainer,
                           fontSize: 14,
                           fontWeight: FontWeight.normal),
                     ),

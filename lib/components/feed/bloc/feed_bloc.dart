@@ -164,11 +164,6 @@ class FeedBloc extends Bloc<FeedEvent, FeedState> {
 
   FutureOr<void> reportPostSubmitEvent(
       ReportPostSubmitEvent event, Emitter<FeedState> emit) async {
-    print("User reporting: " + event.userReportingId);
-    print("Post id: " + event.postId);
-    print("Post user id: " + event.postUserId);
-    print("Description: " + event.description);
-    print("Report submiting");
     emit(ReportPageLoadingState());
     String connectionStatus = await FeedMethods().checkInternetConnection();
     if (connectionStatus != "success") {
@@ -176,10 +171,13 @@ class FeedBloc extends Bloc<FeedEvent, FeedState> {
       emit(ReportPageInitial());
       return;
     }
-    print("Internet connection ok");
+    if (event.description.trim() == "") {
+      emit(FeedErrorState("Please enter a description"));
+      emit(ReportPageInitial());
+      return;
+    }
     String res = await FeedMethods().reportPost(event.postId, event.postUserId,
         event.userReportingId, event.description);
-    print(res);
     if (res != "success") {
       emit(FeedErrorState(res));
       emit(ReportPageInitial());
