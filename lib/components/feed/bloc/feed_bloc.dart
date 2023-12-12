@@ -17,6 +17,8 @@ class FeedBloc extends Bloc<FeedEvent, FeedState> {
     on<PostCardDownvoteEvent>(postCardDownvoteEvent);
     on<PostCardCancelUpvoteEvent>(postCardCancelUpvoteEvent);
     on<PostCardCancelDownvoteEvent>(postCardCancelDownvoteEvent);
+    on<PostCardReportEvent>(postCardReportEvent);
+    on<ReportPostSubmitEvent>(reportPostSubmitEvent);
   }
 
   FutureOr<void> feedInitialEvent(
@@ -158,5 +160,31 @@ class FeedBloc extends Bloc<FeedEvent, FeedState> {
   FutureOr<void> postCardReportEvent(
       PostCardReportEvent event, Emitter<FeedState> emit) async {
     emit(PostReportPageActionState(post: event.post));
+  }
+
+  FutureOr<void> reportPostSubmitEvent(
+      ReportPostSubmitEvent event, Emitter<FeedState> emit) async {
+    print("User reporting: " + event.userReportingId);
+    print("Post id: " + event.postId);
+    print("Post user id: " + event.postUserId);
+    print("Description: " + event.description);
+    print("Report submiting");
+    emit(ReportPageLoadingState());
+    String connectionStatus = await FeedMethods().checkInternetConnection();
+    if (connectionStatus != "success") {
+      emit(FeedErrorState(connectionStatus));
+      emit(ReportPageInitial());
+      return;
+    }
+    print("Internet connection ok");
+    String res = await FeedMethods().reportPost(event.postId, event.postUserId,
+        event.userReportingId, event.description);
+    print(res);
+    if (res != "success") {
+      emit(FeedErrorState(res));
+      emit(ReportPageInitial());
+      return;
+    }
+    emit(ReportPageSuccessState());
   }
 }
