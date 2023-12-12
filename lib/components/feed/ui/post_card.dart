@@ -127,7 +127,7 @@ class _PostCardState extends State<PostCard> {
                           )
                         : const SizedBox.shrink(),*/
                     IconButton(
-                      icon: const Icon(Icons.more_vert),
+                      icon: const Icon(Icons.flag, color: Colors.red),
                       onPressed: () {
                         showDialog(
                             context: context,
