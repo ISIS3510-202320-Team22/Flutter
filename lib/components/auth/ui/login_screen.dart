@@ -106,10 +106,11 @@ class _LoginState extends State<Login> {
                   // GUARAP
                   Text(
                     "Guarap",
-                    style:
-                        GoogleFonts.pattaya(color: Colors.black, fontSize: 40),
+                    style: GoogleFonts.pattaya(
+                        color: Theme.of(context).colorScheme.onPrimaryContainer,
+                        fontSize: 40),
                   ),
-                  const SizedBox(height: 64),
+                  const SizedBox(height: 16),
                   // Email Text Field Input
                   TextFieldInput(
                     hintText: "Enter your email",
@@ -161,8 +162,8 @@ class _LoginState extends State<Login> {
                   ),
                   const SizedBox(height: 16),
                   // Forgot Password
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
+                  Wrap(
+                    alignment: WrapAlignment.center,
                     children: [
                       Container(
                         padding: const EdgeInsets.symmetric(vertical: 8),

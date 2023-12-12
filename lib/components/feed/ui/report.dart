@@ -77,17 +77,18 @@ class _Report extends State<Report> {
 
           return Scaffold(
             appBar: AppBar(
-              title: Text(
-                "Report",
-                style: GoogleFonts.roboto(
-                    color: Colors.black,
-                    fontWeight: FontWeight.bold,
-                    fontSize: 25),
-              ),
-              backgroundColor: Colors.white,
-              elevation: 0,
-              iconTheme: const IconThemeData(color: Colors.black),
-            ),
+                title: Text(
+                  "Report",
+                  style: GoogleFonts.roboto(
+                      color: Theme.of(context).colorScheme.onPrimaryContainer,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 25),
+                ),
+                backgroundColor: Theme.of(context).colorScheme.background,
+                elevation: 0,
+                iconTheme: IconThemeData(
+                  color: Theme.of(context).colorScheme.onPrimaryContainer,
+                )),
             body: SingleChildScrollView(
               child: Column(
                 children: [
@@ -102,7 +103,9 @@ class _Report extends State<Report> {
                         Text(
                           "Why are you reporting this post?",
                           style: GoogleFonts.roboto(
-                              color: Colors.black,
+                              color: Theme.of(context)
+                                  .colorScheme
+                                  .onPrimaryContainer,
                               fontWeight: FontWeight.bold,
                               fontSize: 20),
                         ),
@@ -123,6 +126,9 @@ class _Report extends State<Report> {
                         SizedBox(
                           width: double.infinity,
                           child: ElevatedButton(
+                              style: ElevatedButton.styleFrom(
+                                  backgroundColor: const Color(0xFFAB003E),
+                                  padding: const EdgeInsets.all(20)),
                               onPressed: () {
                                 feedBloc.add(ReportPostSubmitEvent(
                                     postId: widget.post.id!,

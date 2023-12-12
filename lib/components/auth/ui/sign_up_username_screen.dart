@@ -86,7 +86,8 @@ class _SignUpUsernameState extends State<SignUpUsername> {
                     Text(
                       "Create username",
                       style: GoogleFonts.roboto(
-                          color: Colors.black,
+                          color:
+                              Theme.of(context).colorScheme.onPrimaryContainer,
                           fontSize: 36,
                           fontWeight: FontWeight.bold),
                     ),
@@ -95,7 +96,8 @@ class _SignUpUsernameState extends State<SignUpUsername> {
                     Text(
                       "You will use this username to sign in to your account",
                       style: GoogleFonts.roboto(
-                          color: Colors.black,
+                          color:
+                              Theme.of(context).colorScheme.onPrimaryContainer,
                           fontSize: 14,
                           fontWeight: FontWeight.normal),
                     ),
