@@ -36,9 +36,12 @@ class _Report extends State<Report> {
         listener: (context, state) {},
         builder: (context, state) {
           switch (state.runtimeType) {
-            case LoginAttemptSettingsState:
+            case SendReportAttemptState:
               widget.isLoaded = true;
               break;
+
+            default:
+              widget.isLoaded = false;
           }
 
           return Padding(

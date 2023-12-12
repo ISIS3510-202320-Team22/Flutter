@@ -16,7 +16,6 @@ enum Category {
   Atardeceres,
   LookingFor,
   Emprendimientos,
-  Promociones
 }
 
 class PublishPhoto extends StatefulWidget {
@@ -38,7 +37,7 @@ class _PublishPhotoState extends State<PublishPhoto> {
   final Timestamp actualDate = Timestamp.now();
   bool _isLoading = false;
   bool isSwitched = false;
-  bool showWidget = false;
+  //bool showWidget = false;
   final _inputAmountController = TextEditingController();
 
   @override
@@ -57,6 +56,24 @@ class _PublishPhotoState extends State<PublishPhoto> {
       buildWhen: (previous, current) => current is! PublishActionState,
       listener: (context, state) async {
         if (state is PublishSuccessState) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text("Posted!"),
+              backgroundColor: Colors.blue,
+            ),
+          );
+          Navigator.pushAndRemoveUntil(
+              context,
+              MaterialPageRoute(builder: (context) => const Home()),
+              (route) => false);
+          analytics.logEvent(
+            name: 'screen_view',
+            parameters: {
+              'firebase_screen': "Home",
+              'firebase_screen_class': Home,
+            },
+          );
+        } else if (state is PublishSuccessSponsorState) {
           ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(
               content: Text("Posted!"),
@@ -125,15 +142,18 @@ class _PublishPhotoState extends State<PublishPhoto> {
             final categorySelectedState = state as CategorySelectedState;
             _selectedCategory = categorySelectedState.category;
             break;
+          /*          Not working right now. Was left here for future implementation
+
           case ChangeSwitchAddState:
             final changeSwitchAddState = state as ChangeSwitchAddState;
             isSwitched = changeSwitchAddState.switched;
             break;
-          //Not working right now. Was left here for future implementation
+          
           case AddInputMoneyState:
             final addInputMoneyState = state as AddInputMoneyState;
             showWidget = addInputMoneyState.inputMoney;
             break;
+            */
           default:
             _isLoading = false;
         }
@@ -302,7 +322,7 @@ class _PublishPhotoState extends State<PublishPhoto> {
                                   })*/
                             ])),
                     //Not working right now. Was left here for future implementation
-
+/*
                     !showWidget
                         ? const SizedBox.shrink()
                         : Container(
@@ -330,7 +350,7 @@ class _PublishPhotoState extends State<PublishPhoto> {
                                 ))
                               ],
                             )),
-
+*/
                     //Third row for the location of the user
                     AddLocation(publishBloc: publishBloc),
 

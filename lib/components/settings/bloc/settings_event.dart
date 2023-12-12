@@ -14,3 +14,8 @@ class SettingsActionEvent extends SettingsEvent {
   final String description;
   final dynamic context;
 }
+
+class AboutUsEvent extends SettingsEvent {
+  AboutUsEvent(this.context);
+  final dynamic context;
+}
