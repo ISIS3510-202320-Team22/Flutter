@@ -78,3 +78,5 @@ class AddToCircleSponsorPhotoState extends PublishState {
 
 // Loading corcle state when publishing sponsor
 class PublishingPostSponsorState extends PublishState {}
+
+class PublishSuccessSponsorState extends PublishActionState {}

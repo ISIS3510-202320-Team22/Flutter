@@ -41,21 +41,16 @@ class _Settings extends State<Settings> {
               );
               break;
 
-            case NoInternetErrorActionState:
+            case NoInternetErrorActionSponsorState:
               ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(
+                const SnackBar(
                   content: Text(
-                    "No internet connection. Please try again later.",
-                    style: GoogleFonts.roboto(
-                      color: Colors.yellow,
-                      fontSize: 15,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  backgroundColor: Theme.of(context).colorScheme.primary,
+                      "Error: No internet connection! Please try again later."),
+                  backgroundColor: Colors.yellow,
                 ),
               );
               break;
+
             case PublishErrorSettingsState:
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(
@@ -134,7 +129,9 @@ class _Settings extends State<Settings> {
                         ),
                         IconButton(
                           icon: const Icon(Icons.arrow_forward_ios),
-                          onPressed: () {},
+                          onPressed: () {
+                            settingsBloc.add(AboutUsEvent(context));
+                          },
                         )
                       ],
                     ),
