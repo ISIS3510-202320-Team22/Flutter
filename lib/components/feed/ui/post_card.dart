@@ -141,6 +141,11 @@ class _PostCardState extends State<PostCard> {
                                     ]
                                         .map(
                                           (e) => InkWell(
+                                            onTap: () {
+                                              feedBloc.add(PostCardReportEvent(
+                                                  post: widget.post));
+                                              Navigator.pop(context);
+                                            },
                                             child: Container(
                                               padding:
                                                   const EdgeInsets.symmetric(

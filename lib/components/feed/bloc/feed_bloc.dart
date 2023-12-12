@@ -1,8 +1,6 @@
 import 'dart:async';
 import 'package:bloc/bloc.dart';
-import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:guarap/components/feed/repository/feed_methods.dart';
-import 'package:guarap/components/feed/ui/feed.dart';
 import 'package:guarap/models/post_model.dart';
 import 'package:meta/meta.dart';
 
@@ -23,7 +21,6 @@ class FeedBloc extends Bloc<FeedEvent, FeedState> {
 
   FutureOr<void> feedInitialEvent(
       FeedInitialEvent event, Emitter<FeedState> emit) async {
-    print("FeedInitialEvent");
     emit(FeedLoadingState());
     // Check connectivity
     String connectionStatus = await FeedMethods().checkInternetConnection();
@@ -156,5 +153,10 @@ class FeedBloc extends Bloc<FeedEvent, FeedState> {
         return;
       }
     }
+  }
+
+  FutureOr<void> postCardReportEvent(
+      PostCardReportEvent event, Emitter<FeedState> emit) async {
+    emit(PostReportPageActionState(post: event.post));
   }
 }

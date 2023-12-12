@@ -55,3 +55,8 @@ class PostCancelDownvoteState extends FeedState {
   final bool upVoted;
   PostCancelDownvoteState(this.postId, this.upVoted);
 }
+
+class PostReportPageActionState extends FeedActionState {
+  final PostModel post;
+  PostReportPageActionState({required this.post});
+}
