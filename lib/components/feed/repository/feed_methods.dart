@@ -277,4 +277,34 @@ class FeedMethods {
       return e.message!;
     }
   }
+
+  Future<String> reportPost(
+      postId, postUserUsername, userReportingId, description) async {
+    try {
+      // Check if the user is logged in
+      User? user = FirebaseAuth.instance.currentUser;
+      if (user == null) {
+        return "You must be logged in to report a post";
+      }
+
+      // Get the reporting user's username
+      DocumentSnapshot userSnapshot =
+          await _firestore.collection('users').doc(user.uid).get();
+      String username = userSnapshot.get('username');
+
+      // Add the report to the postReports colletion
+      await _firestore.collection('postReports').add({
+        'id_post': postId,
+        'description': description,
+        'id_user_send': username,
+        'id_user_post': postUserUsername,
+        'date': DateTime.now(),
+      });
+      return "success";
+    } on FirebaseException catch (e) {
+      return e.message!;
+    } catch (e) {
+      return e.toString();
+    }
+  }
 }

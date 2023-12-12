@@ -1,8 +1,6 @@
 import 'dart:async';
 import 'package:bloc/bloc.dart';
-import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:guarap/components/feed/repository/feed_methods.dart';
-import 'package:guarap/components/feed/ui/feed.dart';
 import 'package:guarap/models/post_model.dart';
 import 'package:meta/meta.dart';
 
@@ -19,11 +17,12 @@ class FeedBloc extends Bloc<FeedEvent, FeedState> {
     on<PostCardDownvoteEvent>(postCardDownvoteEvent);
     on<PostCardCancelUpvoteEvent>(postCardCancelUpvoteEvent);
     on<PostCardCancelDownvoteEvent>(postCardCancelDownvoteEvent);
+    on<PostCardReportEvent>(postCardReportEvent);
+    on<ReportPostSubmitEvent>(reportPostSubmitEvent);
   }
 
   FutureOr<void> feedInitialEvent(
       FeedInitialEvent event, Emitter<FeedState> emit) async {
-    print("FeedInitialEvent");
     emit(FeedLoadingState());
     // Check connectivity
     String connectionStatus = await FeedMethods().checkInternetConnection();
@@ -156,5 +155,36 @@ class FeedBloc extends Bloc<FeedEvent, FeedState> {
         return;
       }
     }
+  }
+
+  FutureOr<void> postCardReportEvent(
+      PostCardReportEvent event, Emitter<FeedState> emit) async {
+    emit(PostReportPageActionState(post: event.post));
+  }
+
+  FutureOr<void> reportPostSubmitEvent(
+      ReportPostSubmitEvent event, Emitter<FeedState> emit) async {
+    print("User reporting: " + event.userReportingId);
+    print("Post id: " + event.postId);
+    print("Post user id: " + event.postUserId);
+    print("Description: " + event.description);
+    print("Report submiting");
+    emit(ReportPageLoadingState());
+    String connectionStatus = await FeedMethods().checkInternetConnection();
+    if (connectionStatus != "success") {
+      emit(FeedErrorState(connectionStatus));
+      emit(ReportPageInitial());
+      return;
+    }
+    print("Internet connection ok");
+    String res = await FeedMethods().reportPost(event.postId, event.postUserId,
+        event.userReportingId, event.description);
+    print(res);
+    if (res != "success") {
+      emit(FeedErrorState(res));
+      emit(ReportPageInitial());
+      return;
+    }
+    emit(ReportPageSuccessState());
   }
 }
