@@ -96,81 +96,72 @@ class _Settings extends State<Settings> {
               body: Column(
                 children: [
                   const SizedBox(height: 32.0),
-                  Container(
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          "Notifications",
-                          style: GoogleFonts.roboto(
-                            color: Theme.of(context)
-                                .colorScheme
-                                .onPrimaryContainer,
-                            fontSize: 20,
-                          ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        "Notifications",
+                        style: GoogleFonts.roboto(
+                          color:
+                              Theme.of(context).colorScheme.onPrimaryContainer,
+                          fontSize: 20,
                         ),
-                        Switch(
-                            value: isSwitch,
-                            onChanged: (value) {
-                              isSwitch = value;
-                              settingsBloc.add(ChangeSwitchEvent(isSwitch));
-                            })
-                      ],
-                    ),
+                      ),
+                      Switch(
+                          value: isSwitch,
+                          onChanged: (value) {
+                            isSwitch = value;
+                            settingsBloc.add(ChangeSwitchEvent(isSwitch));
+                          })
+                    ],
                   ),
                   const SizedBox(height: 32.0),
-                  Container(
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          "About us",
-                          style: GoogleFonts.roboto(
-                            color: Theme.of(context)
-                                .colorScheme
-                                .onPrimaryContainer,
-                            fontSize: 20,
-                          ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        "About us",
+                        style: GoogleFonts.roboto(
+                          color:
+                              Theme.of(context).colorScheme.onPrimaryContainer,
+                          fontSize: 20,
                         ),
-                        IconButton(
-                          icon: const Icon(Icons.arrow_forward_ios),
-                          onPressed: () {},
-                        )
-                      ],
-                    ),
+                      ),
+                      IconButton(
+                        icon: const Icon(Icons.arrow_forward_ios),
+                        onPressed: () {},
+                      )
+                    ],
                   ),
                   const SizedBox(height: 32.0),
-                  Container(
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          "Report a bug or issue",
-                          style: GoogleFonts.roboto(
-                            color: Theme.of(context)
-                                .colorScheme
-                                .onPrimaryContainer,
-                            fontSize: 20,
-                          ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        "Report a bug or issue",
+                        style: GoogleFonts.roboto(
+                          color:
+                              Theme.of(context).colorScheme.onPrimaryContainer,
+                          fontSize: 20,
                         ),
-                        IconButton(
-                          icon: const Icon(Icons.arrow_forward_ios),
-                          onPressed: () {
-                            showModalBottomSheet(
-                                enableDrag: true,
-                                isScrollControlled: true,
-                                shape: const RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.vertical(
-                                      top: Radius.circular(20.0)),
-                                ),
-                                context: context,
-                                builder: (context) => Report(
-                                    settingsBloc: settingsBloc,
-                                    isLoaded: isLoaded));
-                          },
-                        )
-                      ],
-                    ),
+                      ),
+                      IconButton(
+                        icon: const Icon(Icons.arrow_forward_ios),
+                        onPressed: () {
+                          showModalBottomSheet(
+                              enableDrag: true,
+                              isScrollControlled: true,
+                              shape: const RoundedRectangleBorder(
+                                borderRadius: BorderRadius.vertical(
+                                    top: Radius.circular(20.0)),
+                              ),
+                              context: context,
+                              builder: (context) => Report(
+                                  settingsBloc: settingsBloc,
+                                  isLoaded: isLoaded));
+                        },
+                      )
+                    ],
                   ),
                 ],
               ));

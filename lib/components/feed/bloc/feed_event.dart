@@ -54,3 +54,20 @@ class PostCardCancelDownvoteEvent extends FeedEvent {
   final bool upVoted;
   PostCardCancelDownvoteEvent({required this.post, required this.upVoted});
 }
+
+class PostCardReportEvent extends FeedEvent {
+  final PostModel post;
+  PostCardReportEvent({required this.post});
+}
+
+class ReportPostSubmitEvent extends FeedEvent {
+  final String postId;
+  final String postUserId;
+  final String userReportingId;
+  final String description;
+  ReportPostSubmitEvent(
+      {required this.postId,
+      required this.postUserId,
+      required this.userReportingId,
+      required this.description});
+}

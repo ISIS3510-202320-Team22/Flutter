@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:guarap/components/feed/bloc/feed_bloc.dart';
+import 'package:guarap/components/feed/ui/report.dart';
 import 'package:guarap/models/post_model.dart';
 import 'package:intl/intl.dart';
 import 'package:cached_network_image/cached_network_image.dart';
@@ -39,7 +40,16 @@ class _PostCardState extends State<PostCard> {
       bloc: feedBloc,
       listenWhen: (previous, current) => current is FeedActionState,
       buildWhen: (previous, current) => current is! FeedActionState,
-      listener: (context, state) {},
+      listener: (context, state) {
+        switch (state.runtimeType) {
+          case PostReportPageActionState:
+            state as PostReportPageActionState;
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => Report(post: state.post)));
+        }
+      },
       builder: (context, state) {
         switch (state.runtimeType) {
           case PostCardInitial:
@@ -127,7 +137,7 @@ class _PostCardState extends State<PostCard> {
                           )
                         : const SizedBox.shrink(),*/
                     IconButton(
-                      icon: const Icon(Icons.more_vert),
+                      icon: const Icon(Icons.flag, color: Colors.red),
                       onPressed: () {
                         showDialog(
                             context: context,
@@ -141,6 +151,11 @@ class _PostCardState extends State<PostCard> {
                                     ]
                                         .map(
                                           (e) => InkWell(
+                                            onTap: () {
+                                              feedBloc.add(PostCardReportEvent(
+                                                  post: widget.post));
+                                              Navigator.pop(context);
+                                            },
                                             child: Container(
                                               padding:
                                                   const EdgeInsets.symmetric(
