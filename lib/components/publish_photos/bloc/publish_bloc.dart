@@ -200,12 +200,12 @@ class PublishBloc extends Bloc<PublishEvent, PublishState> {
 
   FutureOr<void> sendSponsorDataEvent(
       SendSponsorDataEvent event, Emitter<PublishState> emit) async {
+    emit(PublishingPostSponsorState());
     String internetConnection =
         await PostRepository().checkInternetConnection();
     if (internetConnection != "success") {
       emit(NoInternetErrorActionState());
-      emit(PublishInitial());
-      return;
+      Navigator.pop(event.context);
     }
     // Url is a list with two elements, the first one is the status of the upload
     // and the second one is the url of the image (or the error message)
@@ -213,7 +213,6 @@ class PublishBloc extends Bloc<PublishEvent, PublishState> {
         .uploadImageToStorage('images/', File(event.sponsorImage!.path), true);
     if (url[0] == 'failed') {
       emit(PublishPhotoErrorState(errorMessage: url[1]));
-      emit(PublishInitial());
       return;
     } else {
       final res = await PostRepository().publishPost(
@@ -225,11 +224,10 @@ class PublishBloc extends Bloc<PublishEvent, PublishState> {
         event.sponsorMoney ~/ 4,
       );
       if (res == "success") {
-        emit(PublishSuccessState());
+        emit(PublishSuccessSponsorState());
         Navigator.pop(event.context);
       } else {
         emit(PublishErrorState(errorMessage: res));
-        emit(PublishInitial());
       }
     }
   }

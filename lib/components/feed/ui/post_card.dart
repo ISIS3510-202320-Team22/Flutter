@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:guarap/components/feed/bloc/feed_bloc.dart';
+import 'package:guarap/components/feed/ui/report.dart';
 import 'package:guarap/models/post_model.dart';
 import 'package:intl/intl.dart';
 import 'package:cached_network_image/cached_network_image.dart';
@@ -13,7 +14,7 @@ class PostCard extends StatefulWidget {
 
   @override
   State<PostCard> createState() {
-     return _PostCardState();
+    return _PostCardState();
   }
 }
 
@@ -30,7 +31,6 @@ class _PostCardState extends State<PostCard> {
 
   @override
   Widget build(context) {
-    
     bool upVoted = false;
     bool downVoted = false;
     int upvotes = widget.post.upvotes!;
@@ -40,7 +40,16 @@ class _PostCardState extends State<PostCard> {
       bloc: feedBloc,
       listenWhen: (previous, current) => current is FeedActionState,
       buildWhen: (previous, current) => current is! FeedActionState,
-      listener: (context, state) {},
+      listener: (context, state) {
+        switch (state.runtimeType) {
+          case PostReportPageActionState:
+            state as PostReportPageActionState;
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => Report(post: state.post)));
+        }
+      },
       builder: (context, state) {
         switch (state.runtimeType) {
           case PostCardInitial:
@@ -105,11 +114,12 @@ class _PostCardState extends State<PostCard> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              widget.post.user != null ? "${widget.post.user}" : " ",
+                              widget.post.user != null
+                                  ? "${widget.post.user}"
+                                  : " ",
                               style: const TextStyle(
                                 fontWeight: FontWeight.bold,
                               ),
-                              
                             ),
                             Text(widget.post.date != null
                                 ? DateFormat('MMM dd y HH:mm')
@@ -127,7 +137,7 @@ class _PostCardState extends State<PostCard> {
                           )
                         : const SizedBox.shrink(),*/
                     IconButton(
-                      icon: const Icon(Icons.more_vert),
+                      icon: const Icon(Icons.flag, color: Colors.red),
                       onPressed: () {
                         showDialog(
                             context: context,
@@ -141,6 +151,11 @@ class _PostCardState extends State<PostCard> {
                                     ]
                                         .map(
                                           (e) => InkWell(
+                                            onTap: () {
+                                              feedBloc.add(PostCardReportEvent(
+                                                  post: widget.post));
+                                              Navigator.pop(context);
+                                            },
                                             child: Container(
                                               padding:
                                                   const EdgeInsets.symmetric(
@@ -181,7 +196,9 @@ class _PostCardState extends State<PostCard> {
                     const Padding(padding: EdgeInsets.only(left: 16)),
                     Expanded(
                       child: Text(
-                        widget.post.address != null ? "${widget.post.address}" : " ",
+                        widget.post.address != null
+                            ? "${widget.post.address}"
+                            : " ",
                         style: GoogleFonts.roboto(
                           fontSize: 15,
                           fontWeight: FontWeight.bold,
@@ -197,17 +214,20 @@ class _PostCardState extends State<PostCard> {
                           onPressed: () {
                             // Upvote event
                             if (downVoted) {
-                              feedBloc.add(PostCardCancelDownvoteEvent(post: widget.post, upVoted: true));
-                            }
-                            else if (upVoted) {
-                              feedBloc.add(PostCardCancelUpvoteEvent(post: widget.post, downVoted: false));
-                            }
-                            else {
-                              feedBloc.add(PostCardUpvoteEvent(post: widget.post));
+                              feedBloc.add(PostCardCancelDownvoteEvent(
+                                  post: widget.post, upVoted: true));
+                            } else if (upVoted) {
+                              feedBloc.add(PostCardCancelUpvoteEvent(
+                                  post: widget.post, downVoted: false));
+                            } else {
+                              feedBloc
+                                  .add(PostCardUpvoteEvent(post: widget.post));
                             }
                           },
                           icon: Icon(
-                              upVoted ? Icons.thumb_up : Icons.thumb_up_alt_outlined,
+                            upVoted
+                                ? Icons.thumb_up
+                                : Icons.thumb_up_alt_outlined,
                             size: 35,
                             //color: color ? Colors.green : Colors.blue
                           ),
@@ -218,17 +238,20 @@ class _PostCardState extends State<PostCard> {
                             onPressed: () {
                               // Downvote event
                               if (upVoted) {
-                                feedBloc.add(PostCardCancelUpvoteEvent(post: widget.post, downVoted: true));
-                              }
-                              else if (downVoted) {
-                                feedBloc.add(PostCardCancelDownvoteEvent(post: widget.post, upVoted: false));
-                              }
-                              else {
-                                feedBloc.add(PostCardDownvoteEvent(post: widget.post));
+                                feedBloc.add(PostCardCancelUpvoteEvent(
+                                    post: widget.post, downVoted: true));
+                              } else if (downVoted) {
+                                feedBloc.add(PostCardCancelDownvoteEvent(
+                                    post: widget.post, upVoted: false));
+                              } else {
+                                feedBloc.add(
+                                    PostCardDownvoteEvent(post: widget.post));
                               }
                             },
                             icon: Icon(
-                              downVoted ? Icons.thumb_down : Icons.thumb_down_alt_outlined,
+                              downVoted
+                                  ? Icons.thumb_down
+                                  : Icons.thumb_down_alt_outlined,
                               size: 35,
                             )),
                         //downvotes
@@ -256,17 +279,20 @@ class _PostCardState extends State<PostCard> {
                           child: RichText(
                               text: TextSpan(
                                   style: const TextStyle(
-                                    color: Colors.black,
-                                    fontSize: 15,
+                                    fontWeight: FontWeight.bold,
                                   ),
                                   children: [
                                 TextSpan(
                                     text: widget.post.user != null
                                         ? "${widget.post.user}"
                                         : " ",
-                                    style: const TextStyle(
-                                        fontWeight: FontWeight.bold)),
-                                TextSpan(text: '  ${widget.post.description}')
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .titleMedium),
+                                TextSpan(
+                                    text: '  ${widget.post.description}',
+                                    style:
+                                        Theme.of(context).textTheme.bodyMedium)
                               ])))
                     ],
                   ),

@@ -19,6 +19,7 @@ class _Sponsor extends State<Sponsor> {
   File? _pickedImageSponsorFile;
   final _inputAmountControllerSponsor = TextEditingController();
   final _inputTextControllerSponsor = TextEditingController();
+  bool _isLoadingSend = false;
 
   @override
   void dispose() {
@@ -33,16 +34,7 @@ class _Sponsor extends State<Sponsor> {
         bloc: widget.publishBloc,
         listenWhen: (previous, current) => current is PublishActionState,
         buildWhen: (previous, current) => current is! PublishActionState,
-        listener: (context, state) {
-          if (state is PublishSuccessState) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(
-                content: Text("Posted!"),
-                backgroundColor: Colors.blue,
-              ),
-            );
-          }
-        },
+        listener: (context, state) {},
         builder: (context, state) {
           switch (state.runtimeType) {
             case AddToCircleSponsorPhotoState:
@@ -51,6 +43,11 @@ class _Sponsor extends State<Sponsor> {
               _pickedImageSponsorFile =
                   addToCircleSponsorPhotoState.pickedImageSponsor;
               break;
+            case PublishingPostSponsorState:
+              _isLoadingSend = true;
+              break;
+            default:
+              _isLoadingSend = false;
           }
 
           return Scaffold(
@@ -142,13 +139,22 @@ class _Sponsor extends State<Sponsor> {
                               );
                               return;
                             } else {
-                              widget.publishBloc.add(SendSponsorDataEvent(
-                                  _pickedImageSponsorFile!,
-                                  _inputTextControllerSponsor.text,
-                                  int.parse(
-                                    _inputAmountControllerSponsor.text,
+                              try {
+                                widget.publishBloc.add(SendSponsorDataEvent(
+                                    _pickedImageSponsorFile!,
+                                    _inputTextControllerSponsor.text,
+                                    int.parse(
+                                      _inputAmountControllerSponsor.text,
+                                    ),
+                                    context));
+                              } catch (e) {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  const SnackBar(
+                                    content: Text("Please add a payment!"),
+                                    backgroundColor: Colors.red,
                                   ),
-                                  context));
+                                );
+                              }
                             }
                           },
 
@@ -160,7 +166,7 @@ class _Sponsor extends State<Sponsor> {
                             // Expand button width
                             minimumSize: const Size(250, 30),
                           ),
-                          child: true
+                          child: !_isLoadingSend
                               ? Text(
                                   "Post Ad",
                                   style: GoogleFonts.roboto(

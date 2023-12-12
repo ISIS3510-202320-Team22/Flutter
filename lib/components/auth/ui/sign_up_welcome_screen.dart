@@ -45,7 +45,7 @@ class SignUpWelcome extends StatelessWidget {
                   Text(
                     "Welcome to Guarap, \n$username",
                     style: GoogleFonts.roboto(
-                        color: Colors.black,
+                        color: Theme.of(context).colorScheme.onPrimaryContainer,
                         fontSize: 36,
                         fontWeight: FontWeight.bold),
                   ),
@@ -54,7 +54,7 @@ class SignUpWelcome extends StatelessWidget {
                   Text(
                     "Start seeing some posts posted by other users",
                     style: GoogleFonts.roboto(
-                        color: Colors.black,
+                        color: Theme.of(context).colorScheme.onPrimaryContainer,
                         fontSize: 14,
                         fontWeight: FontWeight.normal),
                   ),

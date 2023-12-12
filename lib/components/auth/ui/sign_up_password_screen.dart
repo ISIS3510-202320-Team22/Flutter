@@ -86,7 +86,8 @@ class _SignUpPasswordState extends State<SignUpPassword> {
                     Text(
                       "Create Password",
                       style: GoogleFonts.roboto(
-                          color: Colors.black,
+                          color:
+                              Theme.of(context).colorScheme.onPrimaryContainer,
                           fontSize: 36,
                           fontWeight: FontWeight.bold),
                     ),
@@ -95,7 +96,8 @@ class _SignUpPasswordState extends State<SignUpPassword> {
                     Text(
                       "You will use this Password to sign in to your account",
                       style: GoogleFonts.roboto(
-                          color: Colors.black,
+                          color:
+                              Theme.of(context).colorScheme.onPrimaryContainer,
                           fontSize: 14,
                           fontWeight: FontWeight.normal),
                     ),

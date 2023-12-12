@@ -21,10 +21,6 @@ class PublishErrorSettingsState extends SettingsActionState {
   final String errorMessage;
 }
 
-class NoInternetErrorActionState extends SettingsActionState {}
+class NoInternetErrorActionSponsorState extends SettingsActionState {}
 
-class LoginAttemptSettingsState extends SettingsActionState {
-  LoginAttemptSettingsState(this.isLoaded);
-
-  final bool isLoaded;
-}
+class SendReportAttemptState extends SettingsState {}

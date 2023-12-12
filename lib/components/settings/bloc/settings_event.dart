@@ -9,10 +9,13 @@ class ChangeSwitchEvent extends SettingsEvent {
 }
 
 class SettingsActionEvent extends SettingsEvent {
-  SettingsActionEvent(
-      this.title, this.description, this.context, this.isLoaded);
+  SettingsActionEvent(this.title, this.description, this.context);
   final String title;
   final String description;
   final dynamic context;
-  bool isLoaded;
+}
+
+class AboutUsEvent extends SettingsEvent {
+  AboutUsEvent(this.context);
+  final dynamic context;
 }

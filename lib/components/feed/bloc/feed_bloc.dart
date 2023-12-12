@@ -1,8 +1,6 @@
 import 'dart:async';
 import 'package:bloc/bloc.dart';
-import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:guarap/components/feed/repository/feed_methods.dart';
-import 'package:guarap/components/feed/ui/feed.dart';
 import 'package:guarap/models/post_model.dart';
 import 'package:meta/meta.dart';
 
@@ -19,11 +17,12 @@ class FeedBloc extends Bloc<FeedEvent, FeedState> {
     on<PostCardDownvoteEvent>(postCardDownvoteEvent);
     on<PostCardCancelUpvoteEvent>(postCardCancelUpvoteEvent);
     on<PostCardCancelDownvoteEvent>(postCardCancelDownvoteEvent);
+    on<PostCardReportEvent>(postCardReportEvent);
+    on<ReportPostSubmitEvent>(reportPostSubmitEvent);
   }
 
   FutureOr<void> feedInitialEvent(
       FeedInitialEvent event, Emitter<FeedState> emit) async {
-    print("FeedInitialEvent");
     emit(FeedLoadingState());
     // Check connectivity
     String connectionStatus = await FeedMethods().checkInternetConnection();
@@ -65,12 +64,21 @@ class FeedBloc extends Bloc<FeedEvent, FeedState> {
   }
 
   // Post Card Events
-  FutureOr<void> postCardInitialEvent(PostCardInitialEvent event, Emitter<FeedState> emit) async {
-    // Get the post upvotes and downvotes
-    
+  FutureOr<void> postCardInitialEvent(
+      PostCardInitialEvent event, Emitter<FeedState> emit) async {
+    // Check if the user has already voted on the post
+    String res = await FeedMethods().checkPostVote(event.post.id!);
+    if (res == "upvoted") {
+      emit(PostUpvoteState(event.post.id!));
+    } else if (res == "downvoted") {
+      emit(PostDownvoteState(event.post.id!));
+    }
   }
 
-  FutureOr<void> postCardUpvoteEvent(PostCardUpvoteEvent event, Emitter<FeedState> emit) async {
+  FutureOr<void> postCardUpvoteEvent(
+      PostCardUpvoteEvent event, Emitter<FeedState> emit) async {
+    // Update the ui
+    emit(PostUpvoteState(event.post.id!));
     String connectionStatus = await FeedMethods().checkInternetConnection();
     if (connectionStatus != "success") {
       emit(FeedErrorState(connectionStatus));
@@ -82,11 +90,12 @@ class FeedBloc extends Bloc<FeedEvent, FeedState> {
       emit(FeedErrorState(res));
       return;
     }
-    // Update the ui
-    emit(PostUpvoteState(event.post.id!));
   }
 
-  FutureOr<void> postCardDownvoteEvent(PostCardDownvoteEvent event, Emitter<FeedState> emit) async {
+  FutureOr<void> postCardDownvoteEvent(
+      PostCardDownvoteEvent event, Emitter<FeedState> emit) async {
+    // Update the ui
+    emit(PostDownvoteState(event.post.id!));
     String connectionStatus = await FeedMethods().checkInternetConnection();
     if (connectionStatus != "success") {
       emit(FeedErrorState(connectionStatus));
@@ -98,10 +107,12 @@ class FeedBloc extends Bloc<FeedEvent, FeedState> {
       emit(FeedErrorState(res));
       return;
     }
-    emit(PostDownvoteState(event.post.id!));
   }
 
-  FutureOr<void> postCardCancelUpvoteEvent(PostCardCancelUpvoteEvent event, Emitter<FeedState> emit) async {
+  FutureOr<void> postCardCancelUpvoteEvent(
+      PostCardCancelUpvoteEvent event, Emitter<FeedState> emit) async {
+    // Update the ui
+    emit(PostCancelUpvoteState(event.post.id!, event.downVoted));
     String connectionStatus = await FeedMethods().checkInternetConnection();
     if (connectionStatus != "success") {
       emit(FeedErrorState(connectionStatus));
@@ -120,11 +131,11 @@ class FeedBloc extends Bloc<FeedEvent, FeedState> {
         return;
       }
     }
-    // Update the ui
-    emit(PostCancelUpvoteState(event.post.id!, event.downVoted));
   }
 
-  FutureOr<void> postCardCancelDownvoteEvent(PostCardCancelDownvoteEvent event, Emitter<FeedState> emit) async {
+  FutureOr<void> postCardCancelDownvoteEvent(
+      PostCardCancelDownvoteEvent event, Emitter<FeedState> emit) async {
+    emit(PostCancelDownvoteState(event.post.id!, event.upVoted));
     String connectionStatus = await FeedMethods().checkInternetConnection();
     if (connectionStatus != "success") {
       emit(FeedErrorState(connectionStatus));
@@ -144,6 +155,34 @@ class FeedBloc extends Bloc<FeedEvent, FeedState> {
         return;
       }
     }
-    emit(PostCancelDownvoteState(event.post.id!, event.upVoted));
+  }
+
+  FutureOr<void> postCardReportEvent(
+      PostCardReportEvent event, Emitter<FeedState> emit) async {
+    emit(PostReportPageActionState(post: event.post));
+  }
+
+  FutureOr<void> reportPostSubmitEvent(
+      ReportPostSubmitEvent event, Emitter<FeedState> emit) async {
+    emit(ReportPageLoadingState());
+    String connectionStatus = await FeedMethods().checkInternetConnection();
+    if (connectionStatus != "success") {
+      emit(FeedErrorState(connectionStatus));
+      emit(ReportPageInitial());
+      return;
+    }
+    if (event.description.trim() == "") {
+      emit(FeedErrorState("Please enter a description"));
+      emit(ReportPageInitial());
+      return;
+    }
+    String res = await FeedMethods().reportPost(event.postId, event.postUserId,
+        event.userReportingId, event.description);
+    if (res != "success") {
+      emit(FeedErrorState(res));
+      emit(ReportPageInitial());
+      return;
+    }
+    emit(ReportPageSuccessState());
   }
 }

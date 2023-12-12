@@ -75,3 +75,8 @@ class AddToCircleSponsorPhotoState extends PublishState {
   AddToCircleSponsorPhotoState({required this.pickedImageSponsor});
   final File? pickedImageSponsor;
 }
+
+// Loading corcle state when publishing sponsor
+class PublishingPostSponsorState extends PublishState {}
+
+class PublishSuccessSponsorState extends PublishActionState {}
